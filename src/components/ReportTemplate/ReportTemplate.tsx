@@ -1,12 +1,17 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, 
   Search, Save, LogOut, Edit2, Trash2, Printer, Square, CheckSquare, 
-  X, AlertCircle, CheckCircle2, ShieldAlert, FileText, 
+  X, AlertCircle, CheckCircle2, ShieldAlert, FileText,
+  List, Eye, Edit3, Plus, UserCheck
 } from 'lucide-react';
 import { reportTemplateApi, type ReportTemplateRecord } from '../../api/masterApi';
+import { patientApi, type PatientRecord } from '../../api/patientApi';
 import { useAutoDismissNotification } from '../../hooks/useAutoDismissNotification';
+import { useFormKeyboardNavigation } from '../../hooks/useFormKeyboardNavigation';
+import { parseReportDetails, autoFormatToBullets } from '../../utils/reportDetailsFormatter';
+import { openReportTemplatePrintView } from '../../utils/reportTemplatePrintGenerator';
 import { HOSPITAL_CONFIG } from '../../config/hospitalConfig';
 import styles from './ReportTemplate.module.css';
 
@@ -50,10 +55,75 @@ const ReportTemplate: React.FC = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState<boolean>(false);
 
+  // Registered Patients list for realistic preview & print binding
+  const [patients, setPatients] = useState<PatientRecord[]>([]);
+  const [selectedPreviewPatient, setSelectedPreviewPatient] = useState<PatientRecord | null>(null);
+
+  // Details Editor View Mode: 'edit' or 'preview' (Live Bullet Preview)
+  const [editorViewMode, setEditorViewMode] = useState<'edit' | 'preview'>('edit');
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+
+  // Form Keyboard Navigation
+  const { formRef, handleKeyDown: handleFormKeyDown } = useFormKeyboardNavigation();
+
+  // Structured bullet parser for Details section
+  const parsedDetails = useMemo(() => parseReportDetails(formData.details), [formData.details]);
+
   const { notification, setNotification, dismissNotification } = useAutoDismissNotification<{
     type: 'success' | 'error';
     message: string;
   }>();
+
+  // Load registered patients on mount
+  useEffect(() => {
+    patientApi
+      .getPatients()
+      .then(res => {
+        if (res.patients && res.patients.length > 0) {
+          setPatients(res.patients);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  // Insert a bullet point at current cursor position
+  const handleInsertBullet = () => {
+    const ta = textareaRef.current;
+    if (!ta) {
+      handleInputChange('details', (formData.details ? `${formData.details}\n` : '') + '• ');
+      return;
+    }
+    const start = ta.selectionStart;
+    const end = ta.selectionEnd;
+    const text = formData.details || '';
+    const before = text.substring(0, start);
+    const after = text.substring(end);
+    const prefix = before.length > 0 && !before.endsWith('\n') ? '\n• ' : '• ';
+    const newText = before + prefix + after;
+    handleInputChange('details', newText);
+    setTimeout(() => {
+      ta.focus();
+      const pos = start + prefix.length;
+      ta.setSelectionRange(pos, pos);
+    }, 0);
+  };
+
+  // Auto-format plain lines into bullet points
+  const handleAutoFormatBullets = () => {
+    const formatted = autoFormatToBullets(formData.details);
+    handleInputChange('details', formatted);
+    setNotification({
+      type: 'success',
+      message: 'Report details formatted into clear bullet points.'
+    });
+  };
+
+  // Open dedicated A4 print view
+  const handlePrintReport = () => {
+    openReportTemplatePrintView(formData, {
+      patient: selectedPreviewPatient
+    });
+  };
 
   // Load templates from backend JSON storage
   const loadTemplates = useCallback(async () => {
@@ -280,8 +350,16 @@ const ReportTemplate: React.FC = () => {
         </div>
       )}
 
-      {/* Form Container */}
-      <div className={styles.formContainer}>
+      {/* Form Container with Keyboard Navigation */}
+      <form
+        ref={formRef}
+        onKeyDown={handleFormKeyDown}
+        onSubmit={e => {
+          e.preventDefault();
+          handleUpdateClick();
+        }}
+        className={styles.formContainer}
+      >
         <div className={styles.mainSection}>
           <div className={styles.fieldGroup}>
             <label className={styles.label}>Group Name :</label>
@@ -328,16 +406,97 @@ const ReportTemplate: React.FC = () => {
             />
           </div>
 
-          <div className={styles.fieldGroup} style={{ alignItems: 'flex-start' }}>
-            <label className={styles.label}>Details :</label>
-            <textarea
-              className={styles.textarea}
-              rows={12}
-              style={{ width: '100%', minHeight: '260px', fontFamily: 'monospace, sans-serif', fontSize: '13px', lineHeight: 1.6 }}
-              placeholder="Enter structured findings, clinical remarks, CDI waveforms, observations, impressions..."
-              value={formData.details}
-              onChange={e => handleInputChange('details', e.target.value)}
-            />
+          <div className={styles.fieldGroup} style={{ alignItems: 'flex-start', flexDirection: 'column' }}>
+            <div className={styles.detailsHeaderRow}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <label className={styles.label} style={{ textAlign: 'left', width: 'auto', paddingTop: 0 }}>
+                  Details of the Report :
+                </label>
+                <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+                  ({parsedDetails.items.length} Bullet Points)
+                </span>
+              </div>
+
+              <div className={styles.detailsToolbar}>
+                <button
+                  type="button"
+                  className={styles.toolbarBtn}
+                  onClick={handleInsertBullet}
+                  title="Insert a bullet point at cursor (•)"
+                >
+                  <Plus size={13} /> Add Bullet
+                </button>
+                <button
+                  type="button"
+                  className={styles.toolbarBtn}
+                  onClick={handleAutoFormatBullets}
+                  title="Automatically convert lines into bullet points"
+                >
+                  <List size={13} /> Format as Bullets
+                </button>
+                <button
+                  type="button"
+                  className={`${styles.toolbarBtn} ${editorViewMode === 'edit' ? styles.toolbarBtnActive : ''}`}
+                  onClick={() => setEditorViewMode('edit')}
+                  title="Edit raw text"
+                >
+                  <Edit3 size={13} /> Edit Text
+                </button>
+                <button
+                  type="button"
+                  className={`${styles.toolbarBtn} ${editorViewMode === 'preview' ? styles.toolbarBtnActive : ''}`}
+                  onClick={() => setEditorViewMode('preview')}
+                  title="Preview bullet points alignment"
+                >
+                  <Eye size={13} /> Live Preview
+                </button>
+              </div>
+            </div>
+
+            {editorViewMode === 'edit' ? (
+              <textarea
+                ref={textareaRef}
+                className={styles.textarea}
+                rows={12}
+                style={{ width: '100%', minHeight: '260px', fontFamily: 'monospace, sans-serif', fontSize: '13px', lineHeight: 1.6 }}
+                placeholder="Enter structured findings, clinical remarks, observations, impressions... (Each line can start with • or SECTION:)"
+                value={formData.details}
+                onChange={e => handleInputChange('details', e.target.value)}
+              />
+            ) : (
+              <div className={styles.liveBulletPreviewBox}>
+                {parsedDetails.items.length === 0 ? (
+                  <div style={{ color: 'var(--text-muted)', fontSize: '13px', padding: '24px 0', textAlign: 'center' }}>
+                    No details entered yet. Type findings in edit mode to see live bullet formatting.
+                  </div>
+                ) : (
+                  <div>
+                    {parsedDetails.items.map((item, idx) => (
+                      <div key={item.id || idx} className={styles.liveBulletItem}>
+                        <span className={styles.liveBulletDot}>•</span>
+                        <div style={{ flex: 1 }}>
+                          {item.label && <strong className={styles.liveBulletLabel}>{item.label} </strong>}
+                          <span>{item.content}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {parsedDetails.impressionTitle && (
+                  <div className={styles.liveImpressionCard}>
+                    <div style={{ fontWeight: 700, fontSize: '13px', marginBottom: '4px', color: 'var(--text-main)' }}>
+                      {parsedDetails.impressionTitle}:
+                    </div>
+                    {parsedDetails.impressionLines.map((line, lIdx) => (
+                      <div key={lIdx} style={{ fontSize: '12.5px', color: 'var(--text-secondary)', marginBottom: '2px' }}>
+                        {line}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           <div className={styles.fieldGroup}>
@@ -362,7 +521,7 @@ const ReportTemplate: React.FC = () => {
             </div>
           </div>
         </div>
-      </div>
+      </form>
 
       {/* Bottom Action Bar */}
       <div className={styles.actionBar}>
@@ -662,86 +821,174 @@ const ReportTemplate: React.FC = () => {
         </div>
       )}
 
-      {/* Print-Friendly Template Preview Modal */}
+      {/* Professional A4 Document Preview Modal */}
       {isPreviewModalOpen && (
-        <div className={styles.modalOverlay} onClick={() => setIsPreviewModalOpen(false)}>
-          <div className={styles.modalContent} style={{ maxWidth: '750px' }} onClick={e => e.stopPropagation()}>
-            <div className={styles.modalHeader}>
-              <h3 className={styles.modalTitle}>
-                <FileText size={18} color="var(--primary)" /> Investigation Report Template Preview — {HOSPITAL_CONFIG.name}
-              </h3>
-              <button
-                type="button"
-                className={styles.modalCloseBtn}
-                onClick={() => setIsPreviewModalOpen(false)}
-              >
-                <X size={18} />
-              </button>
-            </div>
+        <div className={styles.previewBackdrop} onClick={() => setIsPreviewModalOpen(false)}>
+          <div className={styles.previewContainer} onClick={e => e.stopPropagation()}>
+            {/* Top Toolbar outside document */}
+            <div className={styles.previewToolbar}>
+              <div className={styles.previewToolbarLeft}>
+                <FileText size={18} color="#60a5fa" />
+                <span style={{ fontWeight: 600, fontSize: '13px' }}>A4 Report Document Preview</span>
+                <span style={{ color: '#94a3b8', fontSize: '12px' }}>|</span>
+                <label style={{ fontSize: '12px', color: '#cbd5e1', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <UserCheck size={14} /> Sample Patient Data:
+                  <select
+                    className={styles.previewPatientSelect}
+                    value={selectedPreviewPatient?.id || ''}
+                    onChange={e => {
+                      const p = patients.find(item => item.id === e.target.value);
+                      setSelectedPreviewPatient(p || null);
+                    }}
+                  >
+                    <option value="">Clinical Verification Default</option>
+                    {patients.map(p => (
+                      <option key={p.id} value={p.id}>
+                        {p.firstName} {p.lastName} ({p.uhid})
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
 
-            <div className={styles.modalBody}>
-              <div style={{ border: '2px solid var(--border)', padding: '24px', borderRadius: '8px', background: '#fff', color: '#111', fontFamily: 'serif, Inter, sans-serif' }}>
-                {/* Hospital Header */}
-                <div style={{ textAlign: 'center', borderBottom: '2px solid #333', paddingBottom: '12px', marginBottom: '16px' }}>
-                  <h2 style={{ margin: 0, fontSize: '22px', letterSpacing: '0.05em', color: '#1a365d' }}>{HOSPITAL_CONFIG.name}</h2>
-                  <p style={{ margin: '4px 0 0 0', fontSize: '12px', color: '#555' }}>{HOSPITAL_CONFIG.address}</p>
-                  <p style={{ margin: '2px 0 0 0', fontSize: '12px', color: '#555' }}>Phone: {HOSPITAL_CONFIG.phone} | Email: {HOSPITAL_CONFIG.email}</p>
-                  <div style={{ marginTop: '8px', display: 'inline-block', padding: '3px 12px', background: '#f0f4f8', borderRadius: '4px', fontSize: '12px', fontWeight: 600, color: '#2b6cb0' }}>
-                    DEPARTMENT OF {formData.groupName.toUpperCase()} & DIAGNOSTICS
-                  </div>
-                </div>
-
-                {/* Patient Placeholder Info Bar */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', fontSize: '12px', background: '#f7fafc', padding: '10px 14px', border: '1px solid #e2e8f0', borderRadius: '6px', marginBottom: '18px' }}>
-                  <div><strong>Patient Name:</strong> <span style={{ color: '#718096' }}>[ PATIENT NAME ]</span></div>
-                  <div><strong>Age / Gender:</strong> <span style={{ color: '#718096' }}>[ 45 Y / Male ]</span></div>
-                  <div><strong>UHID:</strong> <span style={{ color: '#718096' }}>[ UHID-XXXX ]</span></div>
-                  <div><strong>Ref. Doctor:</strong> <span style={{ color: '#718096' }}>[ REFERRING DOCTOR ]</span></div>
-                  <div><strong>Report Date:</strong> <span style={{ color: '#718096' }}>[ {new Date().toLocaleDateString('en-GB')} ]</span></div>
-                  <div><strong>Template ID:</strong> <span>{formData.id}</span></div>
-                </div>
-
-                {/* Report Header Title */}
-                <div style={{ textAlign: 'center', margin: '16px 0 20px 0' }}>
-                  <h3 style={{ margin: 0, fontSize: '16px', textDecoration: 'underline', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-                    {formData.reportHeader || formData.templateName}
-                  </h3>
-                </div>
-
-                {/* Report Content Body */}
-                <div style={{ whiteSpace: 'pre-wrap', fontSize: '13px', lineHeight: 1.8, minHeight: '180px', color: '#2d3748' }}>
-                  {formData.details}
-                </div>
-
-                {/* Signature Block */}
-                <div style={{ marginTop: '48px', paddingTop: '16px', borderTop: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', fontSize: '12px' }}>
-                  <div>
-                    <p style={{ margin: 0, fontWeight: 600 }}>Prepared By: Medical Transcriptionist</p>
-                    <p style={{ margin: '2px 0 0 0', color: '#718096' }}>Verified Diagnostic Format</p>
-                  </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <p style={{ margin: 0, fontWeight: 700 }}>Consultant Radiologist / Pathologist</p>
-                    <p style={{ margin: '2px 0 0 0', color: '#718096' }}>Authorized Signatory</p>
-                  </div>
-                </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <button
+                  type="button"
+                  className={styles.primaryBtn}
+                  onClick={handlePrintReport}
+                  style={{ background: 'var(--primary)', height: '34px', fontSize: '12px' }}
+                >
+                  <Printer size={15} /> Print Document (A4)
+                </button>
+                <button
+                  type="button"
+                  className={styles.secondaryBtn}
+                  onClick={() => setIsPreviewModalOpen(false)}
+                  style={{ background: '#334155', color: '#fff', borderColor: '#475569', height: '34px', fontSize: '12px' }}
+                >
+                  <X size={15} /> Close Preview
+                </button>
               </div>
             </div>
 
-            <div className={styles.modalFooter}>
-              <button
-                type="button"
-                className={styles.secondaryBtn}
-                onClick={() => setIsPreviewModalOpen(false)}
-              >
-                Close Preview
-              </button>
-              <button
-                type="button"
-                className={styles.primaryBtn}
-                onClick={() => window.print()}
-              >
-                <Printer size={16} /> Print Template
-              </button>
+            {/* Document Sheet - Clean White A4 Hospital Surface */}
+            <div className={styles.previewDocumentSheet}>
+              {/* Department Header */}
+              <div className={styles.docDepartmentHeader}>
+                <h2 className={styles.docDepartmentName}>
+                  DEPARTMENT OF {formData.groupName.toUpperCase()} &amp; DIAGNOSTICS
+                </h2>
+                <div className={styles.docDepartmentSub}>
+                  {HOSPITAL_CONFIG.name} • {HOSPITAL_CONFIG.address}
+                </div>
+              </div>
+
+              {/* Patient Info Table */}
+              <table className={styles.docPatientTable}>
+                <tbody>
+                  <tr>
+                    <td style={{ width: '50%' }}>
+                      <span className={styles.docInfoLabel}>Patient Name:</span>
+                      <span className={styles.docInfoVal}>
+                        {selectedPreviewPatient
+                          ? `${selectedPreviewPatient.firstName} ${selectedPreviewPatient.middleName ? `${selectedPreviewPatient.middleName} ` : ''}${selectedPreviewPatient.lastName}`.trim()
+                          : 'Sample Patient (Clinical Verification)'}
+                      </span>
+                    </td>
+                    <td style={{ width: '50%' }}>
+                      <span className={styles.docInfoLabel}>Report Date:</span>
+                      <span className={styles.docInfoVal}>
+                        {new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+                      </span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span className={styles.docInfoLabel}>UHID / ID:</span>
+                      <span className={styles.docInfoVal}>
+                        {selectedPreviewPatient?.uhid || formData.id || 'UHID-DEMO-01'}
+                      </span>
+                    </td>
+                    <td>
+                      <span className={styles.docInfoLabel}>Age / Gender:</span>
+                      <span className={styles.docInfoVal}>
+                        {selectedPreviewPatient
+                          ? `${selectedPreviewPatient.age} ${selectedPreviewPatient.ageUnit || 'Yrs'} / ${selectedPreviewPatient.sex}`
+                          : '42 Yrs / Male'}
+                      </span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span className={styles.docInfoLabel}>Ref. Doctor:</span>
+                      <span className={styles.docInfoVal}>
+                        {selectedPreviewPatient?.hospitalDoctor || selectedPreviewPatient?.referenceBy || 'Dr. S. K. Mehta, MD (Med)'}
+                      </span>
+                    </td>
+                    <td>
+                      <span className={styles.docInfoLabel}>Reporting Unit:</span>
+                      <span className={styles.docInfoVal}>{formData.department || 'Radiology & Imaging'}</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              {/* Report Main Title */}
+              <div className={styles.docTitleSection}>
+                <h3 className={styles.docMainTitle}>
+                  {formData.reportHeader || formData.templateName || 'INVESTIGATION REPORT'}
+                </h3>
+              </div>
+
+              {/* Details of Report - Section Heading */}
+              <div className={styles.docSectionHeading}>
+                DETAILS OF THE REPORT
+              </div>
+
+              {/* Details Bullet Points List */}
+              <div className={styles.docBulletsContainer}>
+                {parsedDetails.items.length === 0 ? (
+                  <div style={{ color: '#64748b', fontStyle: 'italic', fontSize: '13px' }}>
+                    No template findings or observations recorded.
+                  </div>
+                ) : (
+                  parsedDetails.items.map((item, idx) => (
+                    <div key={item.id || idx} className={styles.docBulletItem}>
+                      <span className={styles.docBulletDot}>•</span>
+                      <div className={styles.docBulletText}>
+                        {item.label && <strong className={styles.docBulletLabel}>{item.label} </strong>}
+                        <span>{item.content}</span>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+
+              {/* Impression Box */}
+              {parsedDetails.impressionTitle && (
+                <div className={styles.docImpressionBox}>
+                  <div className={styles.docImpressionTitle}>
+                    {parsedDetails.impressionTitle}:
+                  </div>
+                  {parsedDetails.impressionLines.map((line, lIdx) => (
+                    <div key={lIdx} className={styles.docImpressionLine}>
+                      {line}
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Signatures Block */}
+              <div className={styles.docSignaturesFooter}>
+                <div className={styles.docSigBlock}>
+                  <div className={styles.docSigTitle}>Medical Transcriptionist</div>
+                  <div className={styles.docSigSubtitle}>Verified Diagnostic Format</div>
+                </div>
+                <div className={styles.docSigBlock} style={{ textAlign: 'right' }}>
+                  <div className={styles.docSigTitle}>Consultant Radiologist / Pathologist</div>
+                  <div className={styles.docSigSubtitle}>Authorized Signatory</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

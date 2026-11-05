@@ -831,3 +831,4 @@ export function generateEchoReportPdfBlob(report: EchoReportRecord): Blob {
 
   return doc.output('blob');
 }
+

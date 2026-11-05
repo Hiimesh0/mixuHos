@@ -364,3 +364,4 @@ export function openMedicinePrintView(medicine: MedicineRecord): void {
   win.document.write(html);
   win.document.close();
 }
+

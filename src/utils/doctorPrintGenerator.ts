@@ -355,3 +355,4 @@ export function openDoctorPrintView(doctor: DoctorRecord): void {
   win.document.write(html);
   win.document.close();
 }
+
