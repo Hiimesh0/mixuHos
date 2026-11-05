@@ -4,7 +4,7 @@ import { defineConfig } from 'vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: process.env.VERCEL ? '/' : '/hospital-management-system/',
+  base: process.env.VERCEL ? '/' : '/mixuHos/',
   server: {
     proxy: {
       '/api': {

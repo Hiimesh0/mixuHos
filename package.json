@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://Hiimesh0.github.io/hospital-management-system",
+  "homepage": "https://Hiimesh0.github.io/mixuHos",
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
