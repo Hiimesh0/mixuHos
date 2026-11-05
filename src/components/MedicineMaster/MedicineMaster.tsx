@@ -7,7 +7,9 @@ import {
 } from 'lucide-react';
 import { medicineApi, type MedicineRecord } from '../../api/masterApi';
 import { useAutoDismissNotification } from '../../hooks/useAutoDismissNotification';
+import { useFormKeyboardNavigation } from '../../hooks/useFormKeyboardNavigation';
 import { HOSPITAL_CONFIG } from '../../config/hospitalConfig';
+import { openMedicinePrintView } from '../../utils/medicinePrintGenerator';
 import styles from './MedicineMaster.module.css';
 
 const DEFAULT_MEDICINE: MedicineRecord = {
@@ -53,6 +55,9 @@ const MedicineMaster: React.FC = () => {
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
   const [isPrintModalOpen, setIsPrintModalOpen] = useState<boolean>(false);
+
+  // Keyboard Enter Navigation
+  const { formRef, handleKeyDown: handleFormKeyDown } = useFormKeyboardNavigation();
 
   const { notification, setNotification, dismissNotification } = useAutoDismissNotification<{
     type: 'success' | 'error';
@@ -334,7 +339,15 @@ const MedicineMaster: React.FC = () => {
       )}
 
       {/* Main Grid: Left Form & Right Summary */}
-      <div className={styles.mainGrid}>
+      <form
+        ref={formRef}
+        onKeyDown={handleFormKeyDown}
+        onSubmit={e => {
+          e.preventDefault();
+          handleSave();
+        }}
+        className={styles.mainGrid}
+      >
         {/* Left Form */}
         <div className={styles.formSection}>
           <div className={styles.formRow}>
@@ -560,7 +573,7 @@ const MedicineMaster: React.FC = () => {
             title="Formulary Overview"
           />
         </div>
-      </div>
+      </form>
 
       {/* Bottom Action Bar */}
       <div className={styles.actionBar}>
@@ -615,7 +628,7 @@ const MedicineMaster: React.FC = () => {
           <button
             type="button"
             className={styles.secondaryBtn}
-            onClick={() => setIsPrintModalOpen(true)}
+            onClick={() => openMedicinePrintView(formData)}
           >
             <Printer size={18} /> Print
           </button>

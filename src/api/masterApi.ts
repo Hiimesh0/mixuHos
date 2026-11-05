@@ -658,6 +658,16 @@ export const reportTemplateApi = {
     return { success: true, count: filtered.length, templates: filtered };
   },
 
+  // Alias for backward compatibility with getTemplates
+  async getTemplates(params?: {
+    search?: string;
+    group?: string;
+    department?: string;
+    active_only?: boolean;
+  }): Promise<{ success: boolean; count: number; templates: ReportTemplateRecord[] }> {
+    return this.getReportTemplates(params);
+  },
+
   async getReportTemplateById(id: string): Promise<{ success: boolean; template: ReportTemplateRecord }> {
     try {
       const res = await fetch(`${API_BASE_URL}/report-templates/${encodeURIComponent(id)}/`, {

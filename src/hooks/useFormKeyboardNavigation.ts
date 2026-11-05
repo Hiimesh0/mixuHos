@@ -3,9 +3,9 @@ import { useRef, useCallback } from 'react';
 /**
  * Predefined logical sequence of fields for the Patient Registration form.
  * Matches the actual visual structure across all sections:
- * 1. Basic Information (Category, First, Middle, Last, DOB, Age, Unit, Sex)
- * 2. Demographics & Clinical (Doctor, Ref By, Religion, Marital, Weight, Height)
- * 3. Contact & Address (Mobile, Email, AutoSMS, Street, City, State, PIN)
+ * 1. Basic Information (Category, First, Middle, Last, DOB, Age, Unit, Sex, Doctor, Mobile, Email)
+ * 2. Demographics & Clinical (Ref By, Religion, Marital, Weight, Height)
+ * 3. Contact & Address (Street, City, State, PIN, AutoSMS)
  * 4. Other Details & Identification (Estimate, Aadhar, PAN, Mediclaim, Member ID, Emp ID, Company, Remark)
  */
 export const PATIENT_REGISTRATION_FIELD_ORDER = [
@@ -48,7 +48,73 @@ export const PATIENT_REGISTRATION_FIELD_ORDER = [
   'remark'
 ] as const;
 
+/**
+ * Echo Report Left-to-Right Row-Based Field Navigation Order
+ * Moves horizontally across rows first, then proceeds down to the next row.
+ */
+export const ECHO_REPORT_FIELD_ORDER = [
+  // Row 1: Patient details
+  'patientName',
+  'uhid',
+  'age',
+  'sex',
+  'reportDate',
+
+  // Row 2: Referred By & C/O
+  'referredBy',
+  'c_o',
+
+  // Row 3: Mitral Valve, Aortic Valve, LVEF
+  'mitralValve',
+  'aorticValve',
+  'lvef',
+
+  // Row 4: Tricuspid Valve, Pulmonary Valve
+  'tricuspidValve',
+  'pulmonaryValve',
+
+  // Row 5: Aorta, Left Atrium
+  'aorta',
+  'leftAtrium',
+
+  // Row 6: Left Ventricle, Right Atrium
+  'leftVentricle',
+  'rightAtrium',
+
+  // Row 7: RWMA, RVSP
+  'rwma',
+  'rvsp',
+
+  // Row 8: Right Ventricle, IVS, Septum, LVIDd
+  'rightVentricle',
+  'ivs',
+  'septum',
+  'lvidd',
+
+  // Row 9: IVC, IAS, P.Wall, LVIDs
+  'ivc',
+  'ias',
+  'pWall',
+  'lvids',
+
+  // Row 10: Pericardium, LV. Compliance
+  'pericardium',
+  'lvCompliance',
+
+  // Row 11: Doppler Study, TVI
+  'dopplerStudy',
+  'tvi',
+
+  // Row 12: Left Aortic Arch / PDA / Coarctation
+  'leftAorticArchPdaCoarctation',
+
+  // Row 13: Conclusion, Consultant Dr.
+  'conclusion',
+  'consultantDr'
+] as const;
+
 export type PatientRegistrationFieldName = typeof PATIENT_REGISTRATION_FIELD_ORDER[number];
+export type EchoReportFieldName = typeof ECHO_REPORT_FIELD_ORDER[number];
 
 /**
  * Validates whether a DOM element is focusable and ready for keyboard interaction.
@@ -123,10 +189,10 @@ export interface UseFormKeyboardNavigationOptions {
 }
 
 /**
- * Custom React hook managing Enter-key navigation within a form.
+ * Custom React hook managing Enter-key navigation across forms in the hospital system.
  * 
  * Rules:
- * - Enter moves to the next logical field.
+ * - Enter moves to the next logical field (left to right across current row, then down).
  * - Textareas retain normal multiline Enter behavior.
  * - Buttons retain normal Enter / Space activation.
  * - Dropdowns (selects) allow normal option selection.
@@ -135,9 +201,9 @@ export interface UseFormKeyboardNavigationOptions {
  * - At the last field, moves focus to the primary action button without auto-submitting.
  */
 export function useFormKeyboardNavigation(options?: UseFormKeyboardNavigationOptions) {
-  const formRef = useRef<HTMLFormElement | null>(null);
-  const fieldOrder = options?.fieldOrder ?? PATIENT_REGISTRATION_FIELD_ORDER;
-  const submitButtonSelector = options?.submitButtonSelector ?? 'button[type="submit"], .btnPrimaryAction';
+  const formRef = useRef<HTMLElement | null>(null);
+  const explicitFieldOrder = options?.fieldOrder;
+  const submitButtonSelector = options?.submitButtonSelector ?? 'button[type="submit"], .btnPrimaryAction, button.btnPrimary';
 
   const moveToNextField = useCallback(
     (currentElement?: HTMLElement) => {
@@ -148,64 +214,76 @@ export function useFormKeyboardNavigation(options?: UseFormKeyboardNavigationOpt
       if (!active) return;
 
       const currentName = active.getAttribute('name') || active.id || '';
-      const currentIndex = currentName ? fieldOrder.indexOf(currentName as PatientRegistrationFieldName) : -1;
 
-      // 1. If currently on a field in the sequence
-      if (currentIndex !== -1) {
-        // Look ahead for the next focusable field
-        for (let i = currentIndex + 1; i < fieldOrder.length; i++) {
-          const nextName = fieldOrder[i];
-          const candidate = container.querySelector<HTMLElement>(`[name="${nextName}"], #${nextName}`);
-          if (candidate && isFieldFocusable(candidate)) {
-            focusField(candidate);
-            options?.onNavigate?.(currentName, nextName);
+      // MODE 1: Explicit Field Order provided (e.g. Patient Registration or Echo Report left-to-right)
+      if (explicitFieldOrder && explicitFieldOrder.length > 0) {
+        const currentIndex = currentName ? explicitFieldOrder.indexOf(currentName) : -1;
+
+        if (currentIndex !== -1) {
+          // Look ahead in explicit order
+          for (let i = currentIndex + 1; i < explicitFieldOrder.length; i++) {
+            const nextName = explicitFieldOrder[i];
+            const candidate = container.querySelector<HTMLElement>(`[name="${nextName}"], #${nextName}`);
+            if (candidate && isFieldFocusable(candidate)) {
+              focusField(candidate);
+              options?.onNavigate?.(currentName, nextName);
+              return;
+            }
+          }
+
+          // At end of fields, focus primary submit action button without submitting
+          let submitBtn = container.querySelector<HTMLElement>(submitButtonSelector) || document.querySelector<HTMLElement>(submitButtonSelector);
+          if (submitBtn && isFieldFocusable(submitBtn)) {
+            focusField(submitBtn);
+            options?.onNavigate?.(currentName, 'submitButton');
             return;
           }
         }
-
-        // Reached end of fields: move focus to primary action button without submitting!
-        // Also look outside form if the submit button is in sticky action sidebar
-        let submitBtn = container.querySelector<HTMLElement>(submitButtonSelector);
-        if (!submitBtn) {
-          submitBtn = document.querySelector<HTMLElement>(submitButtonSelector);
-        }
-        if (submitBtn && isFieldFocusable(submitBtn)) {
-          focusField(submitBtn);
-          options?.onNavigate?.(currentName, 'submitButton');
-          return;
-        }
       }
 
-      // 2. If currently focused on the submit button, cycle back to the first focusable field
+      // MODE 2: Generic DOM / Visual Order (Left-to-Right, Top-to-Bottom)
+      const allFormControls = Array.from(
+        container.querySelectorAll<HTMLElement>(
+          'input:not([type="hidden"]), select, textarea, [tabindex]:not([tabindex="-1"])'
+        )
+      ).filter(el => {
+        // Exclude buttons from regular sequential stepping
+        if (el.tagName === 'BUTTON' || (el instanceof HTMLInputElement && (el.type === 'button' || el.type === 'submit'))) {
+          return false;
+        }
+        return isFieldFocusable(el);
+      });
+
+      if (allFormControls.length === 0) return;
+
+      const currentIndexInDom = allFormControls.indexOf(active);
+      if (currentIndexInDom !== -1 && currentIndexInDom < allFormControls.length - 1) {
+        // Move to next input in DOM order
+        const nextControl = allFormControls[currentIndexInDom + 1];
+        focusField(nextControl);
+        options?.onNavigate?.(currentName || `index_${currentIndexInDom}`, nextControl.getAttribute('name') || nextControl.id || `index_${currentIndexInDom + 1}`);
+        return;
+      }
+
+      // If at last field or not found, focus action button
       const submitBtn = container.querySelector<HTMLElement>(submitButtonSelector) || document.querySelector<HTMLElement>(submitButtonSelector);
-      if (active === submitBtn) {
-        for (let i = 0; i < fieldOrder.length; i++) {
-          const fieldName = fieldOrder[i];
-          const candidate = container.querySelector<HTMLElement>(`[name="${fieldName}"], #${fieldName}`);
-          if (candidate && isFieldFocusable(candidate)) {
-            focusField(candidate);
-            options?.onNavigate?.('submitButton', fieldName);
-            return;
-          }
-        }
+      if (submitBtn && isFieldFocusable(submitBtn) && active !== submitBtn) {
+        focusField(submitBtn);
+        options?.onNavigate?.(currentName || 'last', 'submitButton');
+        return;
       }
 
-      // 3. Fallback: Find first focusable field
-      for (let i = 0; i < fieldOrder.length; i++) {
-        const fieldName = fieldOrder[i];
-        const candidate = container.querySelector<HTMLElement>(`[name="${fieldName}"], #${fieldName}`);
-        if (candidate && isFieldFocusable(candidate)) {
-          focusField(candidate);
-          options?.onNavigate?.(currentName || 'unknown', fieldName);
-          return;
-        }
+      // Cycle back to first field if currently on submit button
+      if (active === submitBtn && allFormControls.length > 0) {
+        focusField(allFormControls[0]);
+        options?.onNavigate?.('submitButton', allFormControls[0].getAttribute('name') || 'first');
       }
     },
-    [fieldOrder, submitButtonSelector, options]
+    [explicitFieldOrder, submitButtonSelector, options]
   );
 
   const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLFormElement>) => {
+    (e: React.KeyboardEvent<HTMLElement>) => {
       // Only process Enter key
       if (e.key !== 'Enter') {
         return;
@@ -227,12 +305,11 @@ export function useFormKeyboardNavigation(options?: UseFormKeyboardNavigationOpt
       }
 
       // 2. Button: allow default activation (Enter activates button)
-      if (activeElement.tagName === 'BUTTON') {
+      if (activeElement.tagName === 'BUTTON' || (activeElement instanceof HTMLInputElement && activeElement.type === 'button')) {
         return;
       }
 
-      // 3. Select element: if Enter is pressed on closed select, advance; do not block option selection
-      // Normal input: prevent form submission & move to next field
+      // 3. Normal input / select: prevent accidental form submission & advance to next field
       e.preventDefault();
       e.stopPropagation();
       moveToNextField(activeElement);
@@ -244,6 +321,6 @@ export function useFormKeyboardNavigation(options?: UseFormKeyboardNavigationOpt
     formRef,
     handleKeyDown,
     moveToNextField,
-    fieldOrder
+    fieldOrder: explicitFieldOrder ?? PATIENT_REGISTRATION_FIELD_ORDER
   };
 }

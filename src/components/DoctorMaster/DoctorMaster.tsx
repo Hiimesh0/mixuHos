@@ -7,7 +7,9 @@ import {
 } from 'lucide-react';
 import { doctorApi, type DoctorRecord } from '../../api/masterApi';
 import { useAutoDismissNotification } from '../../hooks/useAutoDismissNotification';
+import { useFormKeyboardNavigation } from '../../hooks/useFormKeyboardNavigation';
 import { HOSPITAL_CONFIG } from '../../config/hospitalConfig';
+import { openDoctorPrintView } from '../../utils/doctorPrintGenerator';
 import styles from './DoctorMaster.module.css';
 
 const DEFAULT_DOCTOR: DoctorRecord = {
@@ -50,6 +52,9 @@ const DoctorMaster: React.FC = () => {
   const [_isLoading, setIsLoading] = useState<boolean>(true);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [printChecked, setPrintChecked] = useState<boolean>(false);
+
+  // Form Keyboard Enter Navigation
+  const { formRef, handleKeyDown: handleFormKeyDown } = useFormKeyboardNavigation();
 
   // Modals
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
@@ -321,7 +326,15 @@ const DoctorMaster: React.FC = () => {
       )}
 
       {/* Form Container */}
-      <div className={styles.formContainer}>
+      <form
+        ref={formRef}
+        onKeyDown={handleFormKeyDown}
+        onSubmit={e => {
+          e.preventDefault();
+          handleSave();
+        }}
+        className={styles.formContainer}
+      >
         {/* General Information Section */}
         <div className={styles.section}>
           <h2 className={styles.sectionTitle}>General Information</h2>
@@ -678,7 +691,7 @@ const DoctorMaster: React.FC = () => {
             </div>
           </div>
         </div>
-      </div>
+      </form>
 
       {/* Bottom Action Bar */}
       <div className={styles.actionBar}>
@@ -726,7 +739,7 @@ const DoctorMaster: React.FC = () => {
             className={styles.printBtn}
             onClick={() => {
               setPrintChecked(!printChecked);
-              setIsPrintModalOpen(true);
+              openDoctorPrintView(formData);
             }}
           >
             {printChecked ? <CheckSquare size={18} color="var(--primary)" /> : <Square size={18} />}

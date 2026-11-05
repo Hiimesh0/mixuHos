@@ -20,14 +20,18 @@ import {
   FileText,
   Plus,
   HeartPulse,
-  Sparkles
+  Sparkles,
+  Download,
+  RotateCcw
 } from 'lucide-react';
 import { echoReportApi, type EchoReportRecord } from '../../api/echoReportApi';
 import { patientApi, type PatientRecord } from '../../api/patientApi';
 import { doctorApi, type DoctorRecord } from '../../api/masterApi';
 import { reportTemplateApi, type ReportTemplateRecord } from '../../api/masterApi';
 import { useAutoDismissNotification } from '../../hooks/useAutoDismissNotification';
+import { useFormKeyboardNavigation, ECHO_REPORT_FIELD_ORDER } from '../../hooks/useFormKeyboardNavigation';
 import { HOSPITAL_CONFIG } from '../../config/hospitalConfig';
+import { openEchoReportPrintView, generateEchoReportPdfBlob } from '../../utils/echoReportPrintGenerator';
 import styles from './EchoReport.module.css';
 
 const DEFAULT_FORM: Omit<EchoReportRecord, 'id'> = {
@@ -104,6 +108,50 @@ export const EchoReport: React.FC = () => {
     message: string;
   }>();
 
+  // Keyboard navigation hook (Row-based Left-to-Right)
+  const { formRef, handleKeyDown: handleFormKeyDown } = useFormKeyboardNavigation({
+    fieldOrder: ECHO_REPORT_FIELD_ORDER
+  });
+
+  const handlePrintReport = () => {
+    if (!formData.uhid) {
+      setNotification({ type: 'error', message: 'Please select or enter a patient before printing.' });
+      return;
+    }
+    openEchoReportPrintView({ id: currentId || 'ECHO-PRINT', ...formData } as EchoReportRecord);
+  };
+
+  const handleExportPdf = () => {
+    if (!formData.uhid) {
+      setNotification({ type: 'error', message: 'Please select or enter a patient before exporting PDF.' });
+      return;
+    }
+    try {
+      const blob = generateEchoReportPdfBlob({ id: currentId || 'ECHO-PRINT', ...formData } as EchoReportRecord);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Echo_Report_${formData.uhid || 'patient'}_${formData.reportDate || 'date'}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      setNotification({ type: 'success', message: 'PDF downloaded successfully.' });
+    } catch {
+      setNotification({ type: 'error', message: 'Failed to generate PDF.' });
+    }
+  };
+
+  const handleClearForm = () => {
+    if (window.confirm('Clear all fields on this Echo Report? Any unsaved edits will be discarded.')) {
+      setFormData(DEFAULT_FORM);
+      setCurrentId(null);
+      setCurrentIndex(-1);
+      setIsEditingFinalized(false);
+      setNotification({ type: 'success', message: 'Form cleared.' });
+    }
+  };
+
   const isFinalized = formData.status === 'Finalized' && !isEditingFinalized;
 
   // Load report data into form
@@ -156,10 +204,11 @@ export const EchoReport: React.FC = () => {
     try {
       setIsLoading(true);
       const [repRes, patRes, docRes, tplRes] = await Promise.all([
-        echoReportApi.getReports(),
-        patientApi.getPatients(),
-        doctorApi.getDoctors(),
-        reportTemplateApi.getTemplates()
+        echoReportApi.getReports().catch(() => ({ success: true, count: 0, reports: [] })),
+        patientApi.getPatients().catch(() => ({ success: true, count: 0, patients: [] })),
+        doctorApi.getDoctors().catch(() => ({ success: true, count: 0, doctors: [] })),
+        (reportTemplateApi.getReportTemplates ? reportTemplateApi.getReportTemplates() : reportTemplateApi.getTemplates())
+          .catch(() => ({ success: true, count: 0, templates: [] }))
       ]);
 
       const repList = repRes.reports || [];
@@ -549,8 +598,13 @@ export const EchoReport: React.FC = () => {
         </div>
       )}
 
-      {/* Form Container */}
-      <div className={styles.formContainer}>
+      {/* Form Container with Left-to-Right Keyboard Navigation */}
+      <form
+        className={styles.formContainer}
+        ref={formRef as any}
+        onKeyDown={handleFormKeyDown}
+        onSubmit={e => e.preventDefault()}
+      >
         {/* Patient Details Section */}
         <section className={styles.section} aria-label="Patient Identification">
           <div className={styles.sectionHeader}>
@@ -572,6 +626,7 @@ export const EchoReport: React.FC = () => {
               <label className={`${styles.label} ${styles.labelRight}`}>Patient's Name :</label>
               <input
                 type="text"
+                name="patientName"
                 className={`${styles.input} ${styles.wFull} ${isFinalized ? styles.inputLocked : ''}`}
                 style={{ backgroundColor: !formData.patientName ? 'var(--warning-soft)' : undefined }}
                 value={formData.patientName}
@@ -586,6 +641,7 @@ export const EchoReport: React.FC = () => {
               <div style={{ display: 'flex', gap: '6px', width: '100%' }}>
                 <input
                   type="text"
+                  name="uhid"
                   className={`${styles.input} ${styles.wFull} ${isFinalized ? styles.inputLocked : ''}`}
                   value={formData.uhid}
                   onChange={e => handleInputChange('uhid', e.target.value)}
@@ -609,6 +665,7 @@ export const EchoReport: React.FC = () => {
               <label className={styles.label}>Age :</label>
               <input
                 type="text"
+                name="age"
                 className={`${styles.input} ${styles.wSmall} ${isFinalized ? styles.inputLocked : ''}`}
                 value={formData.age}
                 onChange={e => handleInputChange('age', e.target.value)}
@@ -619,6 +676,7 @@ export const EchoReport: React.FC = () => {
             <div className={styles.fieldGroup}>
               <label className={styles.label}>Sex :</label>
               <select
+                name="sex"
                 className={`${styles.input} ${styles.wSmall} ${isFinalized ? styles.inputLocked : ''}`}
                 value={formData.sex}
                 onChange={e => handleInputChange('sex', e.target.value)}
@@ -635,6 +693,7 @@ export const EchoReport: React.FC = () => {
               <label className={styles.label}>Date :</label>
               <input
                 type="date"
+                name="reportDate"
                 className={`${styles.input} ${styles.wMedium} ${isFinalized ? styles.inputLocked : ''}`}
                 value={formData.reportDate}
                 onChange={e => handleInputChange('reportDate', e.target.value)}
@@ -649,6 +708,7 @@ export const EchoReport: React.FC = () => {
               <label className={`${styles.label} ${styles.labelRight}`}>Refered By :</label>
               <input
                 type="text"
+                name="referredBy"
                 className={`${styles.input} ${styles.wFull} ${isFinalized ? styles.inputLocked : ''}`}
                 value={formData.referredBy}
                 onChange={e => handleInputChange('referredBy', e.target.value)}
@@ -661,6 +721,7 @@ export const EchoReport: React.FC = () => {
               <label className={`${styles.label} ${styles.labelRight}`}>C/O :</label>
               <input
                 type="text"
+                name="c_o"
                 className={`${styles.input} ${styles.wFull} ${isFinalized ? styles.inputLocked : ''}`}
                 value={formData.c_o}
                 onChange={e => handleInputChange('c_o', e.target.value)}
@@ -689,6 +750,7 @@ export const EchoReport: React.FC = () => {
                 <label className={`${styles.label} ${styles.labelRight}`}>Mitral Valve :</label>
                 <input
                   type="text"
+                  name="mitralValve"
                   className={`${styles.input} ${isFinalized ? styles.inputLocked : ''}`}
                   value={formData.mitralValve}
                   onChange={e => handleInputChange('mitralValve', e.target.value)}
@@ -700,6 +762,7 @@ export const EchoReport: React.FC = () => {
                 <label className={`${styles.label} ${styles.labelRight}`}>Tricuspid Valve :</label>
                 <input
                   type="text"
+                  name="tricuspidValve"
                   className={`${styles.input} ${isFinalized ? styles.inputLocked : ''}`}
                   value={formData.tricuspidValve}
                   onChange={e => handleInputChange('tricuspidValve', e.target.value)}
@@ -711,6 +774,7 @@ export const EchoReport: React.FC = () => {
                 <label className={`${styles.label} ${styles.labelRight}`}>Aorta :</label>
                 <input
                   type="text"
+                  name="aorta"
                   className={`${styles.input} ${isFinalized ? styles.inputLocked : ''}`}
                   value={formData.aorta}
                   onChange={e => handleInputChange('aorta', e.target.value)}
@@ -722,6 +786,7 @@ export const EchoReport: React.FC = () => {
                 <label className={`${styles.label} ${styles.labelRight}`}>Left Ventricle :</label>
                 <input
                   type="text"
+                  name="leftVentricle"
                   className={`${styles.input} ${isFinalized ? styles.inputLocked : ''}`}
                   value={formData.leftVentricle}
                   onChange={e => handleInputChange('leftVentricle', e.target.value)}
@@ -733,6 +798,7 @@ export const EchoReport: React.FC = () => {
                 <label className={`${styles.label} ${styles.labelRight}`}>RWMA :</label>
                 <input
                   type="text"
+                  name="rwma"
                   className={`${styles.input} ${isFinalized ? styles.inputLocked : ''}`}
                   value={formData.rwma}
                   onChange={e => handleInputChange('rwma', e.target.value)}
@@ -744,6 +810,7 @@ export const EchoReport: React.FC = () => {
                 <label className={`${styles.label} ${styles.labelRight}`}>Right Ventricle :</label>
                 <input
                   type="text"
+                  name="rightVentricle"
                   className={`${styles.input} ${isFinalized ? styles.inputLocked : ''}`}
                   value={formData.rightVentricle}
                   onChange={e => handleInputChange('rightVentricle', e.target.value)}
@@ -755,6 +822,7 @@ export const EchoReport: React.FC = () => {
                 <label className={`${styles.label} ${styles.labelRight}`}>IVC :</label>
                 <input
                   type="text"
+                  name="ivc"
                   className={`${styles.input} ${isFinalized ? styles.inputLocked : ''}`}
                   value={formData.ivc}
                   onChange={e => handleInputChange('ivc', e.target.value)}
@@ -769,6 +837,7 @@ export const EchoReport: React.FC = () => {
                 <label className={`${styles.label} ${styles.labelRight}`}>Aortic Valve :</label>
                 <input
                   type="text"
+                  name="aorticValve"
                   className={`${styles.input} ${isFinalized ? styles.inputLocked : ''}`}
                   value={formData.aorticValve}
                   onChange={e => handleInputChange('aorticValve', e.target.value)}
@@ -781,6 +850,7 @@ export const EchoReport: React.FC = () => {
                 <div className={styles.complexRow}>
                   <input
                     type="text"
+                    name="pulmonaryValve"
                     className={`${styles.input} ${styles.wFull} ${isFinalized ? styles.inputLocked : ''}`}
                     value={formData.pulmonaryValve}
                     onChange={e => handleInputChange('pulmonaryValve', e.target.value)}
@@ -789,6 +859,7 @@ export const EchoReport: React.FC = () => {
                   <label className={styles.label} style={{ marginLeft: '8px' }}>LVEF :</label>
                   <input
                     type="text"
+                    name="lvef"
                     className={`${styles.input} ${styles.wMedium} ${isFinalized ? styles.inputLocked : ''}`}
                     value={formData.lvef}
                     onChange={e => handleInputChange('lvef', e.target.value)}
@@ -802,6 +873,7 @@ export const EchoReport: React.FC = () => {
                 <label className={`${styles.label} ${styles.labelRight}`}>Left Atrium :</label>
                 <input
                   type="text"
+                  name="leftAtrium"
                   className={`${styles.input} ${isFinalized ? styles.inputLocked : ''}`}
                   value={formData.leftAtrium}
                   onChange={e => handleInputChange('leftAtrium', e.target.value)}
@@ -813,6 +885,7 @@ export const EchoReport: React.FC = () => {
                 <label className={`${styles.label} ${styles.labelRight}`}>Right Atrium :</label>
                 <input
                   type="text"
+                  name="rightAtrium"
                   className={`${styles.input} ${isFinalized ? styles.inputLocked : ''}`}
                   value={formData.rightAtrium}
                   onChange={e => handleInputChange('rightAtrium', e.target.value)}
@@ -824,6 +897,7 @@ export const EchoReport: React.FC = () => {
                 <label className={`${styles.label} ${styles.labelRight}`}>RVSP :</label>
                 <input
                   type="text"
+                  name="rvsp"
                   className={`${styles.input} ${isFinalized ? styles.inputLocked : ''}`}
                   value={formData.rvsp}
                   onChange={e => handleInputChange('rvsp', e.target.value)}
@@ -837,6 +911,7 @@ export const EchoReport: React.FC = () => {
                 <div className={styles.complexRow}>
                   <input
                     type="text"
+                    name="ivs"
                     className={`${styles.input} ${styles.wFull} ${isFinalized ? styles.inputLocked : ''}`}
                     value={formData.ivs}
                     onChange={e => handleInputChange('ivs', e.target.value)}
@@ -845,6 +920,7 @@ export const EchoReport: React.FC = () => {
                   <label className={styles.label} style={{ width: '50px', textAlign: 'right' }}>Septum :</label>
                   <input
                     type="text"
+                    name="septum"
                     className={`${styles.input} ${styles.wSmall} ${isFinalized ? styles.inputLocked : ''}`}
                     value={formData.septum}
                     onChange={e => handleInputChange('septum', e.target.value)}
@@ -854,6 +930,7 @@ export const EchoReport: React.FC = () => {
                   <label className={styles.label} style={{ marginLeft: '6px' }}>LVIDd :</label>
                   <input
                     type="text"
+                    name="lvidd"
                     className={`${styles.input} ${styles.wMedium} ${isFinalized ? styles.inputLocked : ''}`}
                     value={formData.lvidd}
                     onChange={e => handleInputChange('lvidd', e.target.value)}
@@ -867,6 +944,7 @@ export const EchoReport: React.FC = () => {
                 <div className={styles.complexRow}>
                   <input
                     type="text"
+                    name="ias"
                     className={`${styles.input} ${styles.wFull} ${isFinalized ? styles.inputLocked : ''}`}
                     value={formData.ias}
                     onChange={e => handleInputChange('ias', e.target.value)}
@@ -875,6 +953,7 @@ export const EchoReport: React.FC = () => {
                   <label className={styles.label} style={{ width: '50px', textAlign: 'right' }}>P.Wall :</label>
                   <input
                     type="text"
+                    name="pWall"
                     className={`${styles.input} ${styles.wSmall} ${isFinalized ? styles.inputLocked : ''}`}
                     value={formData.pWall}
                     onChange={e => handleInputChange('pWall', e.target.value)}
@@ -884,6 +963,7 @@ export const EchoReport: React.FC = () => {
                   <label className={styles.label} style={{ marginLeft: '6px' }}>LVIDs :</label>
                   <input
                     type="text"
+                    name="lvids"
                     className={`${styles.input} ${styles.wMedium} ${isFinalized ? styles.inputLocked : ''}`}
                     value={formData.lvids}
                     onChange={e => handleInputChange('lvids', e.target.value)}
@@ -918,6 +998,7 @@ export const EchoReport: React.FC = () => {
                 <label className={`${styles.label} ${styles.labelRight}`}>Pericardium :</label>
                 <input
                   type="text"
+                  name="pericardium"
                   className={`${styles.input} ${isFinalized ? styles.inputLocked : ''}`}
                   value={formData.pericardium}
                   onChange={e => handleInputChange('pericardium', e.target.value)}
@@ -931,6 +1012,7 @@ export const EchoReport: React.FC = () => {
                   Doppler Study :
                 </label>
                 <textarea
+                  name="dopplerStudy"
                   className={`${styles.textarea} ${isFinalized ? styles.inputLocked : ''}`}
                   style={{ height: '80px' }}
                   value={formData.dopplerStudy}
@@ -945,6 +1027,7 @@ export const EchoReport: React.FC = () => {
                   Conclusion :
                 </label>
                 <textarea
+                  name="conclusion"
                   className={`${styles.textarea} ${isFinalized ? styles.inputLocked : ''}`}
                   style={{ height: '80px' }}
                   value={formData.conclusion}
@@ -961,6 +1044,7 @@ export const EchoReport: React.FC = () => {
                 <label className={`${styles.label} ${styles.labelRight}`}>LV. Compliance :</label>
                 <input
                   type="text"
+                  name="lvCompliance"
                   className={`${styles.input} ${isFinalized ? styles.inputLocked : ''}`}
                   value={formData.lvCompliance}
                   onChange={e => handleInputChange('lvCompliance', e.target.value)}
@@ -972,6 +1056,7 @@ export const EchoReport: React.FC = () => {
                 <label className={`${styles.label} ${styles.labelRight}`}>TVI :</label>
                 <input
                   type="text"
+                  name="tvi"
                   className={`${styles.input} ${isFinalized ? styles.inputLocked : ''}`}
                   value={formData.tvi}
                   onChange={e => handleInputChange('tvi', e.target.value)}
@@ -986,6 +1071,7 @@ export const EchoReport: React.FC = () => {
                 </label>
                 <input
                   type="text"
+                  name="leftAorticArchPdaCoarctation"
                   className={`${styles.input} ${isFinalized ? styles.inputLocked : ''}`}
                   value={formData.leftAorticArchPdaCoarctation}
                   onChange={e => handleInputChange('leftAorticArchPdaCoarctation', e.target.value)}
@@ -998,6 +1084,7 @@ export const EchoReport: React.FC = () => {
                 <div style={{ display: 'flex', gap: '6px', width: '100%' }}>
                   <input
                     type="text"
+                    name="consultantDr"
                     className={`${styles.input} ${styles.wFull} ${isFinalized ? styles.inputLocked : ''}`}
                     value={formData.consultantDr}
                     onChange={e => handleInputChange('consultantDr', e.target.value)}
@@ -1017,7 +1104,7 @@ export const EchoReport: React.FC = () => {
             </div>
           </div>
         </section>
-      </div>
+      </form>
 
       {/* Bottom Action Bar matching Echo Report Screenshot */}
       <footer className={styles.actionBar}>
@@ -1065,20 +1152,40 @@ export const EchoReport: React.FC = () => {
           </button>
         </div>
 
-        {/* Middle Actions: PRINT, Perticular Search, Binoculars Search */}
+        {/* Middle Actions: PRINT, Export PDF, Perticular Search, Patient Search, Clear */}
         <div className={styles.middleActions}>
+          <button
+            type="button"
+            className={`${styles.btn} ${styles.btnPrimary}`}
+            onClick={handlePrintReport}
+            disabled={!formData.uhid}
+            title="Open dedicated print page matching reference standard"
+          >
+            <Printer size={16} /> PRINT
+          </button>
           <button
             type="button"
             className={`${styles.btn} ${styles.btnSecondary}`}
             onClick={() => setIsPrintModalOpen(true)}
             disabled={!formData.uhid}
+            title="Preview formatted A4 report"
           >
-            <Printer size={16} /> PRINT / Preview
+            <FileText size={15} /> Preview
+          </button>
+          <button
+            type="button"
+            className={`${styles.btn} ${styles.btnSecondary}`}
+            onClick={handleExportPdf}
+            disabled={!formData.uhid}
+            title="Download report as PDF file"
+          >
+            <Download size={15} /> Export PDF
           </button>
           <button
             type="button"
             className={`${styles.btn} ${styles.btnSecondary}`}
             onClick={() => setIsHistoryModalOpen(true)}
+            title="Search past Echo Reports"
           >
             Perticular Search
           </button>
@@ -1088,7 +1195,15 @@ export const EchoReport: React.FC = () => {
             onClick={() => setIsPatientModalOpen(true)}
             title="Quick Patient Search"
           >
-            <Search size={16} />
+            <Search size={16} /> Patient
+          </button>
+          <button
+            type="button"
+            className={`${styles.btn} ${styles.btnSecondary}`}
+            onClick={handleClearForm}
+            title="Clear form fields"
+          >
+            <RotateCcw size={15} /> Clear
           </button>
         </div>
 
@@ -1466,9 +1581,9 @@ export const EchoReport: React.FC = () => {
                 <button
                   type="button"
                   className={`${styles.btn} ${styles.btnPrimary}`}
-                  onClick={() => window.print()}
+                  onClick={handlePrintReport}
                 >
-                  <Printer size={15} /> Print Now
+                  <Printer size={15} /> Open Dedicated Print Tab
                 </button>
                 <button
                   type="button"

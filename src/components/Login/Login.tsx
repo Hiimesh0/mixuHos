@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Eye, EyeOff, Activity, CheckCircle2, Lock } from 'lucide-react';
+import { Eye, EyeOff, Lock, HeartPulse, ShieldCheck, Activity } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { HOSPITAL_CONFIG } from '../../config/hospitalConfig';
-import mixuLogoClean from '../../assets/mixu-logo-clean.png';
+import mixuEmblem from '../../assets/mixu-emblem.png';
 import styles from './Login.module.css';
 
 interface LoginProps {
@@ -10,9 +10,10 @@ interface LoginProps {
 }
 
 const Login: React.FC<LoginProps> = ({ onLogin }) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('admin');
+  const [password, setPassword] = useState('pass123');
   const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(true);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -23,117 +24,149 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
     setError('');
     setIsLoading(true);
 
-    // Simulate small network delay for smooth authentication experience
+    // Verify credentials
     setTimeout(() => {
-      if (username === 'admin' && password === 'pass123') {
+      const u = username.trim().toLowerCase();
+      if ((u === 'admin' || u === 'admin@mixu.com' || u === 'admin@hospital.com') && password === 'pass123') {
         onLogin();
         navigate('/patient-registration');
       } else {
-        setError('Invalid username or password');
+        setError('Invalid email or password. Use demo credentials below.');
         setIsLoading(false);
       }
-    }, 500);
+    }, 400);
   };
 
   return (
     <div className={styles.splitPageContainer}>
       <div className={styles.splitWrapper}>
-        {/* Left 40% Branding Panel */}
-        <div className={styles.brandingPanel}>
-          <div className={styles.brandDecorativeAccent}>
-            <span style={{ backgroundColor: '#4285F4' }} />
-            <span style={{ backgroundColor: '#EA4335' }} />
-            <span style={{ backgroundColor: '#FBBC05' }} />
-            <span style={{ backgroundColor: '#34A853' }} />
-          </div>
-
-          <div className={styles.brandContent}>
-            <div className={styles.brandLogoBox}>
-              <img
-                src={mixuLogoClean}
-                alt="Mixu Infosystem Logo"
-                className={styles.brandLogoImg}
+        {/* Left Purple / Indigo Hero Branding Panel with Wave Contours and EHR Graphic */}
+        <div className={styles.heroPanel}>
+          {/* Decorative Wave Contours Background */}
+          <div className={styles.waveOverlay} aria-hidden="true">
+            <svg viewBox="0 0 500 500" preserveAspectRatio="none" className={styles.waveSvg}>
+              <path
+                d="M0,100 C150,200 350,0 500,100 L500,00 L0,0 Z"
+                fill="rgba(255, 255, 255, 0.04)"
               />
-            </div>
-
-            <div className={styles.brandTagline}>
-              Next-Generation Healthcare Information Management System
-            </div>
-
-            <p className={styles.brandDescription}>
-              Comprehensive Hospital & EMR platform delivering intelligent patient registration, encounter tracking, OPD billing, clinical records, and diagnostic reporting with real-time operational precision.
-            </p>
-
-            <div className={styles.brandFeatures}>
-              <div className={styles.featureItem}>
-                <CheckCircle2 size={15} color="#34A853" />
-                <span>Fast Barcode & UHID Identification</span>
-              </div>
-              <div className={styles.featureItem}>
-                <CheckCircle2 size={15} color="#4285F4" />
-                <span>Real-time Encounter & Visit History</span>
-              </div>
-              <div className={styles.featureItem}>
-                <CheckCircle2 size={15} color="#EA4335" />
-                <span>Dynamic Billing & A4 PDF Printing</span>
-              </div>
-            </div>
+              <path
+                d="M0,280 C220,180 280,360 500,240 L500,500 L0,500 Z"
+                fill="rgba(255, 255, 255, 0.03)"
+              />
+              <circle cx="420" cy="120" r="140" fill="rgba(124, 58, 237, 0.25)" />
+              <circle cx="80" cy="380" r="160" fill="rgba(168, 85, 247, 0.15)" />
+            </svg>
           </div>
 
-          <div className={styles.brandFooter}>
-            <span>Powered by <strong>Mixu Infosystem</strong></span>
+          {/* Hero Content Container */}
+          <div className={styles.heroContent}>
+            {/* Top Emblem Brand Pill */}
+            <div className={styles.heroBrandPill}>
+              <img src={mixuEmblem} alt="Mixu Infosystem" className={styles.heroBrandEmblem} />
+              <span className={styles.heroBrandText}>{HOSPITAL_CONFIG.name}</span>
+            </div>
+
+            {/* EHR Vector Illustration Art */}
+            <div className={styles.illustrationWrapper} aria-hidden="true">
+              <div className={styles.illustrationCard}>
+                <div className={styles.illustrationCardHeader}>
+                  <div className={styles.cardHeaderDot} style={{ background: '#ef4444' }} />
+                  <div className={styles.cardHeaderDot} style={{ background: '#f59e0b' }} />
+                  <div className={styles.cardHeaderDot} style={{ background: '#10b981' }} />
+                  <span className={styles.cardHeaderTitle}>EMR Clinical Suite</span>
+                </div>
+                <div className={styles.illustrationCardBody}>
+                  <div className={styles.pulseRow}>
+                    <HeartPulse size={28} className={styles.pulseIcon} />
+                    <div className={styles.pulseGraph}>
+                      <span className={styles.pulseLine} />
+                    </div>
+                  </div>
+                  <div className={styles.metricGrid}>
+                    <div className={styles.metricItem}>
+                      <span className={styles.metricLabel}>Daily Patients</span>
+                      <strong className={styles.metricVal}>148+</strong>
+                    </div>
+                    <div className={styles.metricItem}>
+                      <span className={styles.metricLabel}>Active Reports</span>
+                      <strong className={styles.metricVal}>99.4%</strong>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Hero Copy */}
+            <div className={styles.heroTextSection}>
+              <h2 className={styles.heroTitle}>
+                A few more clicks to<br />sign in to your account.
+              </h2>
+              <p className={styles.heroSubtitle}>
+                Manage your hospital patients, clinical records, and billing in one seamless platform.
+              </p>
+            </div>
           </div>
         </div>
 
-        {/* Right 60% Login Panel */}
+        {/* Right White Form Panel */}
         <div className={styles.formPanel}>
-          <div className={styles.loginCard}>
-            <div className={styles.header}>
-              <div className={styles.hospitalEmblemBox}>
-                <Activity size={26} color="var(--primary)" />
+          <div className={styles.formContainer}>
+            {/* Header Brand & Welcome */}
+            <div className={styles.formHeader}>
+              <div className={styles.brandBadge}>
+                <img src={mixuEmblem} alt="Mixu Logo" className={styles.formBrandLogo} />
+                <span className={styles.formBrandName}>Mixu Infosystem</span>
               </div>
-              <h1 className={styles.title}>{HOSPITAL_CONFIG.name}</h1>
-              <p className={styles.subtitle}>
-                Sign in to access your administrative and clinical portal
+              <h1 className={styles.signInTitle}>Sign In</h1>
+              <p className={styles.signInSubtitle}>
+                Please enter your email & password.
               </p>
             </div>
 
-            <form className={styles.form} onSubmit={handleLogin} noValidate>
-              {error && (
-                <div className={styles.errorMessage} role="alert">
-                  {error}
-                </div>
-              )}
+            {/* Error Notification */}
+            {error && (
+              <div className={styles.errorMessage} role="alert">
+                {error}
+              </div>
+            )}
 
-              <div className={styles.fieldGroup}>
-                <label className={styles.label}>Username</label>
-                <div className={styles.inputWrapper}>
+            {/* Login Form */}
+            <form className={styles.loginForm} onSubmit={handleLogin} noValidate>
+              <div className={styles.inputGroup}>
+                <label className={styles.inputLabel} htmlFor="login-username">
+                  Email
+                </label>
+                <div className={styles.inputFieldWrapper}>
                   <input
+                    id="login-username"
                     type="text"
-                    className={`${styles.input} ${error ? styles.error : ''}`}
+                    className={`${styles.textInput} ${error ? styles.textInputError : ''}`}
                     value={username}
                     onChange={e => setUsername(e.target.value)}
-                    placeholder="Enter username"
+                    placeholder="Enter Email or Username"
                     required
                     autoFocus
                   />
                 </div>
               </div>
 
-              <div className={styles.fieldGroup}>
-                <label className={styles.label}>Password</label>
-                <div className={styles.inputWrapper}>
+              <div className={styles.inputGroup}>
+                <label className={styles.inputLabel} htmlFor="login-password">
+                  Password
+                </label>
+                <div className={styles.inputFieldWrapper}>
                   <input
+                    id="login-password"
                     type={showPassword ? 'text' : 'password'}
-                    className={`${styles.input} ${error ? styles.error : ''}`}
+                    className={`${styles.textInput} ${error ? styles.textInputError : ''}`}
                     value={password}
                     onChange={e => setPassword(e.target.value)}
-                    placeholder="Enter password"
+                    placeholder="Enter Password"
                     required
                   />
                   <button
                     type="button"
-                    className={styles.passwordToggle}
+                    className={styles.passwordEyeBtn}
                     onClick={() => setShowPassword(!showPassword)}
                     aria-label={showPassword ? 'Hide password' : 'Show password'}
                   >
@@ -142,25 +175,50 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                 </div>
               </div>
 
+              {/* Options Row: Remember Me & Forgot Password */}
               <div className={styles.optionsRow}>
-                <label className={styles.rememberMe}>
-                  <input type="checkbox" defaultChecked /> Remember me
+                <label className={styles.rememberLabel}>
+                  <input
+                    type="checkbox"
+                    className={styles.rememberCheckbox}
+                    checked={rememberMe}
+                    onChange={e => setRememberMe(e.target.checked)}
+                  />
+                  <span>Remember me</span>
                 </label>
-                <a href="#" className={styles.forgotPassword} onClick={e => e.preventDefault()}>
+                <a
+                  href="#forgot-password"
+                  className={styles.forgotLink}
+                  onClick={e => {
+                    e.preventDefault();
+                    alert('Password recovery: Contact the hospital IT administrator or use the demo credentials provided below.');
+                  }}
+                >
                   Forgot Password?
                 </a>
               </div>
 
-              <button type="submit" className={styles.primaryBtn} disabled={isLoading}>
-                <Lock size={15} style={{ marginRight: '6px' }} />
-                {isLoading ? 'Signing In...' : 'Sign In'}
+              {/* Continue / Sign In Action Button */}
+              <button
+                type="submit"
+                className={styles.continueBtn}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <span className={styles.btnLoadingText}>Signing In...</span>
+                ) : (
+                  <span>Continue</span>
+                )}
               </button>
             </form>
 
-            <div className={styles.demoInfo}>
-              <p>Demo Login Credentials</p>
-              <div>Username: <code>admin</code></div>
-              <div style={{ marginTop: '4px' }}>Password: <code>pass123</code></div>
+            {/* Demo Credentials Box */}
+            <div className={styles.demoCredentialsBox}>
+              <div className={styles.demoTitle}>Demo Sign In Credentials</div>
+              <div className={styles.demoRow}>
+                <span>Email / User: <code>admin</code></span>
+                <span>Password: <code>pass123</code></span>
+              </div>
             </div>
           </div>
         </div>

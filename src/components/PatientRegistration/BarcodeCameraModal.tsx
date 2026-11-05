@@ -917,8 +917,8 @@ export const BarcodeCameraModal: React.FC<BarcodeCameraModalProps> = ({
             <input
               ref={fileInputRef}
               type="file"
-              accept="image/*"
-              capture="environment"
+              accept="image/png, image/jpeg, image/jpg, image/webp"
+              
               style={{ display: 'none' }}
               onChange={handleFileUpload}
             />
@@ -929,7 +929,7 @@ export const BarcodeCameraModal: React.FC<BarcodeCameraModalProps> = ({
               onClick={() => fileInputRef.current?.click()}
               disabled={isResolving}
             >
-              <Upload size={13} /> Upload Barcode Image
+              <Upload size={13} /> Upload QR / Barcode
             </button>
           </div>
         </div>

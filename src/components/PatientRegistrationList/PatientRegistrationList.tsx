@@ -467,6 +467,16 @@ const PatientRegistrationList: React.FC = () => {
                     <div className={styles.actionsCell} style={{ justifyContent: 'center' }}>
                       <button
                         type="button"
+                        className={`${styles.btn} ${styles.btnPrimary}`}
+                        style={{ height: '28px', padding: '0 8px', fontSize: '0.75rem', display: 'inline-flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap' }}
+                        title="Load patient into registration workflow"
+                        onClick={() => navigate(`/patient-registration?id=${encodeURIComponent(patient.uhid)}`)}
+                      >
+                        <UserCheck size={13} />
+                        Load Patient
+                      </button>
+                      <button
+                        type="button"
                         className={styles.btnAction}
                         title="View Full Details"
                         onClick={() => setViewingPatient(patient)}
@@ -681,8 +691,8 @@ const PatientRegistrationList: React.FC = () => {
                   navigate(`/patient-registration?id=${encodeURIComponent(id)}`);
                 }}
               >
-                <Edit2 size={14} />
-                Edit This Patient
+                <UserCheck size={14} />
+                Load Patient into Workflow
               </button>
             </div>
 

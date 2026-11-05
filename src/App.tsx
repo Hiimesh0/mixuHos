@@ -122,7 +122,7 @@ interface NavSection {
 // 1. Working Modules: Verified fully working modules with functional CRUD operations and active APIs
 const WORKING_NAV_ITEMS: NavItemConfig[] = [
   { id: 'patient-registration', title: 'Patient Registration', icon: UserPlus, to: '/patient-registration' },
-  { id: 'patient-registration-list', title: 'Patient History', icon: History, to: '/patient-registration-list' },
+  { id: 'patient-history', title: 'Patient History', icon: History, to: '/patient-history' },
   { id: 'doctor-master', title: 'Doctor Master', icon: UserCheck, to: '/doctor-master' },
   { id: 'medicine-master', title: 'Medicine Master', icon: Pill, to: '/medicine-master' },
   { id: 'report-template', title: 'Report Template', icon: LayoutTemplate, to: '/report-template' },
@@ -158,7 +158,7 @@ const OTHER_NAV_ITEMS: NavItemConfig[] = [
     icon: FolderPlus,
     children: [
       { id: 'standard-prescription-master', title: 'Standard Prescription Master', icon: FileSignature, to: '/standard-prescription-master' },
-      { id: 'patient-history', title: 'Clinical Notes (Template)', icon: History, to: '/patient-history' },
+      { id: 'clinical-notes-template', title: 'Clinical Notes (Template)', icon: History, to: '/clinical-notes-template' },
       {
         id: 'ipd-master',
         title: 'IPD Master',
@@ -1093,6 +1093,54 @@ function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  // Automatically hide/collapse sidebar when interacting with form fields to give maximum working room
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    const handleGlobalFocusIn = (event: FocusEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (!target) return;
+
+      // Check if target is a form field
+      const isFormControl = 
+        target.matches('input, textarea, select, [contenteditable="true"]') ||
+        target.getAttribute('role') === 'textbox' ||
+        target.getAttribute('role') === 'searchbox' ||
+        target.getAttribute('role') === 'combobox';
+
+      if (!isFormControl) return;
+
+      // Do NOT auto-collapse if user is typing or clicking inside the sidebar navigation itself or header toggle buttons
+      if (
+        target.closest('#main-sidebar-nav') ||
+        target.closest('.mobileTopBar') ||
+        target.closest('.sidebarToggleBtn') ||
+        target.closest('.mobileMenuBtn')
+      ) {
+        return;
+      }
+
+      // Auto-collapse sidebar on desktop
+      setIsSidebarCollapsed(prev => {
+        if (!prev) {
+          localStorage.setItem('mixu_sidebar_collapsed', 'true');
+          window.dispatchEvent(new Event('resize'));
+          setTimeout(() => window.dispatchEvent(new Event('resize')), 260);
+          return true;
+        }
+        return prev;
+      });
+
+      // Close mobile drawer
+      setIsMobileNavOpen(false);
+    };
+
+    document.addEventListener('focusin', handleGlobalFocusIn);
+    return () => {
+      document.removeEventListener('focusin', handleGlobalFocusIn);
+    };
+  }, [isAuthenticated]);
+
   // Lock background body scroll when mobile drawer is open
   useEffect(() => {
     if (isMobileNavOpen) {
@@ -1197,7 +1245,9 @@ function App() {
                   <Route path="/login" element={<Navigate to="/patient-registration" replace />} />
                   <Route path="/" element={<Navigate to="/patient-registration" replace />} />
                   <Route path="/patient-registration" element={<PatientRegistration />} />
+                  <Route path="/patient-history" element={<PatientRegistrationList />} />
                   <Route path="/patient-registration-list" element={<PatientRegistrationList />} />
+                  <Route path="/clinical-notes-template" element={<PatientHistory />} />
                   <Route path="/bill-preview" element={<BillPreview />} />
                   <Route path="/patient-past-info" element={<PatientPastInfo />} />
                   <Route path="/part-payment" element={<PartPayment />} />
@@ -1217,7 +1267,6 @@ function App() {
                   <Route path="/indoor-register" element={<IndoorRegister />} />
                   <Route path="/contact-list" element={<ContactList />} />
                   <Route path="/intercomm-display" element={<IntercommDisplay />} />
-                  <Route path="/patient-history" element={<PatientHistory />} />
                   <Route path="/medicine-master" element={<MedicineMaster />} />
                   <Route path="/standard-prescription-master" element={<StandardPrescriptionMaster />} />
                   <Route path="/advice-master" element={<AdviceMaster />} />

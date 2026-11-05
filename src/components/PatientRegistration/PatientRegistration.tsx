@@ -26,8 +26,10 @@ import {
   Users,
   Activity,
   Clock,
-  History
+  History,
+  Upload
 } from 'lucide-react';
+import { BrowserMultiFormatReader, BarcodeFormat, DecodeHintType } from '@zxing/library';
 import { patientApi } from '../../api/patientApi';
 import { doctorApi } from '../../api/masterApi';
 import type { PatientRecord, PatientFormData, PatientBillRecord, ChargeItem } from '../../api/patientApi';
@@ -269,6 +271,10 @@ const PatientRegistration: React.FC = () => {
 
   // Fast keyboard navigation via Enter key
   const { formRef, handleKeyDown: handleFormKeyDown } = useFormKeyboardNavigation();
+
+  // QR / Barcode Gallery File Upload
+  const galleryFileInputRef = React.useRef<HTMLInputElement | null>(null);
+  const [isDecodingGallery, setIsDecodingGallery] = useState<boolean>(false);
 
   // Search Lookup Modal (Retained for quick access)
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
@@ -823,8 +829,16 @@ const PatientRegistration: React.FC = () => {
   }
   calculatedDiscountAmount = Math.min(subtotalAmount, Math.max(0, calculatedDiscountAmount));
   const netPayable = Math.max(0, Math.round((subtotalAmount - calculatedDiscountAmount) * 100) / 100);
-  const numericReceived = parseFloat(String(billAmountReceived)) || 0;
+  const numericReceived = Math.max(0, parseFloat(String(billAmountReceived)) || 0);
   const dueAmount = Math.max(0, Math.round((netPayable - numericReceived) * 100) / 100);
+
+  // Dynamic Payment Status
+  const paymentStatus: 'Paid' | 'Partially Paid' | 'Unpaid' =
+    numericReceived >= netPayable && netPayable > 0
+      ? 'Paid'
+      : numericReceived > 0
+        ? 'Partially Paid'
+        : 'Unpaid';
 
   // Print Existing Bill without re-issuing
   const handlePrintExistingBill = async () => {
@@ -1039,7 +1053,7 @@ const PatientRegistration: React.FC = () => {
   };
 
   // Unified lookup processor with unsaved data safety
-  const handleProcessBarcodeLookup = async (scannedCode: string, _source: 'Camera' | 'USB Scanner') => {
+  const handleProcessBarcodeLookup = async (scannedCode: string, _source: 'Camera' | 'USB Scanner' | 'Gallery Upload') => {
     const cleanId = scannedCode.trim();
     if (!cleanId) return;
 
@@ -1081,6 +1095,87 @@ const PatientRegistration: React.FC = () => {
         type: 'error',
         message: `Patient Not Found: No registered record matches barcode '${cleanId}'.`
       });
+    }
+  };
+
+  // Gallery QR / Barcode Upload Handler (Opens device photo gallery without forcing camera)
+  const handleGalleryUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsDecodingGallery(true);
+    setNotification({
+      type: 'success',
+      message: 'Processing image from device gallery...'
+    });
+
+    try {
+      const reader = new FileReader();
+      reader.onload = async () => {
+        try {
+          const img = new Image();
+          img.src = reader.result as string;
+          img.onload = async () => {
+            let detectedText: string | null = null;
+
+            // 1. Native BarcodeDetector if supported
+            if (
+              typeof window !== 'undefined' &&
+              'BarcodeDetector' in window &&
+              (window as unknown as { BarcodeDetector?: { new(opt?: unknown): { detect(src: unknown): Promise<Array<{ rawValue: string }>> } } }).BarcodeDetector
+            ) {
+              try {
+                const DetectorClass = (window as unknown as { BarcodeDetector: new(opt?: unknown) => { detect(src: unknown): Promise<Array<{ rawValue: string }>> } }).BarcodeDetector;
+                const detector = new DetectorClass({ formats: ['qr_code', 'code_128', 'code_39'] });
+                const barcodes = await detector.detect(img);
+                if (barcodes && barcodes.length > 0 && barcodes[0].rawValue) {
+                  detectedText = barcodes[0].rawValue.trim();
+                }
+              } catch {
+                // Fallback to ZXing
+              }
+            }
+
+            // 2. Fallback to ZXing MultiFormat Reader
+            if (!detectedText) {
+              try {
+                const hints = new Map<DecodeHintType, unknown>();
+                hints.set(DecodeHintType.POSSIBLE_FORMATS, [
+                  BarcodeFormat.QR_CODE,
+                  BarcodeFormat.CODE_128,
+                  BarcodeFormat.CODE_39
+                ]);
+                const zxingReader = new BrowserMultiFormatReader(hints);
+                const result = await zxingReader.decodeFromImageElement(img);
+                detectedText = result?.getText()?.trim() || null;
+              } catch {
+                // Decoding failed
+              }
+            }
+
+            setIsDecodingGallery(false);
+            if (detectedText) {
+              await handleProcessBarcodeLookup(detectedText, 'Gallery Upload');
+            } else {
+              setNotification({
+                type: 'error',
+                message: 'No readable QR code or barcode found in the uploaded image. Please ensure the code is clear and well-lit.'
+              });
+            }
+          };
+        } catch {
+          setIsDecodingGallery(false);
+          setNotification({ type: 'error', message: 'Failed to process image data.' });
+        }
+      };
+      reader.readAsDataURL(file);
+    } catch {
+      setIsDecodingGallery(false);
+      setNotification({ type: 'error', message: 'Failed to read image file from gallery.' });
+    } finally {
+      if (galleryFileInputRef.current) {
+        galleryFileInputRef.current.value = '';
+      }
     }
   };
 
@@ -1331,6 +1426,23 @@ const PatientRegistration: React.FC = () => {
         >
           <Camera size={14} />
           <span>Scan</span>
+        </button>
+        <input
+          ref={galleryFileInputRef}
+          type="file"
+          accept="image/png, image/jpeg, image/jpg, image/webp"
+          style={{ display: 'none' }}
+          onChange={handleGalleryUpload}
+        />
+        <button
+          type="button"
+          className={`${styles.btn} ${styles.btnSecondary} ${styles.barcodeScanBtn}`}
+          onClick={() => galleryFileInputRef.current?.click()}
+          title="Upload QR or barcode image directly from device gallery or photos"
+          disabled={isDecodingGallery}
+        >
+          <Upload size={14} />
+          <span>{isDecodingGallery ? 'Decoding...' : 'Upload QR'}</span>
         </button>
       </div>
 
@@ -2093,16 +2205,11 @@ const PatientRegistration: React.FC = () => {
       {/* PART 3: Patient History List & Search Section (Bottom Section) */}
       <section id="patient-history-section" className={styles.patientHistorySection} aria-label="Patient History List">
         <div className={styles.historyHeader}>
-          <div>
-            <h2 className={styles.historyTitle}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <h2 className={styles.historyTitle} style={{ margin: 0 }}>
               <Users size={22} color="var(--primary)" />
               Patient History & Records
             </h2>
-            <p className={styles.historySubtitle}>
-              Instant search across registered patients by Name, UHID, or Mobile. Click <strong>Load Patient</strong> to view or edit full record.
-            </p>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <span className={styles.badge} style={{ color: 'var(--primary)', fontWeight: 600 }}>
               {lookupPatients.length} Total Patients
             </span>
@@ -2749,13 +2856,50 @@ const PatientRegistration: React.FC = () => {
               </tbody>
             </table>
 
-            {/* Real-time Subtotal & Due Box */}
+            {/* Real-time Subtotal, Dynamic Payment Status & Due Box */}
             <div className={styles.billTotalBox}>
               <div>
                 <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block' }}>
                   Subtotal ({billRows.length} item{billRows.length > 1 ? 's' : ''})
                 </span>
                 <span className={styles.billTotalBig}>₹{subtotalAmount.toFixed(2)}</span>
+              </div>
+              <div style={{ textAlign: 'center' }}>
+                <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block' }}>
+                  Payment Status
+                </span>
+                <span
+                  style={{
+                    display: 'inline-block',
+                    marginTop: '4px',
+                    padding: '3px 12px',
+                    borderRadius: '12px',
+                    fontSize: '0.85rem',
+                    fontWeight: 700,
+                    letterSpacing: '0.02em',
+                    backgroundColor:
+                      paymentStatus === 'Paid'
+                        ? 'rgba(16, 185, 129, 0.15)'
+                        : paymentStatus === 'Partially Paid'
+                          ? 'rgba(245, 158, 11, 0.15)'
+                          : 'rgba(239, 68, 68, 0.15)',
+                    color:
+                      paymentStatus === 'Paid'
+                        ? '#059669'
+                        : paymentStatus === 'Partially Paid'
+                          ? '#d97706'
+                          : '#dc2626',
+                    border: `1px solid ${
+                      paymentStatus === 'Paid'
+                        ? '#10b981'
+                        : paymentStatus === 'Partially Paid'
+                          ? '#f59e0b'
+                          : '#ef4444'
+                    }`
+                  }}
+                >
+                  {paymentStatus}
+                </span>
               </div>
               <div style={{ textAlign: 'right' }}>
                 <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block' }}>
