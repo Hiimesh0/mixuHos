@@ -1,0 +1,44 @@
+{
+  "entity": "Discharge",
+  "last_sequence": 2,
+  "created_at": "2026-11-16T13:57:05+05:30",
+  "updated_at": "2026-11-16T13:59:24+05:30",
+  "discharges": [
+    {
+      "admission_id": "ADM-000002",
+      "ipd_no": "IPD-2026-0002",
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "bed_number": "SEMI-101",
+      "final_diagnosis": "Dengue Fever - Recovered",
+      "condition_on_discharge": "Recovered",
+      "treatment_summary": "IV fluids, antipyretics, platelet monitoring",
+      "discharging_doctor_name": "Dr. Nilesh Mahale",
+      "id": "DIS-000001",
+      "discharge_no": "DIS-2026-0001",
+      "discharge_date": "2026-11-16",
+      "discharge_time": "13:58",
+      "created_at": "2026-11-16T13:58:15+05:30",
+      "updated_at": "2026-11-16T13:58:15+05:30",
+      "is_active": true
+    },
+    {
+      "admission_id": "ADM-000003",
+      "ipd_no": "IPD-2026-0003",
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "bed_number": "SEMI-101",
+      "final_diagnosis": "Dengue Fever - Recovered",
+      "condition_on_discharge": "Recovered",
+      "treatment_summary": "IV fluids, antipyretics, platelet monitoring",
+      "discharging_doctor_name": "Dr. Nilesh Mahale",
+      "discharge_no": "DIS-2026-0002",
+      "discharge_date": "2026-11-16",
+      "discharge_time": "13:59",
+      "id": "DIS-000002",
+      "created_at": "2026-11-16T13:59:24+05:30",
+      "updated_at": "2026-11-16T13:59:24+05:30",
+      "is_active": true
+    }
+  ]
+}

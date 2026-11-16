@@ -1,0 +1,43 @@
+{
+  "entity": "OperationGroup",
+  "last_sequence": 5,
+  "created_at": "2026-11-16T13:57:05+05:30",
+  "updated_at": "2026-11-16T13:57:05+05:30",
+  "operation_groups": [
+    {
+      "id": "OPG-000001",
+      "code": "GSURG",
+      "name": "General Surgery",
+      "description": "Laparoscopic and open abdominal procedures",
+      "is_active": true
+    },
+    {
+      "id": "OPG-000002",
+      "code": "ORTHO",
+      "name": "Orthopedic Procedures",
+      "description": "Fracture fixation, arthroscopy, joint surgery",
+      "is_active": true
+    },
+    {
+      "id": "OPG-000003",
+      "code": "CARDIO",
+      "name": "Cardiovascular Interventions",
+      "description": "Pacemaker, vascular grafts, angiographies",
+      "is_active": true
+    },
+    {
+      "id": "OPG-000004",
+      "code": "ENT",
+      "name": "ENT / Otorhinolaryngology",
+      "description": "Septoplasty, tonsillectomy, mastoidectomy",
+      "is_active": true
+    },
+    {
+      "id": "OPG-000005",
+      "code": "GYNEC",
+      "name": "Obstetrics & Gynecology",
+      "description": "LSCS, hysterectomy, diagnostic laparoscopy",
+      "is_active": true
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "entity": "Contact",
+  "last_sequence": 6,
+  "created_at": "2026-11-16T13:57:05+05:30",
+  "updated_at": "2026-11-16T13:57:05+05:30",
+  "contacts": [
+    {
+      "id": "CNT-000001",
+      "name": "Dr. Nilesh Mahale",
+      "department": "Cardiology / Medicine",
+      "designation": "Chief Consultant",
+      "intercomm": "101",
+      "mobile": "9825123456",
+      "email": "dr.nilesh@hospital.com",
+      "is_active": true
+    },
+    {
+      "id": "CNT-000002",
+      "name": "Dr. Snehal Mahale",
+      "department": "Surgery",
+      "designation": "Senior Surgeon",
+      "intercomm": "102",
+      "mobile": "9825234567",
+      "email": "dr.snehal@hospital.com",
+      "is_active": true
+    },
+    {
+      "id": "CNT-000003",
+      "name": "ICU Incharge Desk",
+      "department": "Intensive Care Unit",
+      "designation": "Nursing Officer",
+      "intercomm": "201",
+      "mobile": "9825000201",
+      "email": "icu@hospital.com",
+      "is_active": true
+    },
+    {
+      "id": "CNT-000004",
+      "name": "Operation Theatre Desk",
+      "department": "OT Complex",
+      "designation": "OT Coordinator",
+      "intercomm": "301",
+      "mobile": "9825000301",
+      "email": "ot@hospital.com",
+      "is_active": true
+    },
+    {
+      "id": "CNT-000005",
+      "name": "Billing & TPA Cashless",
+      "department": "Administration",
+      "designation": "Billing Executive",
+      "intercomm": "401",
+      "mobile": "9825000401",
+      "email": "billing@hospital.com",
+      "is_active": true
+    },
+    {
+      "id": "CNT-000006",
+      "name": "Reception / Emergency Desk",
+      "department": "Casualty",
+      "designation": "Front Desk Officer",
+      "intercomm": "501",
+      "mobile": "9825000501",
+      "email": "reception@hospital.com",
+      "is_active": true
+    }
+  ]
+}

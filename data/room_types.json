@@ -1,0 +1,53 @@
+{
+  "entity": "RoomType",
+  "last_sequence": 5,
+  "created_at": "2026-11-16T13:57:05+05:30",
+  "updated_at": "2026-11-16T13:57:05+05:30",
+  "room_types": [
+    {
+      "id": "RMT-000001",
+      "name": "General Ward",
+      "code": "GEN",
+      "daily_rate": 800.0,
+      "ac_type": "Non-AC",
+      "total_beds": 20,
+      "is_active": true
+    },
+    {
+      "id": "RMT-000002",
+      "name": "Semi-Private Room",
+      "code": "SEMI",
+      "daily_rate": 1800.0,
+      "ac_type": "AC",
+      "total_beds": 10,
+      "is_active": true
+    },
+    {
+      "id": "RMT-000003",
+      "name": "Private Deluxe",
+      "code": "DELUXE",
+      "daily_rate": 3500.0,
+      "ac_type": "AC Deluxe",
+      "total_beds": 8,
+      "is_active": true
+    },
+    {
+      "id": "RMT-000004",
+      "name": "ICU / CCU",
+      "code": "ICU",
+      "daily_rate": 5500.0,
+      "ac_type": "Central AC / Monitor",
+      "total_beds": 6,
+      "is_active": true
+    },
+    {
+      "id": "RMT-000005",
+      "name": "Day Care / Recovery",
+      "code": "DAYCARE",
+      "daily_rate": 1200.0,
+      "ac_type": "AC",
+      "total_beds": 4,
+      "is_active": true
+    }
+  ]
+}
