@@ -1,0 +1,1 @@
+function e(e,t){if(!t&&!e)return``;let n=(t||``).trim(),r=(e||``).trim();if(!n)return r;let i=n.replace(/^(?:dr\.?\s+)+/i,``).trim();return`${r||`Dr.`} ${i}`.trim()}export{e as t};
