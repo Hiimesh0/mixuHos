@@ -3,6 +3,7 @@ export * from './echoReportApi';
 export interface PatientRecord {
   id: string;
   uhid: string;
+  name?: string;
   category: string;
   firstName: string;
   middleName: string;
@@ -175,6 +176,19 @@ async function getFallbackStorage(): Promise<PatientRecord[]> {
   return [];
 }
 
+export function getPatientFullName(p?: Partial<PatientRecord> | null): string {
+  if (!p) return 'Patient';
+  const nameFromField = (p as any).name;
+  if (nameFromField && typeof nameFromField === 'string' && nameFromField.trim()) {
+    return nameFromField.trim();
+  }
+  const parts = [p.firstName, p.middleName, p.lastName].filter(Boolean);
+  if (parts.length > 0) {
+    return parts.join(' ').trim();
+  }
+  return p.uhid || p.id || 'Patient';
+}
+
 function saveFallbackStorage(list: PatientRecord[]): void {
   if (typeof window === 'undefined') return;
   try {
@@ -214,7 +228,12 @@ export const patientApi = {
       if (res.ok) {
         const data = await res.json();
         // Also keep local storage cache in sync
-        if (data.patients && data.patients.length > 0) {
+        if (data.patients && Array.isArray(data.patients)) {
+          data.patients = data.patients.map((p: any) => ({
+            ...p,
+            id: p.id || p.uhid,
+            name: p.name || getPatientFullName(p),
+          }));
           saveFallbackStorage(data.patients);
         }
         return data;
@@ -225,7 +244,11 @@ export const patientApi = {
 
     // Fallback implementation for GitHub Pages static hosting
     const all = await getFallbackStorage();
-    let filtered = all;
+    let filtered = all.map(p => ({
+      ...p,
+      id: p.id || p.uhid,
+      name: p.name || getPatientFullName(p),
+    }));
 
     if (params?.search) {
       const q = params.search.toLowerCase().trim();
@@ -271,7 +294,12 @@ export const patientApi = {
       });
 
       if (res.ok) {
-        return res.json();
+        const d = await res.json();
+        if (d.patient) {
+          d.patient.id = d.patient.id || d.patient.uhid;
+          d.patient.name = d.patient.name || getPatientFullName(d.patient);
+        }
+        return d;
       }
     } catch {
       // Backend not running -> Fallback
@@ -282,9 +310,14 @@ export const patientApi = {
     if (!found) {
       throw new Error(`Patient '${id}' not found.`);
     }
+    const pat = {
+      ...found,
+      id: found.id || found.uhid,
+      name: found.name || getPatientFullName(found),
+    };
     return {
       success: true,
-      patient: found,
+      patient: pat,
     };
   },
 

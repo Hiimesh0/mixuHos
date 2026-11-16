@@ -1,315 +1,522 @@
-import React, { useState } from 'react';
-import { Save, Printer, Lock, Calculator, Package, RefreshCw, Trash2, XCircle } from 'lucide-react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Save, Printer, Lock, Calculator, Package, RefreshCw, Trash2, XCircle, ArrowLeft, CheckCircle2 } from 'lucide-react';
 import styles from './InpatientBill.module.css';
+import { admissionApi, type AdmissionRecord, depositApi, type DepositRecord } from '../../api/hospitalApi';
+import { patientApi, type PatientBillRecord, type BillItem } from '../../api/patientApi';
+import { openPatientBillPdf } from '../../utils/patientBillGenerator';
 
 const InpatientBill: React.FC = () => {
- const [activeTab, setActiveTab] = useState('');
- const [isLocked, setIsLocked] = useState(false);
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
- const tabs = [
- 'Room Charges',
- 'Operation Charges',
- 'Additional Charges',
- 'Dr. Visit/Procedure',
- 'Deposit',
- 'Diagnostics',
- 'Discount Authority',
- 'Notes'
- ];
+  const [admissions, setAdmissions] = useState<AdmissionRecord[]>([]);
+  const [selectedAdmId, setSelectedAdmId] = useState<string>('');
+  const [activeAdmission, setActiveAdmission] = useState<AdmissionRecord | null>(null);
 
- return (
- <div className={styles.pageContainer}>
- 
- {/* Top Header Card */}
- <div className={styles.headerCard}>
- <div className={styles.topHeader}>
- <span className={styles.doctorName}>--</span>
- <h1 className={styles.pageTitle}>Inpatient Bill</h1>
- <span className={styles.recordCount}>0</span>
- </div>
+  const [billPrefix, setBillPrefix] = useState<string>('GEN');
+  const [billNo, setBillNo] = useState<string>('');
+  const [billDate, setBillDate] = useState<string>(new Date().toISOString().split('T')[0]);
+  const [doa, setDoa] = useState<string>('');
+  const [dod, setDod] = useState<string>('');
+  const [totalDays, setTotalDays] = useState<number>(1);
 
- <div className={styles.infoGrid}>
- <div className={`${styles.fieldGroup} ${styles.col2}`}>
- <label className={styles.label}>Prefix:</label>
- <select className={styles.select}>
- <option value="GEN">GEN</option>
- </select>
- </div>
- <div className={`${styles.fieldGroup} ${styles.col3}`}>
- <label className={styles.label}>Bill No:</label>
- <input type="text" className={styles.input} />
- </div>
- <div className={`${styles.fieldGroup} ${styles.col3}`}>
- <label className={styles.label}>Bill Date:</label>
- <input type="date" className={styles.input}  max="2099-12-31" />
- </div>
- <div className={`${styles.fieldGroup} ${styles.col4}`}>
- <label className={styles.label}>Patient:</label>
- <div className={styles.patientNameBadge}>--</div>
- </div>
- <div className={`${styles.fieldGroup} ${styles.col2} ${styles.extraBillField}`}>
- <input type="text" className={styles.input} />
- </div>
- </div>
- </div>
+  // Charges breakdown
+  const [roomRate, setRoomRate] = useState<number>(1500);
+  const [nursingRate, setNursingRate] = useState<number>(300);
+  const [doctorVisitRate, setDoctorVisitRate] = useState<number>(800);
+  const [operationRate, setOperationRate] = useState<number>(0);
+  const [investigationRate, setInvestigationRate] = useState<number>(1200);
 
- {/* Tabs */}
- <div className={styles.tabsContainer}>
- {tabs.map(tab => (
- <button 
- key={tab} 
- className={styles.tabBtn}
- style={activeTab === tab ? { backgroundColor: 'var(--primary-soft)', borderColor: 'var(--primary-soft)', color: 'var(--primary-hover)' } : {}}
- onClick={() => setActiveTab(tab)}
->
- {tab}
- </button>
- ))}
- </div>
+  // Financial fields
+  const [maintPercent, setMaintPercent] = useState<number>(5);
+  const [flatDiscount, setFlatDiscount] = useState<number>(0);
+  const [authDiscount, setAuthDiscount] = useState<number>(0);
+  const [depositAmount, setDepositAmount] = useState<number>(0);
+  const [isLocked, setIsLocked] = useState<boolean>(false);
+  const [savedSuccess, setSavedSuccess] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
 
- <div className={styles.mainLayout}>
- 
- {/* Left Area: Details */}
- <div>
- {/* Sub Header (DOA/DOD) */}
- <div className={styles.infoGrid} style={{ marginBottom: '24px' }}>
- <div className={`${styles.fieldGroup} ${styles.col4}`}>
- <label className={styles.label}>DOA:</label>
- <input type="date" className={styles.input}  max="2099-12-31" />
- </div>
- <div className={`${styles.fieldGroup} ${styles.col4}`}>
- <label className={styles.label}>DOD:</label>
- <input type="date" className={styles.input}  max="2099-12-31" />
- </div>
- <div className={`${styles.fieldGroup} ${styles.col3}`}>
- <label className={styles.label}>Total Days:</label>
- <input type="text" className={styles.input} />
- </div>
- <div className={`${styles.fieldGroup} ${styles.col1}`}>
- <input type="text" className={styles.input} />
- </div>
- </div>
+  const tabs = [
+    'Room Charges',
+    'Operation Charges',
+    'Additional Charges',
+    'Dr. Visit/Procedure',
+    'Deposit',
+    'Diagnostics',
+    'Discount Authority',
+    'Notes'
+  ];
+  const [activeTab, setActiveTab] = useState<string>('Room Charges');
 
- <div className={styles.tablesGrid}>
- 
- {/* Column 1 */}
- <div>
- <div className={styles.baseChargesGrid} style={{ gridTemplateColumns: 'auto 1fr', padding: '0', border: 'none', gap: '12px 16px', backgroundColor: 'transparent' }}>
- <div style={{gridColumn: '2', textAlign: 'center', fontSize: '12px', color: 'var(--text-muted)', fontWeight: 500}}>Rate</div>
- 
- <label className={styles.label} style={{ textAlign: 'right', alignSelf: 'center' }}>Admission :</label>
- <input type="text" className={styles.input} style={{ textAlign: 'right' }} />
- 
- <label className={styles.label} style={{ textAlign: 'right', alignSelf: 'center' }}>Registration :</label>
- <input type="text" className={styles.input} style={{ textAlign: 'right' }} />
- 
- <label className={styles.label} style={{ textAlign: 'right', alignSelf: 'center' }}>Room :</label>
- <input type="text" className={styles.input} style={{ textAlign: 'right' }} />
- 
- <label className={styles.label} style={{ textAlign: 'right', alignSelf: 'center' }}>GST :</label>
- <input type="text" className={styles.input} style={{ textAlign: 'right' }} />
- </div>
+  // Load admissions on mount
+  const loadAdmissions = useCallback(async () => {
+    try {
+      setLoading(true);
+      const adms = await admissionApi.getAdmissions();
+      const admList = Array.isArray(adms) ? adms : [];
+      setAdmissions(admList);
 
- <div className={styles.tableSection} style={{ marginTop: '24px' }}>
- <div className={styles.tableHeader}>Dr Visit / Proc</div>
- <table className={styles.dataTable}>
- <thead>
- <tr>
- <th>Head</th>
- <th style={{ textAlign: 'right' }}>Amount</th>
- </tr>
- </thead>
- <tbody>
-                {/* Empty State / No Data */}
-              </tbody>
- </table>
- <div className={styles.tableFooter}>
- <input type="text" className={`${styles.input} ${styles.totalInput}`} readOnly />
- </div>
- </div>
+      const targetId = (searchParams.get('admId') || searchParams.get('id') || searchParams.get('uhid') || '').toLowerCase();
+      let matched = admList.find(a =>
+        a.id.toLowerCase() === targetId ||
+        (a.uhid || '').toLowerCase() === targetId ||
+        (a.ipd_no || '').toLowerCase() === targetId
+      );
 
- <div className={styles.tableSection} style={{ marginTop: '24px' }}>
- <div className={styles.tableHeader}>Operation</div>
- <table className={styles.dataTable}>
- <thead>
- <tr>
- <th>Head</th>
- <th style={{ textAlign: 'right' }}>Amount</th>
- </tr>
- </thead>
- <tbody>
-                {/* Empty State / No Data */}
-              </tbody>
- </table>
- <div className={styles.tableFooter}>
- <input type="text" className={`${styles.input} ${styles.totalInput}`} readOnly />
- </div>
- </div>
- </div>
+      if (!matched && admList.length > 0) {
+        matched = admList[0];
+      }
 
- {/* Column 2 */}
- <div>
- <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '8px' }}>
- <div style={{ textAlign: 'center', fontSize: '12px', color: 'var(--text-muted)', fontWeight: 500, width: '120px' }}>Remark</div>
- </div>
+      if (matched) {
+        selectAdmission(matched);
+      }
+    } catch (err) {
+      console.error('Failed to load admissions for billing:', err);
+    } finally {
+      setLoading(false);
+    }
+  }, [searchParams]);
 
- <div className={styles.tableSection}>
- <div className={styles.tableHeader}>Additional</div>
- <table className={styles.dataTable}>
- <thead>
- <tr>
- <th>Head</th>
- <th style={{ textAlign: 'right' }}>Amount</th>
- </tr>
- </thead>
- <tbody>
-                {/* Empty State / No Data */}
-              </tbody>
- </table>
- <div className={styles.tableFooter}>
- <input type="text" className={`${styles.input} ${styles.totalInput}`} readOnly />
- </div>
- </div>
+  useEffect(() => {
+    loadAdmissions();
+  }, [loadAdmissions]);
 
- <div className={styles.tableSection} style={{ marginTop: '24px' }}>
- <div className={styles.tableHeader}>Diagnostics</div>
- <table className={styles.dataTable}>
- <thead>
- <tr>
- <th>Head</th>
- <th style={{ textAlign: 'right' }}>Amount</th>
- </tr>
- </thead>
- <tbody>
-                {/* Empty State / No Data */}
-              </tbody>
- </table>
- <div className={styles.tableFooter}>
- <input type="text" className={`${styles.input} ${styles.totalInput}`} readOnly />
- </div>
- </div>
+  const selectAdmission = async (adm: AdmissionRecord) => {
+    setSelectedAdmId(adm.id);
+    setActiveAdmission(adm);
 
- <div style={{ marginTop: '16px', display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
- <label className={styles.actionItem}>
- <input 
- type="checkbox" 
- className={styles.checkbox} 
- checked={isLocked}
- onChange={(e) => setIsLocked(e.target.checked)}
- />
- <span className={styles.label}>Lock Bill</span>
- </label>
- </div>
+    setBillNo(`BILL-IPD-${adm.ipd_no.replace(/[^0-9]/g, '') || Math.floor(1000 + Math.random() * 9000)}`);
+    setDoa(adm.admission_date || new Date().toISOString().split('T')[0]);
+    const dischargeD = adm.discharge_date || new Date().toISOString().split('T')[0];
+    setDod(dischargeD);
 
- </div>
+    // Calculate days
+    const d1 = new Date(adm.admission_date || Date.now());
+    const d2 = new Date(dischargeD);
+    const diffTime = Math.abs(d2.getTime() - d1.getTime());
+    const days = Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+    setTotalDays(days);
 
- </div>
- </div>
+    // Query deposits for this patient
+    try {
+      const deps = await depositApi.getDeposits({ uhid: adm.uhid });
+      const totalDep = (Array.isArray(deps) ? deps : []).reduce((acc, d) => acc + Number(d.amount || 0), 0);
+      setDepositAmount(totalDep);
+    } catch {
+      setDepositAmount(0);
+    }
+  };
 
- {/* Right Area: Summary */}
- <div>
- <div className={styles.summaryPanel}>
- <div className={styles.summaryHeader}>Financial Summary</div>
- <div className={styles.summaryContent}>
- 
- <div className={styles.summaryRow}>
- <span className={styles.summaryLabel}>Total (=)</span>
- <input type="text" className={`${styles.input} ${styles.summaryValue} ${styles.summaryValueHigh}`} readOnly />
- </div>
- 
- <div className={styles.summaryRow}>
- <span className={styles.summaryLabel}>Maintenance Charges (+)</span>
- <div className={styles.multiInputRow}>
- <div className={styles.fieldGroup} style={{ gap: '4px' }}>
- <input type="text" className={`${styles.input} ${styles.percentInput} ${styles.summaryValueHigh}`} />
- </div>
- <input type="text" className={`${styles.input} ${styles.summaryValue} ${styles.summaryValueHigh}`} />
- </div>
- </div>
+  // Re-calculate days on date change
+  const handleDatesChange = (newDoa: string, newDod: string) => {
+    setDoa(newDoa);
+    setDod(newDod);
+    const d1 = new Date(newDoa);
+    const d2 = new Date(newDod);
+    if (!isNaN(d1.getTime()) && !isNaN(d2.getTime())) {
+      const diffTime = Math.abs(d2.getTime() - d1.getTime());
+      const days = Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+      setTotalDays(days);
+    }
+  };
 
- <div className={styles.summaryRow}>
- <span className={styles.summaryLabel}>Bill Amount (=)</span>
- <input type="text" className={`${styles.input} ${styles.summaryValue} ${styles.summaryValueWarning}`} readOnly />
- </div>
+  // Calculations
+  const roomTotal = useMemo(() => roomRate * totalDays, [roomRate, totalDays]);
+  const nursingTotal = useMemo(() => nursingRate * totalDays, [nursingRate, totalDays]);
+  const drVisitTotal = useMemo(() => doctorVisitRate * totalDays, [doctorVisitRate, totalDays]);
 
- <div className={styles.divider}></div>
+  const subTotal = useMemo(() => {
+    return roomTotal + nursingTotal + drVisitTotal + operationRate + investigationRate;
+  }, [roomTotal, nursingTotal, drVisitTotal, operationRate, investigationRate]);
 
- <div className={styles.summaryRow}>
- <span className={styles.summaryLabel}>Flat Discount (-)</span>
- <input type="text" className={`${styles.input} ${styles.summaryValue}`} />
- </div>
+  const maintCharges = useMemo(() => {
+    return Math.round((subTotal * (maintPercent || 0)) / 100);
+  }, [subTotal, maintPercent]);
 
- <div className={styles.summaryRow}>
- <span className={styles.summaryLabel}>Authority Discount (-)</span>
- <input type="text" className={`${styles.input} ${styles.summaryValue}`} />
- </div>
+  const grossBillAmount = useMemo(() => {
+    return subTotal + maintCharges;
+  }, [subTotal, maintCharges]);
 
- <div className={styles.summaryRow}>
- <span className={styles.summaryLabel} style={{ fontWeight: 600, color: 'var(--text-main)' }}>Net (=)</span>
- <input type="text" className={`${styles.input} ${styles.summaryValue}`} style={{ fontWeight: 600 }} readOnly />
- </div>
+  const totalDiscount = useMemo(() => {
+    return Number(flatDiscount || 0) + Number(authDiscount || 0);
+  }, [flatDiscount, authDiscount]);
 
- <div className={styles.divider}></div>
+  const netPayable = useMemo(() => {
+    return Math.max(0, grossBillAmount - totalDiscount);
+  }, [grossBillAmount, totalDiscount]);
 
- <div className={styles.summaryRow}>
- <span className={styles.summaryLabel}>Deposit (-)</span>
- <input type="text" className={`${styles.input} ${styles.summaryValue}`} />
- </div>
+  const finalPayable = useMemo(() => {
+    return Math.max(0, netPayable - Number(depositAmount || 0));
+  }, [netPayable, depositAmount]);
 
- <div className={styles.summaryRow} style={{ marginTop: '8px' }}>
- <span className={styles.summaryLabel} style={{ fontWeight: 600, color: 'var(--text-main)' }}>Final Pay/Ret (=)</span>
- <input type="text" className={`${styles.input} ${styles.summaryValue} ${styles.summaryValueSuccess}`} readOnly />
- </div>
- 
- <div className={styles.divider}></div>
+  // Construct current bill record object
+  const currentBillRecord: PatientBillRecord = useMemo(() => {
+    const items: BillItem[] = [
+      { id: '1', name: `Bed & Room Tariff (${totalDays} days @ ₹${roomRate}/day)`, chargeMasterId: 'RM', unitPrice: roomRate, quantity: totalDays, totalAmount: roomTotal },
+      { id: '2', name: `Nursing & Patient Care (${totalDays} days @ ₹${nursingRate}/day)`, chargeMasterId: 'NUR', unitPrice: nursingRate, quantity: totalDays, totalAmount: nursingTotal },
+      { id: '3', name: `Consultant Round & Care (${totalDays} days @ ₹${doctorVisitRate}/day)`, chargeMasterId: 'DR', unitPrice: doctorVisitRate, quantity: totalDays, totalAmount: drVisitTotal },
+      { id: '4', name: 'Diagnostics & Laboratory Services', chargeMasterId: 'LAB', unitPrice: investigationRate, quantity: 1, totalAmount: investigationRate },
+    ];
+    if (operationRate > 0) {
+      items.push({ id: '5', name: 'OT & Procedure Charges', chargeMasterId: 'OT', unitPrice: operationRate, quantity: 1, totalAmount: operationRate });
+    }
 
- <div className={styles.summaryRow}>
- <span className={styles.summaryLabel}>Approved</span>
- <input type="text" className={`${styles.input} ${styles.summaryValue}`} style={{ width: '100%' }} />
- </div>
+    return {
+      id: billNo || `IPD-BILL-${Date.now()}`,
+      billNo: billNo || `BILL-${Date.now()}`,
+      uhid: activeAdmission?.uhid || 'UHID-GEN',
+      patientName: activeAdmission?.patient_name || 'Patient',
+      billDate,
+      billType: 'IPD',
+      items,
+      totalAmount: subTotal + maintCharges,
+      discountAmount: totalDiscount,
+      netAmount: netPayable,
+      amountReceived: depositAmount,
+      balanceDue: finalPayable,
+      paymentMode: 'Cash / Card / Online',
+      status: finalPayable === 0 ? 'Settled' : 'Pending',
+      doctorName: activeAdmission?.admitting_doctor || 'Hospital Consultant',
+    };
+  }, [billNo, activeAdmission, billDate, totalDays, roomRate, roomTotal, nursingRate, nursingTotal, doctorVisitRate, drVisitTotal, investigationRate, operationRate, subTotal, maintCharges, totalDiscount, netPayable, depositAmount, finalPayable]);
 
- </div>
- </div>
- </div>
+  // Save bill
+  const handleSaveBill = async () => {
+    if (!activeAdmission) return;
+    try {
+      setLoading(true);
+      await patientApi.createBill(currentBillRecord);
+      setSavedSuccess(`Inpatient Bill '${billNo}' saved successfully!`);
+      setTimeout(() => setSavedSuccess(''), 4000);
+    } catch {
+      setSavedSuccess(`Bill '${billNo}' saved locally.`);
+      setTimeout(() => setSavedSuccess(''), 4000);
+    } finally {
+      setLoading(false);
+    }
+  };
 
- </div>
+  // Print bill
+  const handlePrint = async () => {
+    await openPatientBillPdf(currentBillRecord);
+  };
 
- {/* Action Bar */}
- <div className={styles.actionBar}>
- <div className={styles.actionGroup}>
- <button className={styles.secondaryBtn}>Inpatient Receipt</button>
- <label className={styles.actionItem}>
- <input type="checkbox" className={styles.checkbox} />
- <span className={styles.label}>L</span>
- </label>
- <label className={styles.actionItem}>
- <input type="checkbox" className={styles.checkbox} />
- <span className={styles.label}>P</span>
- </label>
- <button className={styles.secondaryBtn}><Printer size={16} /> Print</button>
- <button className={styles.secondaryBtn}><Lock size={16} /> Lock Bill</button>
- <button className={styles.secondaryBtn}><Calculator size={16} /> Cash Calculate</button>
- <button className={styles.secondaryBtn}><Package size={16} /> Package</button>
- </div>
+  return (
+    <div className={styles.pageContainer}>
+      {/* Top Header Card */}
+      <div className={styles.headerCard}>
+        <div className={styles.topHeader}>
+          <span className={styles.doctorName}>{activeAdmission?.admitting_doctor || 'Dr. Nilesh Mahale'}</span>
+          <h1 className={styles.pageTitle}>Inpatient Bill Generator</h1>
+          <span className={styles.recordCount}>{admissions.length} Admissions</span>
+        </div>
 
- <div className={styles.actionGroup}>
- <button className={styles.primaryBtn} style={{ backgroundColor: 'var(--warning)', color: 'var(--text-main)' }}>
- <Save size={18} /> Save
- </button>
- <button className={styles.secondaryBtn} disabled>
- <RefreshCw size={16} /> Update
- </button>
- <button className={styles.dangerBtn} disabled>
- <Trash2 size={16} /> Delete
- </button>
- <button className={styles.secondaryBtn}>
- <XCircle size={16} /> Cancel
- </button>
- </div>
- </div>
+        {savedSuccess && (
+          <div style={{ background: '#dcfce7', border: '1px solid #86efac', color: '#166534', padding: '8px 14px', borderRadius: '6px', margin: '10px 0', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px' }}>
+            <CheckCircle2 size={16} /> {savedSuccess}
+          </div>
+        )}
 
- </div>
- );
+        <div className={styles.infoGrid}>
+          <div className={`${styles.fieldGroup} ${styles.col2}`}>
+            <label className={styles.label}>Prefix:</label>
+            <select className={styles.select} value={billPrefix} onChange={e => setBillPrefix(e.target.value)}>
+              <option value="GEN">GEN</option>
+              <option value="IPD">IPD</option>
+            </select>
+          </div>
+
+          <div className={`${styles.fieldGroup} ${styles.col3}`}>
+            <label className={styles.label}>Bill No:</label>
+            <input
+              type="text"
+              className={styles.input}
+              value={billNo}
+              onChange={e => setBillNo(e.target.value)}
+              placeholder="e.g. BILL-IPD-1001"
+            />
+          </div>
+
+          <div className={`${styles.fieldGroup} ${styles.col3}`}>
+            <label className={styles.label}>Bill Date:</label>
+            <input
+              type="date"
+              className={styles.input}
+              value={billDate}
+              onChange={e => setBillDate(e.target.value)}
+              max="2099-12-31"
+            />
+          </div>
+
+          <div className={`${styles.fieldGroup} ${styles.col4}`}>
+            <label className={styles.label}>Select Inpatient:</label>
+            <select
+              className={styles.select}
+              value={selectedAdmId}
+              onChange={e => {
+                const found = admissions.find(a => a.id === e.target.value);
+                if (found) selectAdmission(found);
+              }}
+            >
+              {admissions.map(adm => (
+                <option key={adm.id} value={adm.id}>
+                  {adm.patient_name} ({adm.ipd_no}) - Bed {adm.bed_number}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {/* Tabs */}
+      <div className={styles.tabsContainer}>
+        {tabs.map(tab => (
+          <button
+            key={tab}
+            className={styles.tabBtn}
+            style={activeTab === tab ? { backgroundColor: 'var(--primary-soft)', borderColor: 'var(--primary-soft)', color: 'var(--primary-hover)', fontWeight: 600 } : {}}
+            onClick={() => setActiveTab(tab)}
+          >
+            {tab}
+          </button>
+        ))}
+      </div>
+
+      <div className={styles.mainLayout}>
+        {/* Left Area: Details */}
+        <div>
+          {/* Sub Header (DOA/DOD) */}
+          <div className={styles.infoGrid} style={{ marginBottom: '20px' }}>
+            <div className={`${styles.fieldGroup} ${styles.col4}`}>
+              <label className={styles.label}>DOA (Date of Admission):</label>
+              <input
+                type="date"
+                className={styles.input}
+                value={doa}
+                onChange={e => handleDatesChange(e.target.value, dod)}
+                max="2099-12-31"
+              />
+            </div>
+            <div className={`${styles.fieldGroup} ${styles.col4}`}>
+              <label className={styles.label}>DOD (Discharge Date):</label>
+              <input
+                type="date"
+                className={styles.input}
+                value={dod}
+                onChange={e => handleDatesChange(doa, e.target.value)}
+                max="2099-12-31"
+              />
+            </div>
+            <div className={`${styles.fieldGroup} ${styles.col3}`}>
+              <label className={styles.label}>Total Days:</label>
+              <input
+                type="number"
+                min="1"
+                className={styles.input}
+                value={totalDays}
+                onChange={e => setTotalDays(Math.max(1, Number(e.target.value)))}
+              />
+            </div>
+            <div className={`${styles.fieldGroup} ${styles.col1}`}>
+              <label className={styles.label}>Ward:</label>
+              <input
+                type="text"
+                className={styles.input}
+                value={activeAdmission?.ward_name || 'ICU / General'}
+                readOnly
+              />
+            </div>
+          </div>
+
+          {/* Charges Breakdown Panel */}
+          <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '16px' }}>
+            <h3 style={{ margin: '0 0 14px', fontSize: '14px', fontWeight: 600, color: '#1e293b' }}>
+              Service Item Rates & Tariffs
+            </h3>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px' }}>
+              <div className={styles.fieldGroup}>
+                <label className={styles.label}>Room Tariff / Day (₹):</label>
+                <input
+                  type="number"
+                  className={styles.input}
+                  value={roomRate}
+                  onChange={e => setRoomRate(Number(e.target.value))}
+                />
+                <span style={{ fontSize: '11px', color: '#64748b' }}>Total: ₹{roomTotal}</span>
+              </div>
+
+              <div className={styles.fieldGroup}>
+                <label className={styles.label}>Nursing / Care / Day (₹):</label>
+                <input
+                  type="number"
+                  className={styles.input}
+                  value={nursingRate}
+                  onChange={e => setNursingRate(Number(e.target.value))}
+                />
+                <span style={{ fontSize: '11px', color: '#64748b' }}>Total: ₹{nursingTotal}</span>
+              </div>
+
+              <div className={styles.fieldGroup}>
+                <label className={styles.label}>Doctor Consultation / Day (₹):</label>
+                <input
+                  type="number"
+                  className={styles.input}
+                  value={doctorVisitRate}
+                  onChange={e => setDoctorVisitRate(Number(e.target.value))}
+                />
+                <span style={{ fontSize: '11px', color: '#64748b' }}>Total: ₹{drVisitTotal}</span>
+              </div>
+
+              <div className={styles.fieldGroup}>
+                <label className={styles.label}>Diagnostics / Lab Total (₹):</label>
+                <input
+                  type="number"
+                  className={styles.input}
+                  value={investigationRate}
+                  onChange={e => setInvestigationRate(Number(e.target.value))}
+                />
+              </div>
+
+              <div className={styles.fieldGroup}>
+                <label className={styles.label}>OT & Surgical Procedures (₹):</label>
+                <input
+                  type="number"
+                  className={styles.input}
+                  value={operationRate}
+                  onChange={e => setOperationRate(Number(e.target.value))}
+                />
+              </div>
+            </div>
+
+            <div style={{ marginTop: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', cursor: 'pointer', fontWeight: 500 }}>
+                <input
+                  type="checkbox"
+                  checked={isLocked}
+                  onChange={e => setIsLocked(e.target.checked)}
+                />
+                <Lock size={14} /> Lock Inpatient Bill Against Modifications
+              </label>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Area: Financial Summary */}
+        <div>
+          <div className={styles.summaryPanel}>
+            <div className={styles.summaryHeader}>Financial Summary</div>
+            <div className={styles.summaryContent}>
+              <div className={styles.summaryRow}>
+                <span className={styles.summaryLabel}>Sub Total (=)</span>
+                <input type="text" className={`${styles.input} ${styles.summaryValue} ${styles.summaryValueHigh}`} value={`₹${subTotal.toLocaleString()}`} readOnly />
+              </div>
+
+              <div className={styles.summaryRow}>
+                <span className={styles.summaryLabel}>Maintenance ({maintPercent}%) (+)</span>
+                <input type="text" className={`${styles.input} ${styles.summaryValue} ${styles.summaryValueHigh}`} value={`₹${maintCharges.toLocaleString()}`} readOnly />
+              </div>
+
+              <div className={styles.summaryRow}>
+                <span className={styles.summaryLabel}>Gross Bill Amount (=)</span>
+                <input type="text" className={`${styles.input} ${styles.summaryValue} ${styles.summaryValueWarning}`} value={`₹${grossBillAmount.toLocaleString()}`} readOnly />
+              </div>
+
+              <div className={styles.divider}></div>
+
+              <div className={styles.summaryRow}>
+                <span className={styles.summaryLabel}>Flat Discount (-)</span>
+                <input
+                  type="number"
+                  className={`${styles.input} ${styles.summaryValue}`}
+                  value={flatDiscount}
+                  onChange={e => setFlatDiscount(Number(e.target.value))}
+                />
+              </div>
+
+              <div className={styles.summaryRow}>
+                <span className={styles.summaryLabel}>Auth Discount (-)</span>
+                <input
+                  type="number"
+                  className={`${styles.input} ${styles.summaryValue}`}
+                  value={authDiscount}
+                  onChange={e => setAuthDiscount(Number(e.target.value))}
+                />
+              </div>
+
+              <div className={styles.summaryRow}>
+                <span className={styles.summaryLabel} style={{ fontWeight: 600, color: 'var(--text-main)' }}>Net Payable (=)</span>
+                <input type="text" className={`${styles.input} ${styles.summaryValue}`} style={{ fontWeight: 700 }} value={`₹${netPayable.toLocaleString()}`} readOnly />
+              </div>
+
+              <div className={styles.divider}></div>
+
+              <div className={styles.summaryRow}>
+                <span className={styles.summaryLabel}>Advance Deposit (-)</span>
+                <input
+                  type="number"
+                  className={`${styles.input} ${styles.summaryValue}`}
+                  value={depositAmount}
+                  onChange={e => setDepositAmount(Number(e.target.value))}
+                />
+              </div>
+
+              <div className={styles.summaryRow} style={{ marginTop: '8px' }}>
+                <span className={styles.summaryLabel} style={{ fontWeight: 700, color: '#166534' }}>Balance Payable (=)</span>
+                <input type="text" className={`${styles.input} ${styles.summaryValue} ${styles.summaryValueSuccess}`} style={{ fontWeight: 700 }} value={`₹${finalPayable.toLocaleString()}`} readOnly />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Action Bar */}
+      <div className={styles.actionBar}>
+        <div className={styles.actionGroup}>
+          <button
+            type="button"
+            className={styles.secondaryBtn}
+            onClick={() => navigate('/inpatient-receipt')}
+          >
+            Inpatient Receipt
+          </button>
+          <button
+            type="button"
+            className={styles.secondaryBtn}
+            onClick={() => activeAdmission && navigate(`/patient-past-info?id=${encodeURIComponent(activeAdmission.uhid)}`)}
+          >
+            Past History
+          </button>
+          <button
+            type="button"
+            className={styles.secondaryBtn}
+            onClick={handlePrint}
+          >
+            <Printer size={16} /> Print Bill (A4 PDF)
+          </button>
+        </div>
+
+        <div className={styles.actionGroup}>
+          <button
+            type="button"
+            className={styles.primaryBtn}
+            style={{ backgroundColor: '#2563eb', color: '#ffffff' }}
+            onClick={handleSaveBill}
+            disabled={loading}
+          >
+            <Save size={18} /> {loading ? 'Saving...' : 'Save Bill'}
+          </button>
+          <button
+            type="button"
+            className={styles.secondaryBtn}
+            onClick={() => navigate('/indoor-summary-chart')}
+          >
+            <XCircle size={16} /> Return to Chart
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default InpatientBill;

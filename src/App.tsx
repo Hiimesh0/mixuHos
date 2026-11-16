@@ -1,5 +1,6 @@
 import React, { Suspense, lazy, useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { HashRouter, Routes, Route, NavLink, Navigate, useLocation } from 'react-router-dom';
+import ErrorBoundary from './components/common/ErrorBoundary';
 import {
   Menu,
   X,
@@ -1247,74 +1248,76 @@ function App() {
 
         {/* Main Content Area */}
         <main className={`appMainContent ${isSidebarCollapsed ? 'sidebarCollapsed' : 'sidebarExpanded'}`}>
-          <Suspense fallback={<div style={{ padding: '2rem', textAlign: 'center', fontFamily: 'Inter, sans-serif' }}>Loading...</div>}>
-            <Routes>
-              {!isAuthenticated ? (
-                <>
-                  <Route path="/login" element={<Login onLogin={handleLogin} />} />
-                  <Route path="*" element={<Navigate to="/login" replace />} />
-                </>
-              ) : (
-                <>
-                  <Route path="/login" element={<Navigate to="/patient-registration" replace />} />
-                  <Route path="/" element={<Navigate to="/patient-registration" replace />} />
-                  <Route path="/patient-registration" element={<PatientRegistration />} />
-                  <Route path="/patient-history" element={<PatientRegistrationList />} />
-                  <Route path="/patient-registration-list" element={<PatientRegistrationList />} />
-                  <Route path="/clinical-notes-template" element={<PatientHistory />} />
-                  <Route path="/bill-preview" element={<BillPreview />} />
-                  <Route path="/patient-past-info" element={<PatientPastInfo />} />
-                  <Route path="/part-payment" element={<PartPayment />} />
-                  <Route path="/room-charges" element={<RoomCharges />} />
-                  <Route path="/room-status" element={<RoomStatus />} />
-                  <Route path="/ot-entry" element={<OtEntry />} />
-                  <Route path="/operation-charges" element={<OperationCharges />} />
-                  <Route path="/indoor-summary" element={<IndoorSummaryChart />} />
-                  <Route path="/indoor-option" element={<IndoorOption />} />
-                  <Route path="/inpatient-receipt" element={<InpatientReceipt />} />
-                  <Route path="/inpatient-bill" element={<InpatientBill />} />
-                  <Route path="/discharge-card" element={<DischargeCard />} />
-                  <Route path="/deposit-entry" element={<DepositEntry />} />
-                  <Route path="/billing" element={<Billing />} />
-                  <Route path="/dr-visit-procedure" element={<DrVisitProcedure />} />
-                  <Route path="/investigation-ordered" element={<InvestigationOrdered />} />
-                  <Route path="/indoor-register" element={<IndoorRegister />} />
-                  <Route path="/contact-list" element={<ContactList />} />
-                  <Route path="/intercomm-display" element={<IntercommDisplay />} />
-                  <Route path="/medicine-master" element={<MedicineMaster />} />
-                  <Route path="/standard-prescription-master" element={<StandardPrescriptionMaster />} />
-                  <Route path="/advice-master" element={<AdviceMaster />} />
-                  <Route path="/bed-master" element={<BedMaster />} />
-                  <Route path="/operation-group-master" element={<OperationGroupMaster />} />
-                  <Route path="/room-type-master" element={<RoomTypeMaster />} />
-                  <Route path="/visiting-type-master" element={<VisitingTypeMaster />} />
-                  <Route path="/visit-procedure-header-master" element={<VisitProcedureHeaderMaster />} />
-                  
-                  {/* OPD Master Routes */}
-                  <Route path="/opd-patient-category" element={<OPDPatientCategory />} />
-                  <Route path="/opd-charges-master" element={<OPDChargesMaster />} />
-                  <Route path="/department-master" element={<DepartmentMaster />} />
-                  <Route path="/doctor-master" element={<DoctorMaster />} />
-                  <Route path="/insurance-company-master" element={<InsuranceCompanyMaster />} />
-                  <Route path="/opd-charges-profile" element={<OPDChargesProfile />} />
-                  
-                  {/* Diagnostics Report Routes */}
-                  <Route path="/echo-report" element={<EchoReport />} />
-                  <Route path="/short-form-master" element={<ShortFormMaster />} />
-                  <Route path="/report-template" element={<ReportTemplate />} />
-                  <Route path="/today-report-dashboard" element={<TodayReportDashboard />} />
-                  
-                  {/* Certificate Routes */}
-                  <Route path="/death-certificate" element={<DeathCertificate />} />
-                  <Route path="/medical-certificate" element={<MedicalCertificate />} />
-                  <Route path="/mlc-certificate" element={<MlcCertificate />} />
-                  <Route path="/certificate-template" element={<CertificateTemplate />} />
-                  
-                  <Route path="*" element={<Navigate to="/patient-registration" replace />} />
-                </>
-              )}
-            </Routes>
-          </Suspense>
+          <ErrorBoundary>
+            <Suspense fallback={<div style={{ padding: '2rem', textAlign: 'center', fontFamily: 'Inter, sans-serif' }}>Loading...</div>}>
+              <Routes>
+                {!isAuthenticated ? (
+                  <>
+                    <Route path="/login" element={<Login onLogin={handleLogin} />} />
+                    <Route path="*" element={<Navigate to="/login" replace />} />
+                  </>
+                ) : (
+                  <>
+                    <Route path="/login" element={<Navigate to="/patient-registration" replace />} />
+                    <Route path="/" element={<Navigate to="/patient-registration" replace />} />
+                    <Route path="/patient-registration" element={<PatientRegistration />} />
+                    <Route path="/patient-history" element={<PatientRegistrationList />} />
+                    <Route path="/patient-registration-list" element={<PatientRegistrationList />} />
+                    <Route path="/clinical-notes-template" element={<PatientHistory />} />
+                    <Route path="/bill-preview" element={<BillPreview />} />
+                    <Route path="/patient-past-info" element={<PatientPastInfo />} />
+                    <Route path="/part-payment" element={<PartPayment />} />
+                    <Route path="/room-charges" element={<RoomCharges />} />
+                    <Route path="/room-status" element={<RoomStatus />} />
+                    <Route path="/ot-entry" element={<OtEntry />} />
+                    <Route path="/operation-charges" element={<OperationCharges />} />
+                    <Route path="/indoor-summary" element={<IndoorSummaryChart />} />
+                    <Route path="/indoor-option" element={<IndoorOption />} />
+                    <Route path="/inpatient-receipt" element={<InpatientReceipt />} />
+                    <Route path="/inpatient-bill" element={<InpatientBill />} />
+                    <Route path="/discharge-card" element={<DischargeCard />} />
+                    <Route path="/deposit-entry" element={<DepositEntry />} />
+                    <Route path="/billing" element={<Billing />} />
+                    <Route path="/dr-visit-procedure" element={<DrVisitProcedure />} />
+                    <Route path="/investigation-ordered" element={<InvestigationOrdered />} />
+                    <Route path="/indoor-register" element={<IndoorRegister />} />
+                    <Route path="/contact-list" element={<ContactList />} />
+                    <Route path="/intercomm-display" element={<IntercommDisplay />} />
+                    <Route path="/medicine-master" element={<MedicineMaster />} />
+                    <Route path="/standard-prescription-master" element={<StandardPrescriptionMaster />} />
+                    <Route path="/advice-master" element={<AdviceMaster />} />
+                    <Route path="/bed-master" element={<BedMaster />} />
+                    <Route path="/operation-group-master" element={<OperationGroupMaster />} />
+                    <Route path="/room-type-master" element={<RoomTypeMaster />} />
+                    <Route path="/visiting-type-master" element={<VisitingTypeMaster />} />
+                    <Route path="/visit-procedure-header-master" element={<VisitProcedureHeaderMaster />} />
+                    
+                    {/* OPD Master Routes */}
+                    <Route path="/opd-patient-category" element={<OPDPatientCategory />} />
+                    <Route path="/opd-charges-master" element={<OPDChargesMaster />} />
+                    <Route path="/department-master" element={<DepartmentMaster />} />
+                    <Route path="/doctor-master" element={<DoctorMaster />} />
+                    <Route path="/insurance-company-master" element={<InsuranceCompanyMaster />} />
+                    <Route path="/opd-charges-profile" element={<OPDChargesProfile />} />
+                    
+                    {/* Diagnostics Report Routes */}
+                    <Route path="/echo-report" element={<EchoReport />} />
+                    <Route path="/short-form-master" element={<ShortFormMaster />} />
+                    <Route path="/report-template" element={<ReportTemplate />} />
+                    <Route path="/today-report-dashboard" element={<TodayReportDashboard />} />
+                    
+                    {/* Certificate Routes */}
+                    <Route path="/death-certificate" element={<DeathCertificate />} />
+                    <Route path="/medical-certificate" element={<MedicalCertificate />} />
+                    <Route path="/mlc-certificate" element={<MlcCertificate />} />
+                    <Route path="/certificate-template" element={<CertificateTemplate />} />
+                    
+                    <Route path="*" element={<Navigate to="/patient-registration" replace />} />
+                  </>
+                )}
+              </Routes>
+            </Suspense>
+          </ErrorBoundary>
         </main>
       </div>
     </HashRouter>

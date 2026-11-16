@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Redirecting to Mixu Infosystem EMR...</title>
+    <script type="text/javascript">
+      // GitHub Pages SPA Single-Page-App Redirect Router
+      (function() {
+        var l = window.location;
+        var pathname = l.pathname;
+        var search = l.search;
+        var hash = l.hash;
+
+        // Check if hosted under subfolder like /mixuHos/
+        var isSubfolder = pathname.indexOf('/mixuHos') === 0;
+        var basePath = isSubfolder ? '/mixuHos/' : '/';
+        var relativePath = isSubfolder ? pathname.slice('/mixuHos'.length) : pathname;
+
+        // Ensure relativePath starts with '/'
+        if (!relativePath.startsWith('/')) {
+          relativePath = '/' + relativePath;
+        }
+
+        // Construct HashRouter target
+        var target = basePath + '#' + relativePath + search + hash;
+        window.location.replace(target);
+      })();
+    </script>
+  </head>
+  <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #f8fafc; color: #334155;">
+    <div style="text-align: center; padding: 24px;">
+      <h2 style="margin: 0 0 8px; color: #1e293b;">Mixu Infosystem Hospital Management</h2>
+      <p style="margin: 0; color: #64748b;">Loading clinical portal...</p>
+    </div>
+  </body>
+</html>

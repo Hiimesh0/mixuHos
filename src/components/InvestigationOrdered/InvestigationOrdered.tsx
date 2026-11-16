@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { ArrowDown, Printer, Save, CheckCircle2, AlertCircle, Trash2, RefreshCw } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
+import { ArrowDown, Printer, Save, CheckCircle2, AlertCircle, Trash2, RefreshCw, Search } from 'lucide-react';
 import styles from './InvestigationOrdered.module.css';
 import { investigationApi, type InvestigationRecord } from '../../api/clinicalApi';
-import { patientApi, type PatientRecord } from '../../api/patientApi';
+import { patientApi, type PatientRecord, getPatientFullName } from '../../api/patientApi';
 import { admissionApi, type AdmissionRecord } from '../../api/hospitalApi';
 import { openInvestigationPrint } from '../../utils/universalPrintGenerator';
 import { useAutoDismissNotification } from '../../hooks/useAutoDismissNotification';
@@ -47,6 +48,7 @@ const COMMON_TESTS = [
 ];
 
 const InvestigationOrdered: React.FC = () => {
+  const location = useLocation();
   const [patients, setPatients] = useState<PatientRecord[]>([]);
   const [admissions, setAdmissions] = useState<AdmissionRecord[]>([]);
   const [investigations, setInvestigations] = useState<InvestigationRecord[]>([]);
@@ -59,35 +61,52 @@ const InvestigationOrdered: React.FC = () => {
   const [testItems, setTestItems] = useState<OrderedTestItem[]>(COMMON_TESTS[0].params.map((p, i) => ({ ...p, id: String(i) })));
   const [impression, setImpression] = useState<string>('Normal biological parameters. No significant abnormality detected.');
   const [loading, setLoading] = useState<boolean>(false);
+  const [recentSearch, setRecentSearch] = useState<string>('');
 
   const { notification, setNotification, dismissNotification } = useAutoDismissNotification();
 
   const loadData = useCallback(async () => {
     try {
       setLoading(true);
-      const [patList, admList, invList] = await Promise.all([
+      const [patRes, admList, invList] = await Promise.all([
         patientApi.getPatients(),
         admissionApi.getAdmissions(),
         investigationApi.getInvestigations(),
       ]);
+
+      const patList: PatientRecord[] = Array.isArray(patRes) ? patRes : (patRes?.patients || []);
       setPatients(patList);
-      setAdmissions(admList);
-      setInvestigations(invList);
+      setAdmissions(Array.isArray(admList) ? admList : []);
+      setInvestigations(Array.isArray(invList) ? invList : []);
+
+      // Check query params (?id= or ?uhid=)
+      const qParams = new URLSearchParams(location.search || window.location.hash.split('?')[1] || '');
+      const paramId = qParams.get('uhid') || qParams.get('id');
+
+      if (paramId) {
+        const found = patList.find(p => (p.uhid || '').toLowerCase() === paramId.toLowerCase() || (p.id || '').toLowerCase() === paramId.toLowerCase());
+        if (found) {
+          setSelectedPatientId(found.uhid || found.id);
+          return;
+        }
+      }
+
       if (patList.length > 0 && !selectedPatientId) {
-        setSelectedPatientId(patList[0].id);
+        setSelectedPatientId(patList[0].uhid || patList[0].id);
       }
     } catch {
       setNotification({ type: 'error', message: 'Failed to load investigations.' });
     } finally {
       setLoading(false);
     }
-  }, [selectedPatientId, setNotification]);
+  }, [location.search, selectedPatientId, setNotification]);
 
   useEffect(() => {
     loadData();
   }, [loadData]);
 
   const currentPatient = useMemo(() => {
+    if (!selectedPatientId) return undefined;
     return patients.find(p => p.id === selectedPatientId || p.uhid === selectedPatientId);
   }, [patients, selectedPatientId]);
 
@@ -105,6 +124,41 @@ const InvestigationOrdered: React.FC = () => {
     }
   };
 
+  const handleSelectRecentInvestigation = (inv: InvestigationRecord) => {
+    if (inv.uhid) {
+      setSelectedPatientId(inv.uhid);
+    }
+    if (inv.test_name) {
+      setSelectedTestName(inv.test_name);
+    }
+    if (inv.category) {
+      setCategory(inv.category);
+    }
+    if (inv.order_date) {
+      setOrderDate(inv.order_date);
+    }
+    if (inv.doctor_name) {
+      setDoctorName(inv.doctor_name);
+    }
+    if (inv.impression) {
+      setImpression(inv.impression);
+    }
+    if (inv.results && Array.isArray(inv.results) && inv.results.length > 0) {
+      setTestItems(inv.results.map((r, i) => ({
+        id: String(i),
+        parameter: r.parameter,
+        value: r.value,
+        unit: r.unit,
+        ref_range: r.ref_range || r.reference || '',
+        flag: (r.flag || r.status || 'Normal') as any,
+      })));
+    }
+    setNotification({
+      type: 'info',
+      message: `Loaded order #${inv.order_no} (${inv.test_name}) for ${inv.patient_name || inv.uhid}`,
+    });
+  };
+
   const handleSave = async () => {
     if (!currentPatient) {
       setNotification({ type: 'warning', message: 'Please select a patient.' });
@@ -113,9 +167,11 @@ const InvestigationOrdered: React.FC = () => {
 
     try {
       setLoading(true);
+      const patDisplayName = getPatientFullName(currentPatient);
       const payload: Partial<InvestigationRecord> = {
+        patient_id: currentPatient.uhid || currentPatient.id,
         uhid: currentPatient.uhid || currentPatient.id,
-        patient_name: currentPatient.name,
+        patient_name: patDisplayName,
         order_date: orderDate,
         doctor_name: doctorName,
         test_name: selectedTestName,
@@ -134,7 +190,7 @@ const InvestigationOrdered: React.FC = () => {
       });
 
       const updated = await investigationApi.getInvestigations();
-      setInvestigations(updated);
+      setInvestigations(Array.isArray(updated) ? updated : []);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Error creating investigation.';
       setNotification({ type: 'error', message: msg });
@@ -146,12 +202,13 @@ const InvestigationOrdered: React.FC = () => {
   const handlePrint = (inv?: InvestigationRecord) => {
     const toPrint = inv || (investigations.length > 0 ? investigations[investigations.length - 1] : undefined);
     if (!toPrint) {
+      const patDisplayName = currentPatient ? getPatientFullName(currentPatient) : 'Patient';
       const draft: InvestigationRecord = {
         id: 'DRAFT',
         order_no: 'ORD-2026-DRAFT',
         patient_id: currentPatient?.uhid || 'UHID-0000',
         uhid: currentPatient?.uhid || 'UHID-0000',
-        patient_name: currentPatient?.name || 'Patient',
+        patient_name: patDisplayName,
         order_date: orderDate,
         doctor_name: doctorName,
         test_name: selectedTestName,
@@ -166,6 +223,17 @@ const InvestigationOrdered: React.FC = () => {
     }
     openInvestigationPrint(toPrint);
   };
+
+  const filteredRecentOrders = useMemo(() => {
+    if (!recentSearch.trim()) return investigations;
+    const q = recentSearch.toLowerCase().trim();
+    return investigations.filter(inv =>
+      (inv.order_no || '').toLowerCase().includes(q) ||
+      (inv.uhid || '').toLowerCase().includes(q) ||
+      (inv.patient_name || '').toLowerCase().includes(q) ||
+      (inv.test_name || '').toLowerCase().includes(q)
+    );
+  }, [investigations, recentSearch]);
 
   return (
     <div className={styles.pageContainer}>
@@ -212,10 +280,15 @@ const InvestigationOrdered: React.FC = () => {
                   value={selectedPatientId}
                   onChange={e => setSelectedPatientId(e.target.value)}
                 >
-                  <option value="">-- Choose Patient --</option>
-                  {patients.map(p => (
-                    <option key={p.id} value={p.id}>{p.name} ({p.uhid || p.id})</option>
-                  ))}
+                  <option value="">-- Choose Patient ({patients.length} Registered) --</option>
+                  {patients.map(p => {
+                    const pName = p.name || [p.firstName, p.middleName, p.lastName].filter(Boolean).join(' ') || p.uhid;
+                    return (
+                      <option key={p.uhid || p.id} value={p.uhid || p.id}>
+                        {pName} ({p.uhid})
+                      </option>
+                    );
+                  })}
                 </select>
               </div>
 
@@ -338,26 +411,41 @@ const InvestigationOrdered: React.FC = () => {
               </button>
 
               <div style={{ margin: '12px 0', borderTop: '1px solid #cbd5e1' }}></div>
-              <span style={{ fontSize: '11px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase' }}>Recent Orders</span>
-              <div style={{ maxHeight: '180px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                {investigations.slice(-4).reverse().map(inv => (
-                  <div
-                    key={inv.id}
-                    onClick={() => handlePrint(inv)}
-                    style={{
-                      padding: '6px 8px',
-                      borderRadius: '4px',
-                      background: '#f8fafc',
-                      border: '1px solid #e2e8f0',
-                      cursor: 'pointer',
-                      fontSize: '11px',
-                    }}
-                    title="Click to print this report"
-                  >
-                    <strong>{inv.order_no}</strong> ({inv.test_name})<br />
-                    {inv.patient_name} - {inv.order_date}
-                  </div>
-                ))}
+              <span style={{ fontSize: '11px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase' }}>
+                Recent Orders ({filteredRecentOrders.length})
+              </span>
+              <input
+                type="text"
+                placeholder="Filter orders..."
+                value={recentSearch}
+                onChange={e => setRecentSearch(e.target.value)}
+                className={styles.input}
+                style={{ height: '26px', fontSize: '11px', padding: '0 6px', margin: '4px 0' }}
+              />
+              <div style={{ maxHeight: '200px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                {filteredRecentOrders.length === 0 ? (
+                  <div style={{ fontSize: '11px', color: '#94a3b8', textAlign: 'center', padding: '8px' }}>No orders found</div>
+                ) : (
+                  filteredRecentOrders.slice(0, 10).map(inv => (
+                    <div
+                      key={inv.id}
+                      onClick={() => handleSelectRecentInvestigation(inv)}
+                      style={{
+                        padding: '6px 8px',
+                        borderRadius: '4px',
+                        background: '#f8fafc',
+                        border: '1px solid #e2e8f0',
+                        cursor: 'pointer',
+                        fontSize: '11px',
+                        transition: 'background-color 0.15s'
+                      }}
+                      title="Click to load this order into form"
+                    >
+                      <strong>{inv.order_no}</strong> ({inv.test_name})<br />
+                      <span style={{ color: '#2563eb', fontWeight: 600 }}>{inv.patient_name || inv.uhid}</span> - {inv.order_date}
+                    </div>
+                  ))
+                )}
               </div>
             </div>
           </div>

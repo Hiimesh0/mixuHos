@@ -56,10 +56,11 @@ const PatientHistory: React.FC = () => {
   const loadData = useCallback(async () => {
     try {
       setLoading(true);
-      const [patList, docList] = await Promise.all([
+      const [patRes, docList] = await Promise.all([
         patientApi.getPatients(),
         doctorApi.getDoctors({ active_only: true }),
       ]);
+      const patList: PatientRecord[] = Array.isArray(patRes) ? patRes : ((patRes as any)?.patients || []);
       setPatients(patList);
       setDoctors(docList.doctors || []);
       if (patList.length > 0 && !selectedPatientId) {
@@ -77,36 +78,39 @@ const PatientHistory: React.FC = () => {
   }, [loadData]);
 
   const populateFromPatient = async (pat: PatientRecord) => {
-    setSelectedPatientId(pat.id);
+    const pName = pat.name || [pat.firstName, pat.middleName, pat.lastName].filter(Boolean).join(' ') || pat.uhid;
+    setSelectedPatientId(pat.uhid || pat.id);
     const uhid = pat.uhid || pat.id;
     try {
       const visits = await patientVisitsApi.getVisits(uhid);
-      setPatientVisits(visits);
-      if (visits.length > 0) {
-        const lastVisit = visits[visits.length - 1];
+      setPatientVisits(Array.isArray(visits) ? visits : []);
+      if (visits && visits.length > 0) {
+        const lastVisit: any = visits[visits.length - 1];
         setCurrentVisitIndex(visits.length - 1);
+        const bpStr = lastVisit.vitals?.bp || lastVisit.bp || '120/80';
+        const bpParts = bpStr.split('/');
         setFormData({
-          patient_name: pat.name,
+          patient_name: pName,
           uhid: uhid,
           age: pat.age ? String(pat.age) : '35',
-          doctor: lastVisit.doctor || 'Dr. Nilesh Mahale',
-          visit_date: lastVisit.visit_date.slice(0, 10),
+          doctor: lastVisit.doctor || lastVisit.doctor_name || 'Dr. Nilesh Mahale',
+          visit_date: (lastVisit.visit_date || new Date().toISOString()).slice(0, 10),
           visit_type: lastVisit.visit_type || 'Follow-up',
-          bp_sys: lastVisit.vitals?.bp ? lastVisit.vitals.bp.split('/')[0] : '120',
-          bp_dia: lastVisit.vitals?.bp ? lastVisit.vitals.bp.split('/')[1] : '80',
-          pulse: lastVisit.vitals?.pulse || '76',
-          temp: lastVisit.vitals?.temp || '98.4',
-          spo2: lastVisit.vitals?.spo2 || '99',
-          weight: lastVisit.vitals?.weight || '68',
-          chief_complaint: lastVisit.chief_complaint || '',
+          bp_sys: bpParts[0] || '120',
+          bp_dia: bpParts[1] || '80',
+          pulse: String(lastVisit.vitals?.pulse || lastVisit.pulse || '76'),
+          temp: String(lastVisit.vitals?.temp || lastVisit.temperature || '98.4'),
+          spo2: String(lastVisit.vitals?.spo2 || lastVisit.spo2 || '99'),
+          weight: String(lastVisit.vitals?.weight || lastVisit.weight || '68'),
+          chief_complaint: lastVisit.chief_complaint || lastVisit.symptoms || lastVisit.diagnosis || '',
           past_history: 'Known case under treatment.',
-          clinical_notes: lastVisit.notes || '',
+          clinical_notes: lastVisit.notes || lastVisit.advice || '',
         });
       } else {
         setCurrentVisitIndex(-1);
         setFormData(prev => ({
           ...prev,
-          patient_name: pat.name,
+          patient_name: pName,
           uhid: uhid,
           age: pat.age ? String(pat.age) : '35',
           visit_date: new Date().toISOString().split('T')[0],
@@ -116,7 +120,7 @@ const PatientHistory: React.FC = () => {
   };
 
   const handlePatientSelect = (patId: string) => {
-    const found = patients.find(p => p.id === patId);
+    const found = patients.find(p => p.id === patId || p.uhid === patId);
     if (found) populateFromPatient(found);
   };
 
@@ -278,9 +282,11 @@ const PatientHistory: React.FC = () => {
             value={selectedPatientId}
             onChange={e => handlePatientSelect(e.target.value)}
           >
-            <option value="">-- Select Patient --</option>
+            <option value="">-- Select Patient ({patients.length} Registered) --</option>
             {patients.map(p => (
-              <option key={p.id} value={p.id}>{p.name} ({p.uhid || p.id})</option>
+              <option key={p.uhid || p.id} value={p.uhid || p.id}>
+                {p.name || [p.firstName, p.middleName, p.lastName].filter(Boolean).join(' ') || p.uhid} ({p.uhid})
+              </option>
             ))}
           </select>
         </div>

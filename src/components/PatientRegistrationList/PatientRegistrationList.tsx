@@ -15,7 +15,8 @@ import {
   Building,
   UserCheck,
   Printer,
-  Receipt
+  Receipt,
+  History
 } from 'lucide-react';
 import { patientApi } from '../../api/patientApi';
 import type { PatientRecord } from '../../api/patientApi';
@@ -508,6 +509,15 @@ const PatientRegistrationList: React.FC = () => {
                       </button>
                       <button
                         type="button"
+                        className={styles.btnAction}
+                        style={{ color: '#2563eb' }}
+                        title="View Patient Past Clinical Information & Timeline"
+                        onClick={() => navigate(`/patient-past-info?id=${encodeURIComponent(patient.uhid)}`)}
+                      >
+                        <History size={15} />
+                      </button>
+                      <button
+                        type="button"
                         className={`${styles.btnAction}`}
                         style={{ color: '#0f766e' }}
                         title="Print Patient Sticker (100mm x 50mm PDF)"
@@ -722,6 +732,19 @@ const PatientRegistrationList: React.FC = () => {
               >
                 <Receipt size={14} style={{ marginRight: '6px' }} />
                 Print Bill Cum Receipt
+              </button>
+              <button
+                type="button"
+                className={`${styles.btn}`}
+                style={{ background: '#2563eb', color: '#ffffff', borderColor: '#1d4ed8' }}
+                onClick={() => {
+                  const id = viewingPatient.uhid;
+                  setViewingPatient(null);
+                  navigate(`/patient-past-info?id=${encodeURIComponent(id)}`);
+                }}
+              >
+                <History size={14} style={{ marginRight: '6px' }} />
+                View Past Clinical History
               </button>
               <button
                 type="button"

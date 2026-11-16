@@ -90,7 +90,9 @@ const Billing: React.FC = () => {
         ]);
 
         if (isMounted && pts.status === 'fulfilled') {
-          setPatients(pts.value);
+          const raw = pts.value as any;
+          const pList = Array.isArray(raw) ? raw : (raw?.patients || []);
+          setPatients(pList);
         }
 
         if (isMounted && docRes.status === 'fulfilled' && docRes.value?.doctors) {

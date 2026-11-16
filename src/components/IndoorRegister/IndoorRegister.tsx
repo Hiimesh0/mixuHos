@@ -101,7 +101,8 @@ const IndoorRegister: React.FC = () => {
       setAdmissions(adms);
       setBeds(bds);
       setDoctors(docs.doctors || []);
-      setPatients(pats || []);
+      const patList = Array.isArray(pats) ? pats : ((pats as any)?.patients || []);
+      setPatients(patList);
 
       if (adms.length > 0) {
         setCurrentIndex(adms.length - 1);
@@ -460,14 +461,14 @@ const IndoorRegister: React.FC = () => {
                     .slice(0, 8)
                     .map(p => (
                       <div
-                        key={p.id}
+                        key={p.uhid || p.id}
                         onClick={() => {
                           handleSelectPatient(p);
                           setPatientSearch('');
                         }}
                         style={{ padding: '8px 12px', cursor: 'pointer', borderBottom: '1px solid #f1f5f9', fontSize: '12px' }}
                       >
-                        <strong>{p.name}</strong> ({p.uhid}) - {p.gender}, {p.age} Yrs
+                        <strong>{p.name || [p.firstName, p.middleName, p.lastName].filter(Boolean).join(' ')}</strong> ({p.uhid}) - {p.sex || (p as any).gender || '--'}, {p.age} Yrs
                       </div>
                     ))}
                 </div>

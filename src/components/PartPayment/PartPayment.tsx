@@ -49,11 +49,12 @@ const PartPayment: React.FC = () => {
         admissionApi.getAdmissions(),
         depositApi.getDeposits(),
       ]);
-      setPatients(pats);
-      setAdmissions(adms);
-      setDeposits(deps);
-      if (pats.length > 0 && !selectedPatientId) {
-        setSelectedPatientId(pats[0].id);
+      const patList: PatientRecord[] = Array.isArray(pats) ? pats : ((pats as any)?.patients || []);
+      setPatients(patList);
+      setAdmissions(Array.isArray(adms) ? adms : []);
+      setDeposits(Array.isArray(deps) ? deps : []);
+      if (patList.length > 0 && !selectedPatientId) {
+        setSelectedPatientId(patList[0].uhid || patList[0].id);
       }
     } catch {
       setNotification({ type: 'error', message: 'Failed to load billing records.' });
@@ -205,9 +206,11 @@ const PartPayment: React.FC = () => {
             value={selectedPatientId}
             onChange={e => setSelectedPatientId(e.target.value)}
           >
-            <option value="">-- Choose Patient --</option>
+            <option value="">-- Choose Patient ({patients.length} Registered) --</option>
             {patients.map(p => (
-              <option key={p.id} value={p.id}>{p.name} ({p.uhid || p.id})</option>
+              <option key={p.uhid || p.id} value={p.uhid || p.id}>
+                {p.name || [p.firstName, p.middleName, p.lastName].filter(Boolean).join(' ') || p.uhid} ({p.uhid})
+              </option>
             ))}
           </select>
           <span className={styles.hospitalName}>{HOSPITAL_CONFIG.name}</span>

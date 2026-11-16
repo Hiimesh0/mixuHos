@@ -59,14 +59,15 @@ const MlcCertificate: React.FC = () => {
         certificateApi.getCertificates({ cert_type: 'MLC' }),
         patientApi.getPatients(),
       ]);
-      setCertificates(certs);
-      setPatients(pats);
+      const patList = Array.isArray(pats) ? pats : ((pats as any)?.patients || []);
+      setCertificates(Array.isArray(certs) ? certs : []);
+      setPatients(patList);
 
-      if (certs.length > 0) {
+      if (certs && certs.length > 0) {
         setCurrentIndex(certs.length - 1);
         populateFromRecord(certs[certs.length - 1]);
-      } else if (pats.length > 0) {
-        populateFromPatient(pats[0]);
+      } else if (patList.length > 0) {
+        populateFromPatient(patList[0]);
       }
     } catch {
       setNotification({ type: 'error', message: 'Failed to load MLC certificates.' });
@@ -100,12 +101,13 @@ const MlcCertificate: React.FC = () => {
 
   const populateFromPatient = (pat: PatientRecord) => {
     setSelectedPatientId(pat.id);
+    const fullName = pat.name || [pat.firstName, pat.lastName].filter(Boolean).join(' ') || pat.id;
     setFormData(prev => ({
       ...prev,
       uhid: pat.uhid || pat.id,
-      patient_name: pat.name,
+      patient_name: fullName,
       age: pat.age ? String(pat.age) : '30',
-      gender: pat.gender || 'Male',
+      gender: pat.gender || (pat as any).sex || 'Male',
     }));
   };
 
@@ -234,7 +236,7 @@ const MlcCertificate: React.FC = () => {
           >
             <option value="">-- Autofill from Patient --</option>
             {patients.map(p => (
-              <option key={p.id} value={p.id}>{p.name} ({p.uhid || p.id})</option>
+              <option key={p.id} value={p.id}>{p.name || [p.firstName, p.lastName].filter(Boolean).join(' ') || p.id} ({p.uhid || p.id})</option>
             ))}
           </select>
         </div>

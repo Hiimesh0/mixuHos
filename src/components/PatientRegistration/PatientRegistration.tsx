@@ -2076,6 +2076,23 @@ const PatientRegistration: React.FC = () => {
                     <Plus size={16} style={{ marginRight: '6px' }} />
                     New Registration
                   </button>
+                  <button
+                    type="button"
+                    className={`${styles.btn} ${styles.btnSecondary}`}
+                    onClick={() => {
+                      const uhid = loadedRecord?.uhid || formData.uhid;
+                      if (uhid) {
+                        navigate(`/patient-past-info?id=${encodeURIComponent(uhid)}`);
+                      } else {
+                        navigate('/patient-past-info');
+                      }
+                    }}
+                    title="View full clinical timeline, OPD, IPD, lab and echo history for this patient"
+                    style={{ backgroundColor: '#eff6ff', borderColor: '#93c5fd', color: '#1d4ed8', fontWeight: 600 }}
+                  >
+                    <History size={15} style={{ marginRight: '6px' }} />
+                    View Patient Past History
+                  </button>
                   <a
                     href="#patient-history-section"
                     className={`${styles.btn} ${styles.btnSecondary}`}
@@ -3204,6 +3221,19 @@ const PatientRegistration: React.FC = () => {
                   </div>
 
                   <div className={styles.historyModalFooter}>
+                    <button
+                      type="button"
+                      className={`${styles.btn} ${styles.btnSecondary}`}
+                      onClick={() => {
+                        setIsHistoryModalOpen(false);
+                        navigate(`/patient-past-info?id=${encodeURIComponent(selectedHistoryPatient.uhid)}`);
+                      }}
+                      title="Open complete clinical timeline, lab reports, echo, and admissions"
+                      style={{ backgroundColor: '#eff6ff', borderColor: '#93c5fd', color: '#1d4ed8', fontWeight: 600 }}
+                    >
+                      <History size={14} style={{ marginRight: '4px' }} />
+                      View Full Clinical History
+                    </button>
                     <button
                       type="button"
                       className={styles.btnLoadPatient}
