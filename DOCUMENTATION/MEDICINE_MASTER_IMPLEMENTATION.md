@@ -72,3 +72,4 @@ Medicines linked to patient prescriptions or pharmacy sales cannot be permanentl
   - `GET /api/medicines/<id>/`: Retrieve single medicine record.
   - `PUT /api/medicines/<id>/` / `PATCH /api/medicines/<id>/`: Update medicine record.
   - `DELETE /api/medicines/<id>/?force=false`: Deactivate or delete record.
+

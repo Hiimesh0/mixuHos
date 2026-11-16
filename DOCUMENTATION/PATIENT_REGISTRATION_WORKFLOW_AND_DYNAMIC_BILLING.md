@@ -129,3 +129,4 @@ The Patient Registration module and its directly associated billing and printing
    - Adding rows dynamically updates the total in real time.
    - Printing bill calls API and opens PDF in a new tab.
    - Record remains locked after closing bill modal.
+

@@ -159,3 +159,4 @@ OTHER MODULES
 ## 6. Conclusion
 
 The sidebar navigation now provides an intuitive, productivity-focused workflow for hospital staff by surfacing all fully functioning modules at the very top, while keeping all secondary and upcoming modules organized logically according to hospital departments.
+

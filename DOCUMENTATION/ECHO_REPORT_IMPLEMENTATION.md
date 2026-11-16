@@ -135,3 +135,4 @@ The **Echo Report** (2D Transthoracic Echocardiography & Color Doppler Report) m
 ## 6. Conclusion
 
 The Echo Report module is complete, adheres to the source-of-truth screenshot `Echo Report.jpg`, and functions as an enterprise-grade medical echocardiography workflow with full patient linkage, report template integration, and print-ready output.
+

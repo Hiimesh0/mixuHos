@@ -87,3 +87,4 @@ In accordance with healthcare software engineering best practices:
   - `GET /api/doctors/<id>/`: Retrieve single doctor record.
   - `PUT /api/doctors/<id>/` / `PATCH /api/doctors/<id>/`: Update doctor record.
   - `DELETE /api/doctors/<id>/?force=false`: Deactivate or delete record.
+

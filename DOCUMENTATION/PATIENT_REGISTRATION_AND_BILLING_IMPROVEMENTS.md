@@ -106,3 +106,4 @@ npm run build
 | `frontend/src/components/PatientRegistration/PatientRegistration.module.css` | Removed sidebar styles, set form to 100% width, made `.actions` sticky, added discount styling classes. |
 | `frontend/src/components/PatientRegistration/PatientRegistration.tsx` | Removed sidebar and mobile bar JSX, integrated discount state and validation into Dynamic Bill Card, unified footer action bar. |
 | `DOCUMENTATION/PATIENT_REGISTRATION_AND_BILLING_IMPROVEMENTS.md` | Comprehensive technical documentation. |
+

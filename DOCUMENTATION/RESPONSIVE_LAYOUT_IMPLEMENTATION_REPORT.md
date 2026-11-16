@@ -78,7 +78,7 @@ Prior to this implementation:
       box-sizing: border-box !important;
     }
 
-    /* Form containers, sections, cards, and tables expand to full width of their page container */
+    /* Nested form containers, sections, cards, and tables expand to full width of their page container */
     .appLayout.sidebarCollapsed .appMainContent [class*="formContainer"]:not([class*="modal"]):not([class*="dialog"]),
     .appLayout.sidebarCollapsed .appMainContent [class*="formCard"]:not([class*="modal"]),
     .appLayout.sidebarCollapsed .appMainContent [class*="topSection"]:not([class*="modal"]),

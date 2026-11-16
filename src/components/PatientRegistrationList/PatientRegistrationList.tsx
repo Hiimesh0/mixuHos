@@ -14,12 +14,14 @@ import {
   Calendar,
   Building,
   UserCheck,
-  Printer
+  Printer,
+  Receipt
 } from 'lucide-react';
 import { patientApi } from '../../api/patientApi';
 import type { PatientRecord } from '../../api/patientApi';
 import { useAutoDismissNotification } from '../../hooks/useAutoDismissNotification';
 import { openPatientStickerPdf } from '../../utils/patientStickerGenerator';
+import { openPatientBillPdf } from '../../utils/patientBillGenerator';
 import { HOSPITAL_CONFIG } from '../../config/hospitalConfig';
 import styles from './PatientRegistrationList.module.css';
 
@@ -156,6 +158,27 @@ const PatientRegistrationList: React.FC = () => {
   const registeredTodayCount = patients.filter(
     p => p.createdAt && p.createdAt.startsWith(todayDateStr)
   ).length;
+
+  // Quick Print Patient Bill Cum Receipt
+  const handlePrintPatientBill = async (patient: PatientRecord) => {
+    try {
+      const existing = await patientApi.getPatientBill(patient.uhid);
+      if (existing) {
+        await openPatientBillPdf(existing);
+      } else {
+        const created = await patientApi.createOrGetPatientBill(patient.uhid, {
+          items: [{ details: 'OPD Consultation / Registration Charge', rate: 500, amount: 500 }],
+          totalReceived: 500
+        });
+        await openPatientBillPdf(created);
+      }
+    } catch (err: any) {
+      setNotification({
+        type: 'error',
+        message: err?.message || 'Failed to generate bill print for this patient.'
+      });
+    }
+  };
 
   // Delete execution
   const confirmDelete = async () => {
@@ -494,6 +517,15 @@ const PatientRegistrationList: React.FC = () => {
                       </button>
                       <button
                         type="button"
+                        className={`${styles.btnAction}`}
+                        style={{ color: '#4338ca' }}
+                        title="Print Bill Cum Receipt (A4 PDF)"
+                        onClick={() => handlePrintPatientBill(patient)}
+                      >
+                        <Receipt size={15} />
+                      </button>
+                      <button
+                        type="button"
                         className={`${styles.btnAction} ${styles.btnActionEdit}`}
                         title="Edit Patient"
                         onClick={() => navigate(`/patient-registration?id=${encodeURIComponent(patient.uhid)}`)}
@@ -681,6 +713,15 @@ const PatientRegistrationList: React.FC = () => {
               >
                 <Printer size={14} style={{ marginRight: '6px' }} />
                 Print Patient Sticker
+              </button>
+              <button
+                type="button"
+                className={`${styles.btn}`}
+                style={{ background: '#4338ca', color: '#ffffff', borderColor: '#3730a3' }}
+                onClick={() => handlePrintPatientBill(viewingPatient)}
+              >
+                <Receipt size={14} style={{ marginRight: '6px' }} />
+                Print Bill Cum Receipt
               </button>
               <button
                 type="button"

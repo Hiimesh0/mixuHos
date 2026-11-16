@@ -55,3 +55,4 @@ The module includes a print-ready **Investigation Report Preview Modal** formatt
   - `GET /api/report-templates/<id>/`: Retrieve single template record.
   - `PUT /api/report-templates/<id>/` / `PATCH /api/report-templates/<id>/`: Update template record.
   - `DELETE /api/report-templates/<id>/?force=false`: Deactivate or delete record.
+

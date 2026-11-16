@@ -398,7 +398,7 @@ export const bedApi = {
     try {
       const res = await fetch(`${API_BASE_URL}/beds/`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify(payload),
       });
       if (res.ok) {
@@ -407,27 +407,30 @@ export const bedApi = {
       }
     } catch {}
 
-    const all = await getLocal<BedRecord>('beds', 'beds.json', 'beds');
-    const seq = all.length + 1;
+    const beds = await getLocal<BedRecord>('beds', 'beds.json', 'beds');
+    const seq = beds.length + 1;
     const created: BedRecord = {
-      id: `BED-${String(seq).padStart(6, '0')}`,
-      bed_number: payload.bed_number || String(seq + 100),
+      id: `BED-${String(seq).padStart(4, '0')}`,
+      bed_number: payload.bed_number || `B-${seq}`,
       ward_name: payload.ward_name || 'General Ward',
-      room_type_id: payload.room_type_id || 'RMT-000001',
+      room_type: payload.room_type || 'General',
+      daily_rate: Number(payload.daily_rate) || 800,
       status: payload.status || 'Vacant',
-      daily_rate: Number(payload.daily_rate) || 1000,
-      is_active: payload.is_active !== false,
+      floor: payload.floor || '1st Floor',
+      wing: payload.wing || 'West Wing',
+      notes: payload.notes || '',
+      is_active: payload.is_active !== undefined ? payload.is_active : true,
     };
-    all.push(created);
-    saveLocal('beds', all);
+    beds.push(created);
+    saveLocal('beds', beds);
     return created;
   },
 
   async updateBed(id: string, payload: Partial<BedRecord>): Promise<BedRecord> {
     try {
-      const res = await fetch(`${API_BASE_URL}/beds/${encodeURIComponent(id)}/`, {
+      const res = await fetch(`${API_BASE_URL}/beds/${id}/`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify(payload),
       });
       if (res.ok) {
@@ -436,40 +439,37 @@ export const bedApi = {
       }
     } catch {}
 
-    const all = await getLocal<BedRecord>('beds', 'beds.json', 'beds');
-    const idx = all.findIndex(b => b.id === id);
+    const beds = await getLocal<BedRecord>('beds', 'beds.json', 'beds');
+    const idx = beds.findIndex(b => b.id === id || b.bed_number === id);
     if (idx !== -1) {
-      all[idx] = { ...all[idx], ...payload, id };
-      saveLocal('beds', all);
-      return all[idx];
+      beds[idx] = { ...beds[idx], ...payload };
+      saveLocal('beds', beds);
+      return beds[idx];
     }
-    throw new Error(`Bed with ID ${id} not found.`);
+    throw new Error('Bed record not found');
   },
 };
 
 // --- Room Type API ---
 
 export const roomTypeApi = {
-  async getRoomTypes(params?: { search?: string }): Promise<RoomTypeRecord[]> {
+  async getRoomTypes(): Promise<RoomTypeRecord[]> {
     try {
-      const q = new URLSearchParams();
-      if (params?.search) q.set('search', params.search);
-      const res = await fetch(`${API_BASE_URL}/room-types/?${q.toString()}`, { headers: { Accept: 'application/json' } });
+      const res = await fetch(`${API_BASE_URL}/room-types/`, { headers: { 'Accept': 'application/json' } });
       if (res.ok) {
         const d = await res.json();
-        if (d.success && Array.isArray(d.room_types)) return d.room_types;
+        if (d.success && Array.isArray(d.items)) return d.items;
       }
     } catch {}
 
-    const local = await getLocal<RoomTypeRecord>('room_types', 'room_types.json', 'room_types');
-    return local;
+    return await getLocal<RoomTypeRecord>('room_types', 'room_types.json', 'items');
   },
 
   async createRoomType(payload: Partial<RoomTypeRecord>): Promise<RoomTypeRecord> {
     try {
       const res = await fetch(`${API_BASE_URL}/room-types/`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify(payload),
       });
       if (res.ok) {
@@ -478,16 +478,16 @@ export const roomTypeApi = {
       }
     } catch {}
 
-    const all = await getLocal<RoomTypeRecord>('room_types', 'room_types.json', 'room_types');
+    const all = await getLocal<RoomTypeRecord>('room_types', 'room_types.json', 'items');
     const seq = all.length + 1;
     const created: RoomTypeRecord = {
-      id: `RMT-${String(seq).padStart(6, '0')}`,
-      name: payload.name || 'Room Type',
+      id: `RT-${String(seq).padStart(4, '0')}`,
+      name: payload.name || `Room Type ${seq}`,
       code: payload.code || `RT-${seq}`,
       daily_rate: Number(payload.daily_rate) || 1000,
       ac_type: payload.ac_type || 'Non-AC',
       total_beds: Number(payload.total_beds) || 10,
-      is_active: payload.is_active !== false,
+      is_active: payload.is_active !== undefined ? payload.is_active : true,
     };
     all.push(created);
     saveLocal('room_types', all);
@@ -496,9 +496,9 @@ export const roomTypeApi = {
 
   async updateRoomType(id: string, payload: Partial<RoomTypeRecord>): Promise<RoomTypeRecord> {
     try {
-      const res = await fetch(`${API_BASE_URL}/room-types/${encodeURIComponent(id)}/`, {
+      const res = await fetch(`${API_BASE_URL}/room-types/${id}/`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify(payload),
       });
       if (res.ok) {
@@ -507,29 +507,31 @@ export const roomTypeApi = {
       }
     } catch {}
 
-    const all = await getLocal<RoomTypeRecord>('room_types', 'room_types.json', 'room_types');
-    const idx = all.findIndex(r => r.id === id);
+    const all = await getLocal<RoomTypeRecord>('room_types', 'room_types.json', 'items');
+    const idx = all.findIndex(x => x.id === id || x.code === id);
     if (idx !== -1) {
-      all[idx] = { ...all[idx], ...payload, id };
+      all[idx] = { ...all[idx], ...payload };
       saveLocal('room_types', all);
       return all[idx];
     }
-    throw new Error(`Room Type with ID ${id} not found.`);
+    throw new Error('Room type record not found');
   },
 
-  async deleteRoomType(id: string, force = false): Promise<boolean> {
+  async deleteRoomType(id: string, hard: boolean = false): Promise<boolean> {
     try {
-      const res = await fetch(`${API_BASE_URL}/room-types/${encodeURIComponent(id)}/?force=${force}`, {
+      const res = await fetch(`${API_BASE_URL}/room-types/${id}/`, {
         method: 'DELETE',
+        headers: { 'Accept': 'application/json' },
       });
       if (res.ok) return true;
     } catch {}
 
-    const all = await getLocal<RoomTypeRecord>('room_types', 'room_types.json', 'room_types');
-    if (force) {
-      saveLocal('room_types', all.filter(r => r.id !== id));
+    const all = await getLocal<RoomTypeRecord>('room_types', 'room_types.json', 'items');
+    if (hard) {
+      const filtered = all.filter(x => x.id !== id && x.code !== id);
+      saveLocal('room_types', filtered);
     } else {
-      const idx = all.findIndex(r => r.id === id);
+      const idx = all.findIndex(x => x.id === id || x.code === id);
       if (idx !== -1) {
         all[idx].is_active = false;
         saveLocal('room_types', all);
@@ -730,3 +732,4 @@ export const otApi = {
     return created;
   },
 };
+

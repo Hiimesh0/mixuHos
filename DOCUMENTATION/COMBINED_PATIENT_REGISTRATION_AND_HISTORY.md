@@ -301,3 +301,4 @@ Executed: `npm run lint` (`oxlint`)
 | `frontend/src/components/PatientRegistrationList/PatientRegistrationList.tsx` | Standalone history list updated to replace Gender filter with Date Range (From/To) filter, New/Old category stats, and clean reset actions. |
 | `frontend/src/components/PatientRegistrationList/PatientRegistrationList.module.css` | Added date input styles and responsive layout updates. |
 | `DOCUMENTATION/COMBINED_PATIENT_REGISTRATION_AND_HISTORY.md` | Comprehensive architectural and user documentation. |
+

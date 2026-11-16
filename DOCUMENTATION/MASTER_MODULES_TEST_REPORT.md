@@ -76,3 +76,4 @@ All modules have been verified across the Django REST backend, JSON storage laye
 - **Dynamic Billing**: Itemized charges, custom row creation, percentage and cash discounts, invoice sequencing, and PDF generation remain fully functional.
 - **Sticker PDF Generation**: 100mm × 50mm thermal sticker and A4 multi-label grid printing remain fully operational.
 - **Barcode Scanning**: Mobile camera scanner modal and USB barcode scanner wedge lookup remain operational.
+

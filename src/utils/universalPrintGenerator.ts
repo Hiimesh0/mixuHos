@@ -493,3 +493,4 @@ export function openCertificatePrint(cert: CertificateRecord): void {
   `;
   openHtmlPrintWindow(`Certificate_${cert.certificate_no}`, body);
 }
+
