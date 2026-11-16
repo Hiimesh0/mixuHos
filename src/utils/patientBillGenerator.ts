@@ -4,7 +4,6 @@
  * Provides fallback generation via jsPDF for static deployments.
  */
 
-import { jsPDF } from 'jspdf';
 import type { PatientBillRecord } from '../api/patientApi';
 import { HOSPITAL_CONFIG } from '../config/hospitalConfig';
 
@@ -60,7 +59,8 @@ function formatNativeDate(d: Date, includeTime: boolean): string {
 /**
  * Generate an A4 Portrait PDF Blob matching Bill.jpeg using jsPDF
  */
-export function generatePatientBillPdfBlob(bill: PatientBillRecord): Blob {
+export async function generatePatientBillPdfBlob(bill: PatientBillRecord): Promise<Blob> {
+  const { jsPDF } = await import('jspdf');
   const doc = new jsPDF({
     orientation: 'portrait',
     unit: 'mm',
@@ -228,8 +228,6 @@ export function generatePatientBillPdfBlob(bill: PatientBillRecord): Blob {
   // 4. Bill Items Table
   let tableY = currY;
   const wSr = 18.0;
-  const wDet = 132.0;
-  const wRate = 40.0;
 
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(8.2);
@@ -454,7 +452,7 @@ export async function openPatientBillPdf(
     }
 
     if (!targetPdfUrl) {
-      const blob = generatePatientBillPdfBlob(bill);
+      const blob = await generatePatientBillPdfBlob(bill);
       targetPdfUrl = URL.createObjectURL(blob);
     }
 

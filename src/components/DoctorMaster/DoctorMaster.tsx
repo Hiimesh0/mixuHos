@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { 
   ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, 
   Search, Save, LogOut, Edit2, CheckSquare, Square, 
-  Trash2, Printer, X, AlertCircle, CheckCircle2, UserCheck, ShieldAlert
+  Trash2, Printer, X, AlertCircle, CheckCircle2, ShieldAlert
 } from 'lucide-react';
 import { doctorApi, type DoctorRecord } from '../../api/masterApi';
 import { useAutoDismissNotification } from '../../hooks/useAutoDismissNotification';

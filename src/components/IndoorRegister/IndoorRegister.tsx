@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronFirst, ChevronLeft, ChevronRight, ChevronLast, Save, Trash2, Printer, X, FileText, UserCircle } from 'lucide-react';
+import { ChevronFirst, ChevronLeft, ChevronRight, ChevronLast, Save, Trash2, FileText, UserCircle } from 'lucide-react';
 import styles from './IndoorRegister.module.css';
 
 const IndoorRegister: React.FC = () => {

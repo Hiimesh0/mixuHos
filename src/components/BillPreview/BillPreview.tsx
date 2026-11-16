@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Printer, ArrowLeft, Download, FileText, AlertCircle } from 'lucide-react';
+import { Printer, ArrowLeft, Download, AlertCircle } from 'lucide-react';
 import { patientApi, type PatientBillRecord, type PatientRecord } from '../../api/patientApi';
 import { openPatientBillPdf, formatBillDate } from '../../utils/patientBillGenerator';
 import { HOSPITAL_CONFIG } from '../../config/hospitalConfig';

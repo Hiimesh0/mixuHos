@@ -7,7 +7,6 @@ import styles from './InsuranceCompanyMaster.module.css';
 
 const InsuranceCompanyMaster: React.FC = () => {
  const [status, setStatus] = useState('active');
- const [defaultHospital, setDefaultHospital] = useState(false);
  const [noIpdCharges, setNoIpdCharges] = useState(false);
  const [print, setPrint] = useState(false);
 

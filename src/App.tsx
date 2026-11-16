@@ -815,11 +815,13 @@ interface NavigationBarProps {
 
 const NavigationBar: React.FC<NavigationBarProps> = ({
   isMobileOpen,
-  isCollapsed,
+  isCollapsed: rawIsCollapsed,
   onToggleCollapse,
   onCloseMobile,
   onLogout
 }) => {
+  // Mobile drawer is NEVER collapsed - always show full labels, headers, and accordions
+  const isCollapsed = isMobileOpen ? false : rawIsCollapsed;
   const location = useLocation();
   const currentPath = location.pathname;
 
@@ -1073,6 +1075,11 @@ function App() {
   });
 
   const toggleSidebarCollapse = () => {
+    // If on mobile/tablet screens (<= 1024px), toggle the mobile nav drawer instead of desktop sidebar collapse
+    if (typeof window !== 'undefined' && window.innerWidth <= 1024) {
+      setIsMobileNavOpen(prev => !prev);
+      return;
+    }
     setIsSidebarCollapsed(prev => {
       const next = !prev;
       localStorage.setItem('mixu_sidebar_collapsed', String(next));
@@ -1117,6 +1124,13 @@ function App() {
         target.closest('.sidebarToggleBtn') ||
         target.closest('.mobileMenuBtn')
       ) {
+        return;
+      }
+
+      // On mobile screens (<= 1024px), focus on an input should only close the slide-in drawer if open.
+      // NEVER set isSidebarCollapsed = true on mobile!
+      if (typeof window !== 'undefined' && window.innerWidth <= 1024) {
+        setIsMobileNavOpen(false);
         return;
       }
 
@@ -1224,7 +1238,7 @@ function App() {
         {isAuthenticated && (
           <NavigationBar 
             isMobileOpen={isMobileNavOpen}
-            isCollapsed={isSidebarCollapsed}
+            isCollapsed={isMobileNavOpen ? false : isSidebarCollapsed}
             onToggleCollapse={toggleSidebarCollapse}
             onCloseMobile={() => setIsMobileNavOpen(false)} 
             onLogout={handleLogout}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { 
  ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, 
- Search, Save, Edit2, Trash2, LogOut, Play
+ Search, Save, Edit2, Trash2, LogOut
 } from 'lucide-react';
 import styles from './AdviceMaster.module.css';
 

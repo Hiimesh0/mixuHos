@@ -149,3 +149,4 @@ The updated layout and preview system were verified across all standard responsi
 - **Main Branch:** `main`
 - **Build Output:** Clean Vite build (`dist/`) with zero TypeScript errors.
 - **GitHub Pages Deployment:** Synchronized via `npm run deploy` to `gh-pages`.
+

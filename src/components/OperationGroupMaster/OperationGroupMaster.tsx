@@ -1,7 +1,7 @@
 import React from 'react';
 import { 
  ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, 
- Search, FileText, Save, Edit2, Trash2, LogOut, ArrowDown, Play
+ Search, FileText, Save, Edit2, Trash2, LogOut, ArrowDown
 } from 'lucide-react';
 import styles from './OperationGroupMaster.module.css';
 

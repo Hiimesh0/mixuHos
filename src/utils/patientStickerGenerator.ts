@@ -6,7 +6,6 @@
  * The sticker retains its physical dimensions and is not stretched across the page.
  */
 
-import { jsPDF } from 'jspdf';
 import JsBarcode from 'jsbarcode';
 import type { PatientRecord } from '../api/patientApi';
 import { HOSPITAL_CONFIG } from '../config/hospitalConfig';
@@ -245,7 +244,8 @@ function renderSingleStickerToDoc(
 /**
  * Generate an A4 Portrait PDF Blob (210mm x 297mm) containing the patient sticker
  */
-export function generatePatientStickerPdfBlob(patient: PatientRecord): Blob {
+export async function generatePatientStickerPdfBlob(patient: PatientRecord): Promise<Blob> {
+  const { jsPDF } = await import('jspdf');
   // A4 Portrait: 210mm wide x 297mm high
   const doc = new jsPDF({
     orientation: 'portrait',
@@ -373,7 +373,7 @@ export async function openPatientStickerPdf(
     }
 
     if (!targetPdfUrl) {
-      const blob = generatePatientStickerPdfBlob(patient);
+      const blob = await generatePatientStickerPdfBlob(patient);
       targetPdfUrl = URL.createObjectURL(blob);
     }
 

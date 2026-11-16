@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
  ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, 
- Save, LogOut, Edit2, Trash2, Printer, Square, CheckSquare, FileText
+ Save, LogOut, Edit2, Trash2, Printer, Square, CheckSquare
 } from 'lucide-react';
 import styles from './CertificateTemplate.module.css';
 

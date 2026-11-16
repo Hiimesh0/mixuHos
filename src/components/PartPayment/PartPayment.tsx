@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowDown, X, Printer, Save, FileText, ArrowLeft } from 'lucide-react';
+import { ArrowDown, X, Printer, FileText } from 'lucide-react';
 import { HOSPITAL_CONFIG } from '../../config/hospitalConfig';
 import styles from './PartPayment.module.css';
 

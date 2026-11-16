@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
  ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, 
- Search, Save, LogOut, Edit2, Trash2, Printer, Square, CheckSquare
+ Search, Save, LogOut, Edit2, Trash2, Square, CheckSquare
 } from 'lucide-react';
 import styles from './DeathCertificate.module.css';
 

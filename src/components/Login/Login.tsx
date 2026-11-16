@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Eye, EyeOff, Lock, HeartPulse, ShieldCheck, Activity } from 'lucide-react';
+import { Eye, EyeOff, HeartPulse } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { HOSPITAL_CONFIG } from '../../config/hospitalConfig';
 import mixuEmblem from '../../assets/mixu-emblem.png';

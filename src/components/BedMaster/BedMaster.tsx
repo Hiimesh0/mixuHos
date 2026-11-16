@@ -1,7 +1,7 @@
 import React from 'react';
 import { 
  ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, 
- Search, FileText, Save, LogOut, Play
+ Search, FileText, Save, LogOut
 } from 'lucide-react';
 import styles from './BedMaster.module.css';
 

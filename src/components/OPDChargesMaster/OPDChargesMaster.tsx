@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
  ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, 
- Search, Save, LogOut, CheckSquare, Square, Edit2, Trash2, ArrowDownCircle, Info
+ Search, Save, LogOut, CheckSquare, Square, Edit2, Trash2, ArrowDownCircle
 } from 'lucide-react';
 import styles from './OPDChargesMaster.module.css';
 

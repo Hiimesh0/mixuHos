@@ -144,7 +144,7 @@ export const BarcodeCameraModal: React.FC<BarcodeCameraModalProps> = ({
         activeCameraLabel: 'None'
       });
     }
-  }, []);
+  }, [logDiagnostic]);
 
   // Enumerate cameras (called without requesting permission on mount)
   const enumerateCameras = useCallback(async () => {
@@ -167,7 +167,7 @@ export const BarcodeCameraModal: React.FC<BarcodeCameraModalProps> = ({
     } catch (err: unknown) {
       console.warn('Could not enumerate cameras:', err);
     }
-  }, []);
+  }, [logDiagnostic]);
 
   // Check Secure Context and permission status on modal open
   useEffect(() => {
@@ -226,7 +226,7 @@ export const BarcodeCameraModal: React.FC<BarcodeCameraModalProps> = ({
       isMountedRef.current = false;
       stopCameraStream();
     };
-  }, [isOpen, enumerateCameras, stopCameraStream]);
+  }, [isOpen, enumerateCameras, stopCameraStream, logDiagnostic]);
 
   // Build constraints ladder for progressive fallback
   const getConstraintsLadder = (targetId: string): MediaStreamConstraints[] => {

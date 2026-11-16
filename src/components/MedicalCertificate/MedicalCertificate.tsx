@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { 
  ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, 
- Search, Save, LogOut, Edit2, Trash2, Printer, Square, CheckSquare, Image as ImageIcon
+ Search, Save, LogOut, Edit2, Trash2, Square, CheckSquare, Image as ImageIcon
 } from 'lucide-react';
 import styles from './MedicalCertificate.module.css';
 
 const MedicalCertificate: React.FC = () => {
- const [shouldPrint, setShouldPrint] = useState(false);
  const [isCheckedH, setIsCheckedH] = useState(false);
  const [blankCheck, setBlankCheck] = useState(false);
 

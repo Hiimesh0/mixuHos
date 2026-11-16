@@ -4,8 +4,6 @@
  * fallback and initial fixtures for GitHub Pages hosting.
  */
 
-import { HOSPITAL_CONFIG } from '../config/hospitalConfig';
-
 export interface EchoReportRecord {
   id: string;
   uhid: string;

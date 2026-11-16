@@ -19,8 +19,8 @@ export interface ParsedReportDetails {
   rawText: string;
 }
 
-const IMPRESSION_REGEX = /^(IMPRESSION|CONCLUSION|COMMENTS|RECOMMENDATION|RECOMMENDATIONS|REMARKS?|OPINION)\s*[:\-]\s*(.*)$/i;
-const BULLET_PREFIX_REGEX = /^[\s\t]*([•\-\*–—\u2022\u25CF\u25BA]|\d+[\.\)])\s*/;
+const IMPRESSION_REGEX = /^(IMPRESSION|CONCLUSION|COMMENTS|RECOMMENDATION|RECOMMENDATIONS|REMARKS?|OPINION)\s*[:-]\s*(.*)$/i;
+const BULLET_PREFIX_REGEX = /^[\s\t]*([•\-*–—\u2022\u25CF\u25BA]|\d+[.)])\s*/;
 const COLON_PREFIX_REGEX = /^([A-Z0-9\s&/()_\-+]{2,35})\s*:\s*(.*)$/;
 
 /**
@@ -126,3 +126,4 @@ export function autoFormatToBullets(text: string): string {
 
   return formatted.join('\n');
 }
+

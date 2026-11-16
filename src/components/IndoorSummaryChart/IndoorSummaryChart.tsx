@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { RefreshCw, X, MoreVertical } from 'lucide-react';
 import styles from './IndoorSummaryChart.module.css';
 

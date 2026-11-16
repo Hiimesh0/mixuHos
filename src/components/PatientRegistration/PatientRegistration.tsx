@@ -29,7 +29,6 @@ import {
   History,
   Upload
 } from 'lucide-react';
-import { BrowserMultiFormatReader, BarcodeFormat, DecodeHintType } from '@zxing/library';
 import { patientApi } from '../../api/patientApi';
 import { doctorApi } from '../../api/masterApi';
 import type { PatientRecord, PatientFormData, PatientBillRecord, ChargeItem } from '../../api/patientApi';
@@ -37,8 +36,9 @@ import { useAutoDismissNotification } from '../../hooks/useAutoDismissNotificati
 import { useFormKeyboardNavigation } from '../../hooks/useFormKeyboardNavigation';
 import { openPatientStickerPdf } from '../../utils/patientStickerGenerator';
 import { openPatientBillPdf } from '../../utils/patientBillGenerator';
-import { BarcodeCameraModal } from './BarcodeCameraModal';
 import styles from './PatientRegistration.module.css';
+
+const BarcodeCameraModal = React.lazy(() => import('./BarcodeCameraModal').then(m => ({ default: m.BarcodeCameraModal })));
 
 interface DynamicBillRow {
   id: string;
@@ -1139,7 +1139,8 @@ const PatientRegistration: React.FC = () => {
             // 2. Fallback to ZXing MultiFormat Reader
             if (!detectedText) {
               try {
-                const hints = new Map<DecodeHintType, unknown>();
+                const { BrowserMultiFormatReader, BarcodeFormat, DecodeHintType } = await import('@zxing/library');
+                const hints = new Map<any, any>();
                 hints.set(DecodeHintType.POSSIBLE_FORMATS, [
                   BarcodeFormat.QR_CODE,
                   BarcodeFormat.CODE_128,
@@ -2667,11 +2668,15 @@ const PatientRegistration: React.FC = () => {
       )}
 
       {/* Camera Barcode Scanner Modal */}
-      <BarcodeCameraModal
-        isOpen={isCameraModalOpen}
-        onClose={() => setIsCameraModalOpen(false)}
-        onScanSuccess={handleCameraScanSuccess}
-      />
+      {isCameraModalOpen && (
+        <React.Suspense fallback={null}>
+          <BarcodeCameraModal
+            isOpen={isCameraModalOpen}
+            onClose={() => setIsCameraModalOpen(false)}
+            onScanSuccess={handleCameraScanSuccess}
+          />
+        </React.Suspense>
+      )}
 
       {/* Unsaved Changes Confirmation Dialog */}
       {showUnsavedConfirmModal && pendingScannedPatient && (

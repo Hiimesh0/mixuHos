@@ -479,3 +479,4 @@ export function openReportTemplatePrintView(
   win.document.write(html);
   win.document.close();
 }
+
