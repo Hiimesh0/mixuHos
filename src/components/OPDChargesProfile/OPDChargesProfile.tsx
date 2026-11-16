@@ -1,10 +1,11 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight,
-  Search, Save, LogOut, CheckSquare, Square, Edit2, Trash2, ArrowDownCircle, X, CheckCircle2
+  Search, Save, LogOut, CheckSquare, Square, Edit2, Trash2, ArrowDownCircle, X, CheckCircle2, AlertCircle
 } from 'lucide-react';
 import styles from './OPDChargesProfile.module.css';
+import { opdProfileApi, type OPDProfileRecord } from '../../api/masterApi';
 
 interface SubTestItem {
   id: string;
@@ -13,19 +14,7 @@ interface SubTestItem {
   priority: number;
 }
 
-interface TestProfile {
-  id: string;
-  profileName: string;
-  group: string;
-  shortName: string;
-  priority: number;
-  rate: number;
-  active: boolean;
-  isBio: boolean;
-  concernDr: boolean;
-  testFor: 'Both' | 'Male' | 'Female';
-  subTests: SubTestItem[];
-}
+type TestProfile = OPDProfileRecord;
 
 const INITIAL_PROFILES: TestProfile[] = [
   {
@@ -132,6 +121,27 @@ const OPDChargesProfile: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [listType, setListType] = useState<'all' | 'active' | 'inactive'>('active');
   const [notification, setNotification] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const loadProfiles = useCallback(async () => {
+    try {
+      setLoading(true);
+      const res = await opdProfileApi.getAll();
+      const list = res.profiles || (Array.isArray(res) ? res : []);
+      if (list && list.length > 0) {
+        setProfiles(list);
+      }
+    } catch (err: any) {
+      console.warn('Could not fetch OPD profiles from backend, using default list:', err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadProfiles();
+  }, [loadProfiles]);
 
   // Subtest add inputs
   const [newSubGroup, setNewSubGroup] = useState<string>('OPD-BCH');
@@ -177,12 +187,29 @@ const OPDChargesProfile: React.FC = () => {
     handleUpdateCurrent('subTests', current.subTests.filter(s => s.id !== id));
   };
 
-  const handleSave = () => {
-    setNotification(`Test profile '${current.id} - ${current.profileName}' saved successfully!`);
-    setTimeout(() => setNotification(''), 4000);
+  const handleSave = async () => {
+    if (!current) return;
+    try {
+      setLoading(true);
+      setErrorMessage('');
+      let saved: TestProfile;
+      try {
+        saved = await opdProfileApi.update(current.id, current);
+      } catch {
+        saved = await opdProfileApi.create(current);
+      }
+      setProfiles(prev => prev.map(p => p.id === current.id ? (saved || current) : p));
+      setNotification(`Test profile '${current.id} - ${current.profileName}' saved persistently to hospital master!`);
+      setTimeout(() => setNotification(''), 4000);
+    } catch (err: any) {
+      setErrorMessage(err.message || 'Failed to persist test profile to backend.');
+      setTimeout(() => setErrorMessage(''), 5000);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleAddNewProfile = () => {
+  const handleAddNewProfile = async () => {
     const nextSeq = profiles.length + 1;
     const newId = `PRF-${String(nextSeq).padStart(3, '0')}`;
     const newP: TestProfile = {
@@ -200,14 +227,25 @@ const OPDChargesProfile: React.FC = () => {
         { id: '1', group: 'OPD-BCH', testName: 'Parameter 1', priority: 1 }
       ]
     };
-    setProfiles(prev => [...prev, newP]);
-    setNotification(`New Profile '${newId}' created!`);
+    try {
+      const created = await opdProfileApi.create(newP);
+      setProfiles(prev => [...prev, created || newP]);
+      setNotification(`New Profile '${newId}' created persistently!`);
+    } catch {
+      setProfiles(prev => [...prev, newP]);
+      setNotification(`New Profile '${newId}' created!`);
+    }
     setTimeout(() => setNotification(''), 4000);
     setCurrentIndex(filteredProfiles.length);
   };
 
-  const handleDeleteProfile = () => {
+  const handleDeleteProfile = async () => {
     if (!current) return;
+    try {
+      await opdProfileApi.delete(current.id, true);
+    } catch (e) {
+      console.warn('Backend delete failed, removing locally:', e);
+    }
     setProfiles(prev => prev.filter(p => p.id !== current.id));
     setNotification(`Profile '${current.id}' removed.`);
     setTimeout(() => setNotification(''), 4000);
@@ -244,6 +282,12 @@ const OPDChargesProfile: React.FC = () => {
       {notification && (
         <div style={{ background: '#dcfce7', border: '1px solid #86efac', color: '#166534', padding: '8px 14px', borderRadius: '6px', margin: '10px 0', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px' }}>
           <CheckCircle2 size={16} /> {notification}
+        </div>
+      )}
+
+      {errorMessage && (
+        <div style={{ background: '#fee2e2', border: '1px solid #f87171', color: '#991b1b', padding: '8px 14px', borderRadius: '6px', margin: '10px 0', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px' }}>
+          <AlertCircle size={16} /> {errorMessage}
         </div>
       )}
 

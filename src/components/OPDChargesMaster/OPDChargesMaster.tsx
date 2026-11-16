@@ -1,27 +1,13 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight,
-  Search, Save, LogOut, CheckSquare, Square, Edit2, Trash2, ArrowDownCircle, CheckCircle2
+  Search, Save, LogOut, CheckSquare, Square, Edit2, Trash2, ArrowDownCircle, CheckCircle2, AlertCircle
 } from 'lucide-react';
 import styles from './OPDChargesMaster.module.css';
+import { opdChargeApi, type OPDChargeRecord } from '../../api/masterApi';
 
-interface ChargeItem {
-  id: string;
-  name: string;
-  group: string;
-  shortName: string;
-  priority: number;
-  rate: number;
-  active: boolean;
-  isBio: boolean;
-  concernDr: boolean;
-  excludeRoomRate: boolean;
-  outsideTest: boolean;
-  testFor: 'Both' | 'Male' | 'Female';
-  unit?: string;
-  refRange?: string;
-}
+type ChargeItem = OPDChargeRecord;
 
 const INITIAL_CHARGES: ChargeItem[] = [
   { id: 'CHG-001', name: 'General Consultation Charge', group: 'OPD-GEN', shortName: 'CONS', priority: 1, rate: 500, active: true, isBio: false, concernDr: true, excludeRoomRate: false, outsideTest: false, testFor: 'Both', unit: 'Visit' },
@@ -45,6 +31,27 @@ const OPDChargesMaster: React.FC = () => {
   const [listType, setListType] = useState<'all' | 'active' | 'inactive'>('active');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [notification, setNotification] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const loadCharges = useCallback(async () => {
+    try {
+      setLoading(true);
+      const res = await opdChargeApi.getAll();
+      const list = res.charges || (Array.isArray(res) ? res : []);
+      if (list && list.length > 0) {
+        setCharges(list);
+      }
+    } catch (err: any) {
+      console.warn('Could not fetch OPD charges from backend, using default list:', err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadCharges();
+  }, [loadCharges]);
 
   const filteredCharges = useMemo(() => {
     return charges.filter(c => {
@@ -71,12 +78,30 @@ const OPDChargesMaster: React.FC = () => {
     setCharges(prev => prev.map(c => c.id === current.id ? { ...c, [field]: value } : c));
   };
 
-  const handleSave = () => {
-    setNotification(`Charge item '${current.id} - ${current.name}' saved successfully!`);
-    setTimeout(() => setNotification(''), 4000);
+  const handleSave = async () => {
+    if (!current) return;
+    try {
+      setLoading(true);
+      setErrorMessage('');
+      const exists = charges.some(c => c.id === current.id);
+      let saved: ChargeItem;
+      try {
+        saved = await opdChargeApi.update(current.id, current);
+      } catch {
+        saved = await opdChargeApi.create(current);
+      }
+      setCharges(prev => prev.map(c => c.id === current.id ? (saved || current) : c));
+      setNotification(`Charge item '${current.id} - ${current.name}' saved persistently to hospital master!`);
+      setTimeout(() => setNotification(''), 4000);
+    } catch (err: any) {
+      setErrorMessage(err.message || 'Failed to save charge item to backend.');
+      setTimeout(() => setErrorMessage(''), 5000);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleAddNew = () => {
+  const handleAddNew = async () => {
     const nextSeq = charges.length + 1;
     const newId = `CHG-${String(nextSeq).padStart(3, '0')}`;
     const newCharge: ChargeItem = {
@@ -94,14 +119,25 @@ const OPDChargesMaster: React.FC = () => {
       testFor: 'Both',
       unit: 'Test',
     };
-    setCharges(prev => [...prev, newCharge]);
-    setNotification(`New charge '${newId}' added!`);
+    try {
+      const created = await opdChargeApi.create(newCharge);
+      setCharges(prev => [...prev, created || newCharge]);
+      setNotification(`New charge '${newId}' created persistently!`);
+    } catch {
+      setCharges(prev => [...prev, newCharge]);
+      setNotification(`New charge '${newId}' added!`);
+    }
     setTimeout(() => setNotification(''), 4000);
     setCurrentIndex(filteredCharges.length);
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (!current) return;
+    try {
+      await opdChargeApi.delete(current.id, true);
+    } catch (e) {
+      console.warn('Backend delete failed, removing locally:', e);
+    }
     setCharges(prev => prev.filter(c => c.id !== current.id));
     setNotification(`Charge '${current.id}' removed.`);
     setTimeout(() => setNotification(''), 4000);
@@ -138,6 +174,12 @@ const OPDChargesMaster: React.FC = () => {
       {notification && (
         <div style={{ background: '#dcfce7', border: '1px solid #86efac', color: '#166534', padding: '8px 14px', borderRadius: '6px', margin: '10px 0', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px' }}>
           <CheckCircle2 size={16} /> {notification}
+        </div>
+      )}
+
+      {errorMessage && (
+        <div style={{ background: '#fee2e2', border: '1px solid #f87171', color: '#991b1b', padding: '8px 14px', borderRadius: '6px', margin: '10px 0', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px' }}>
+          <AlertCircle size={16} /> {errorMessage}
         </div>
       )}
 

@@ -174,16 +174,16 @@ export const EchoReport: React.FC = () => {
       ivc: rep.ivc || '',
       aorticValve: rep.aorticValve || '',
       pulmonaryValve: rep.pulmonaryValve || '',
-      lvef: rep.lvef || '',
+      lvef: rep.lvef != null ? String(rep.lvef) : '',
       leftAtrium: rep.leftAtrium || '',
       rightAtrium: rep.rightAtrium || '',
-      rvsp: rep.rvsp || '',
+      rvsp: rep.rvsp != null ? String(rep.rvsp) : '',
       ivs: rep.ivs || '',
-      septum: rep.septum || '',
-      lvidd: rep.lvidd || '',
+      septum: rep.septum != null ? String(rep.septum) : '',
+      lvidd: rep.lvidd != null ? String(rep.lvidd) : '',
       ias: rep.ias || '',
-      pWall: rep.pWall || '',
-      lvids: rep.lvids || '',
+      pWall: rep.pWall != null ? String(rep.pWall) : '',
+      lvids: rep.lvids != null ? String(rep.lvids) : '',
       pericardium: rep.pericardium || '',
       dopplerStudy: rep.dopplerStudy || '',
       conclusion: rep.conclusion || '',
@@ -860,12 +860,13 @@ export const EchoReport: React.FC = () => {
                   <input
                     type="text"
                     name="lvef"
-                    className={`${styles.input} ${styles.wMedium} ${isFinalized ? styles.inputLocked : ''}`}
+                    className={`${styles.input} ${styles.wSmall} ${isFinalized ? styles.inputLocked : ''}`}
                     value={formData.lvef}
                     onChange={e => handleInputChange('lvef', e.target.value)}
-                    placeholder="e.g. 60%"
+                    placeholder="e.g. 55"
                     readOnly={isFinalized}
                   />
+                  <span className={styles.unit}>%</span>
                 </div>
               </div>
 
@@ -895,15 +896,18 @@ export const EchoReport: React.FC = () => {
 
               <div className={styles.measurementSubGrid}>
                 <label className={`${styles.label} ${styles.labelRight}`}>RVSP :</label>
-                <input
-                  type="text"
-                  name="rvsp"
-                  className={`${styles.input} ${isFinalized ? styles.inputLocked : ''}`}
-                  value={formData.rvsp}
-                  onChange={e => handleInputChange('rvsp', e.target.value)}
-                  placeholder="mmHg"
-                  readOnly={isFinalized}
-                />
+                <div className={styles.complexRow}>
+                  <input
+                    type="text"
+                    name="rvsp"
+                    className={`${styles.input} ${styles.wMedium} ${isFinalized ? styles.inputLocked : ''}`}
+                    value={formData.rvsp}
+                    onChange={e => handleInputChange('rvsp', e.target.value)}
+                    placeholder="e.g. 28"
+                    readOnly={isFinalized}
+                  />
+                  <span className={styles.unit}>mmHg</span>
+                </div>
               </div>
 
               <div className={styles.measurementSubGrid}>
@@ -924,6 +928,7 @@ export const EchoReport: React.FC = () => {
                     className={`${styles.input} ${styles.wSmall} ${isFinalized ? styles.inputLocked : ''}`}
                     value={formData.septum}
                     onChange={e => handleInputChange('septum', e.target.value)}
+                    placeholder="e.g. 10"
                     readOnly={isFinalized}
                   />
                   <span className={styles.unit}>mm</span>
@@ -934,8 +939,10 @@ export const EchoReport: React.FC = () => {
                     className={`${styles.input} ${styles.wMedium} ${isFinalized ? styles.inputLocked : ''}`}
                     value={formData.lvidd}
                     onChange={e => handleInputChange('lvidd', e.target.value)}
+                    placeholder="e.g. 44"
                     readOnly={isFinalized}
                   />
+                  <span className={styles.unit}>mm</span>
                 </div>
               </div>
 
@@ -957,6 +964,7 @@ export const EchoReport: React.FC = () => {
                     className={`${styles.input} ${styles.wSmall} ${isFinalized ? styles.inputLocked : ''}`}
                     value={formData.pWall}
                     onChange={e => handleInputChange('pWall', e.target.value)}
+                    placeholder="e.g. 10"
                     readOnly={isFinalized}
                   />
                   <span className={styles.unit}>mm</span>
@@ -967,8 +975,10 @@ export const EchoReport: React.FC = () => {
                     className={`${styles.input} ${styles.wMedium} ${isFinalized ? styles.inputLocked : ''}`}
                     value={formData.lvids}
                     onChange={e => handleInputChange('lvids', e.target.value)}
+                    placeholder="e.g. 28"
                     readOnly={isFinalized}
                   />
+                  <span className={styles.unit}>mm</span>
                 </div>
               </div>
             </div>

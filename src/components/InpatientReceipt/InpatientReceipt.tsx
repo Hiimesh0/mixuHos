@@ -351,7 +351,7 @@ const InpatientReceipt: React.FC = () => {
           <button
             type="button"
             className={styles.secondaryBtn}
-            onClick={() => navigate('/indoor-summary-chart')}
+            onClick={() => navigate('/indoor-summary')}
           >
             <LogOut size={16} /> Exit to Chart
           </button>

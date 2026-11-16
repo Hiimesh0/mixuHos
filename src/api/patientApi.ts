@@ -815,6 +815,95 @@ export const patientApi = {
     saveFallbackBillsStorage(allBills);
     return newBill;
   },
+
+  /**
+   * Persistently create or update a patient bill (OPD or IPD) via POST /api/bills/
+   */
+  async createBill(billData: Partial<PatientBillRecord>): Promise<PatientBillRecord> {
+    try {
+      const res = await fetch(`${API_BASE_URL}/bills/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify(billData),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && data.bill) {
+          // Keep local fallback in sync
+          const allBills = getFallbackBillsStorage();
+          const existingIdx = allBills.findIndex(b => b.id === data.bill.id || b.invoiceNo === data.bill.invoiceNo);
+          if (existingIdx !== -1) {
+            allBills[existingIdx] = data.bill;
+          } else {
+            allBills.push(data.bill);
+          }
+          saveFallbackBillsStorage(allBills);
+          return data.bill;
+        } else {
+          throw new Error(data.error || 'Server rejected bill payload.');
+        }
+      } else {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error || `HTTP error ${res.status}: Failed to save bill.`);
+      }
+    } catch (err: any) {
+      // If server responded with an error or validation message, rethrow so UI alerts user
+      if (err.message && !err.message.includes('fetch') && !err.message.includes('Failed to fetch')) {
+        throw err;
+      }
+      // If backend server is offline, save to client fallback storage and warn
+      console.warn('Backend unavailable, persisting bill to local storage fallback:', err);
+      const allBills = getFallbackBillsStorage();
+      const nowIso = new Date().toISOString();
+      const invoiceNo = billData.invoiceNo || billData.billNo || `BILL-LOC-${Date.now()}`;
+      const record: PatientBillRecord = {
+        id: billData.id || `BILL-${Math.random().toString(36).substring(2, 10).toUpperCase()}`,
+        patientId: billData.patientId || billData.uhid || 'UHID-GEN',
+        uhid: billData.uhid || billData.patientId || 'UHID-GEN',
+        admission_id: billData.admission_id,
+        ipd_no: billData.ipd_no,
+        invoiceNo,
+        billNo: invoiceNo,
+        billDate: billData.billDate || nowIso,
+        billType: billData.billType || 'IPD',
+        patientName: billData.patientName || 'Patient',
+        treatingDoctor: billData.treatingDoctor || 'Dr. NILESH MAHALE',
+        items: billData.items || [],
+        subtotal: billData.subtotal || billData.totalAmount || 0,
+        totalAmount: billData.totalAmount || billData.subtotal || 0,
+        discountType: billData.discountType || 'fixed',
+        discountValue: billData.discountValue || 0,
+        discountAmount: billData.discountAmount || 0,
+        netAmount: billData.netAmount || 0,
+        netPayable: billData.netPayable || billData.netAmount || 0,
+        totalReceived: billData.totalReceived || billData.amountReceived || 0,
+        amountReceived: billData.amountReceived || billData.totalReceived || 0,
+        balanceDue: billData.balanceDue || billData.balanceAmount || 0,
+        balanceAmount: billData.balanceAmount || billData.balanceDue || 0,
+        paymentMode: billData.paymentMode || 'Cash',
+        paymentType: billData.paymentType || 'Cash',
+        status: (billData.balanceDue || 0) <= 0 ? 'Paid' : 'Unpaid',
+        remarks: billData.remarks || 'Inpatient Settlement Bill',
+        entryBy: billData.entryBy || 'SYSTEM',
+        pcName: billData.pcName || 'DESK-IPD-01',
+        createdAt: billData.createdAt || nowIso,
+        updatedAt: nowIso,
+      };
+
+      const existingIdx = allBills.findIndex(b => b.id === record.id || b.invoiceNo === record.invoiceNo);
+      if (existingIdx !== -1) {
+        allBills[existingIdx] = record;
+      } else {
+        allBills.push(record);
+      }
+      saveFallbackBillsStorage(allBills);
+      return record;
+    }
+  },
 };
 
 // Fallback bill storage helpers

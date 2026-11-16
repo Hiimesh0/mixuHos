@@ -75,6 +75,13 @@ const API_BASE_URL = (() => {
   if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL;
   if (typeof window !== 'undefined') {
     const host = window.location.hostname;
+    const port = window.location.port;
+    if (port === '5173' || port === '4173') {
+      return '/api';
+    }
+    if (window.location.protocol === 'https:') {
+      return '';
+    }
     if (host === 'localhost' || host === '127.0.0.1') {
       return 'http://127.0.0.1:8000/api';
     }
@@ -138,24 +145,26 @@ export const doctorApi = {
     if (params?.department && params.department !== 'All') query.append('department', params.department);
     if (params?.active_only) query.append('active_only', 'true');
 
-    try {
-      const url = `${API_BASE_URL}/doctors/${query.toString() ? `?${query.toString()}` : ''}`;
-      const res = await fetch(url, { headers: { Accept: 'application/json' } });
-      if (res.ok) {
-        const data = await res.json();
-        if (data.doctors && data.doctors.length > 0) {
-          saveFallbackDoctorsStorage(data.doctors);
+    if (API_BASE_URL) {
+      try {
+        const url = `${API_BASE_URL}/doctors/${query.toString() ? `?${query.toString()}` : ''}`;
+        const res = await fetch(url, { headers: { Accept: 'application/json' } });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.doctors && data.doctors.length > 0) {
+            saveFallbackDoctorsStorage(data.doctors);
+          }
+          return data;
         }
-        return data;
+      } catch {
+        // Backend unavailable, use fallback
       }
-    } catch {
-      // Backend unavailable, use fallback
     }
 
     const all = await getFallbackDoctorsStorage();
     let filtered = all;
     if (params?.active_only) {
-      filtered = filtered.filter(d => d.status === 'active');
+      filtered = filtered.filter(d => d.status === 'active' || d.isActive === true || (d as any).active === true || (!d.status && d.isActive !== false));
     }
     if (params?.speciality && params.speciality !== 'All') {
       filtered = filtered.filter(d => d.speciality?.toLowerCase() === params.speciality?.toLowerCase());
@@ -1029,5 +1038,61 @@ export const shortFormApi = createDomainMasterClient<ShortFormRecord>('short-for
 export const adviceApi = createDomainMasterClient<AdviceRecord>('advices', 'advices', 'advices.json', 'advices', 'ADV');
 export const contactApi = createDomainMasterClient<ContactRecord>('contacts', 'contacts', 'contacts.json', 'contacts', 'CNT');
 export const prescriptionTemplateApi = createDomainMasterClient<PrescriptionTemplateRecord>('prescription-templates', 'prescription_templates', 'prescription_templates.json', 'templates', 'PRX');
+
+export interface OPDChargeRecord {
+  id: string;
+  name: string;
+  group: string;
+  shortName: string;
+  priority: number;
+  rate: number;
+  active: boolean;
+  isBio: boolean;
+  concernDr: boolean;
+  excludeRoomRate: boolean;
+  outsideTest: boolean;
+  testFor: 'Both' | 'Male' | 'Female';
+  unit?: string;
+  refRange?: string;
+  is_active?: boolean;
+}
+
+export interface OPDProfileRecord {
+  id: string;
+  profileName: string;
+  group: string;
+  shortName: string;
+  priority: number;
+  rate: number;
+  active: boolean;
+  isBio: boolean;
+  concernDr: boolean;
+  testFor: 'Both' | 'Male' | 'Female';
+  subTests: Array<{
+    id: string;
+    group: string;
+    testName: string;
+    priority: number;
+  }>;
+  is_active?: boolean;
+}
+
+export interface VisitProcedureHeaderRecord {
+  id: string;
+  headerFor: string;
+  headerName: string;
+  description: string;
+  priority: number;
+  status: 'Active' | 'Inactive';
+  notCalcService: boolean;
+  notCalcUnderCare: boolean;
+  isPackage: boolean;
+  notCalcInRef: boolean;
+  is_active?: boolean;
+}
+
+export const opdChargeApi = createDomainMasterClient<OPDChargeRecord>('opd-charges', 'opd_charges', 'opd_charges.json', 'charges', 'CHG');
+export const opdProfileApi = createDomainMasterClient<OPDProfileRecord>('opd-profiles', 'opd_profiles', 'opd_profiles.json', 'profiles', 'PRF');
+export const visitProcedureHeaderApi = createDomainMasterClient<VisitProcedureHeaderRecord>('visit-procedure-headers', 'visit_procedure_headers', 'visit_procedure_headers.json', 'headers', 'VPH');
 
 

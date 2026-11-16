@@ -4,7 +4,28 @@
  * with robust client-side localStorage fallback for offline / GitHub Pages deployment.
  */
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api';
+const API_BASE_URL = (() => {
+  if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL;
+  if (typeof window !== 'undefined') {
+    const host = window.location.hostname;
+    const port = window.location.port;
+    if (port === '5173' || port === '4173') {
+      return '/api';
+    }
+    // In production HTTPS (e.g. GitHub Pages) without an explicit API URL,
+    // avoid mixed content errors by using pure client-side seed & localStorage.
+    if (window.location.protocol === 'https:') {
+      return '';
+    }
+    if (host === 'localhost' || host === '127.0.0.1') {
+      return 'http://127.0.0.1:8000/api';
+    }
+    if (/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(host)) {
+      return `http://${host}:8000/api`;
+    }
+  }
+  return 'http://127.0.0.1:8000/api';
+})();
 
 // --- Types ---
 
@@ -105,19 +126,32 @@ export interface DrVisitProcedureRecord {
   id: string;
   admission_id?: string;
   ipd_no?: string;
-  patient_id: string;
+  patient_id?: string;
   uhid: string;
   patient_name: string;
-  entry_type: 'VISIT' | 'PROCEDURE';
-  date: string;
-  head: string;
+  entry_type?: string;
+  date?: string;
+  entry_date?: string;
+  visit_date?: string;
+  visit_time?: string;
+  head?: string;
+  head_description?: string;
+  procedure_title?: string;
   doctor_name: string;
+  doctor_id?: string | null;
   room?: string;
   bed_no?: string;
-  charges: number;
+  bed_number?: string;
+  ward_name?: string;
+  rate?: number;
+  quantity?: number;
+  charges?: number;
+  amount?: number;
   notes?: string;
-  is_active: boolean;
+  remark?: string;
+  is_active?: boolean;
   created_at?: string;
+  updated_at?: string;
 }
 
 export interface OtEntryRecord {
@@ -148,7 +182,13 @@ export interface OtEntryRecord {
 function getLocal<T>(key: string, seedUrl: string, rootProp: string): Promise<T[]> {
   try {
     const raw = localStorage.getItem(`mixu_${key}`);
-    if (raw) return Promise.resolve(JSON.parse(raw));
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) return Promise.resolve(parsed);
+      if (parsed && typeof parsed === 'object' && Array.isArray(parsed[rootProp])) {
+        return Promise.resolve(parsed[rootProp]);
+      }
+    }
   } catch {}
 
   const baseUrl = import.meta.env.BASE_URL || '/';
@@ -156,7 +196,7 @@ function getLocal<T>(key: string, seedUrl: string, rootProp: string): Promise<T[
   return fetch(fullUrl)
     .then(r => r.json())
     .then(d => {
-      const items = d[rootProp] || [];
+      const items = Array.isArray(d) ? d : (d[rootProp] || []);
       try { localStorage.setItem(`mixu_${key}`, JSON.stringify(items)); } catch {}
       return items;
     })
@@ -173,16 +213,18 @@ function saveLocal<T>(key: string, items: T[]): void {
 
 export const admissionApi = {
   async getAdmissions(params?: { search?: string; status?: string }): Promise<AdmissionRecord[]> {
-    try {
-      const q = new URLSearchParams();
-      if (params?.search) q.set('search', params.search);
-      if (params?.status) q.set('status', params.status);
-      const res = await fetch(`${API_BASE_URL}/admissions/?${q.toString()}`, { headers: { 'Accept': 'application/json' } });
-      if (res.ok) {
-        const d = await res.json();
-        if (d.success && Array.isArray(d.admissions)) return d.admissions;
-      }
-    } catch {}
+    if (API_BASE_URL) {
+      try {
+        const q = new URLSearchParams();
+        if (params?.search) q.set('search', params.search);
+        if (params?.status) q.set('status', params.status);
+        const res = await fetch(`${API_BASE_URL}/admissions/?${q.toString()}`, { headers: { 'Accept': 'application/json' } });
+        if (res.ok) {
+          const d = await res.json();
+          if (d.success && Array.isArray(d.admissions)) return d.admissions;
+        }
+      } catch {}
+    }
 
     const local = await getLocal<AdmissionRecord>('admissions', 'admissions.json', 'admissions');
     let filtered = local;
@@ -197,17 +239,19 @@ export const admissionApi = {
   },
 
   async admitPatient(payload: Partial<AdmissionRecord>): Promise<AdmissionRecord> {
-    try {
-      const res = await fetch(`${API_BASE_URL}/admissions/`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      if (res.ok) {
-        const d = await res.json();
-        if (d.success && d.admission) return d.admission;
-      }
-    } catch {}
+    if (API_BASE_URL) {
+      try {
+        const res = await fetch(`${API_BASE_URL}/admissions/`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (res.ok) {
+          const d = await res.json();
+          if (d.success && d.admission) return d.admission;
+        }
+      } catch {}
+    }
 
     const all = await getLocal<AdmissionRecord>('admissions', 'admissions.json', 'admissions');
     const seq = all.length + 1;
@@ -608,63 +652,245 @@ export const depositApi = {
 
 // --- Dr. Visit & Procedure API ---
 
+const normalizeDrVisitProcedure = (e: any): DrVisitProcedureRecord => {
+  let entryType = e.entry_type;
+  if (!entryType) {
+    const title = e.head_description || e.procedure_title || e.head || '';
+    if (/round|visit|consult/i.test(title)) {
+      entryType = 'Doctor Visit';
+    } else if (/nurs|dress/i.test(title)) {
+      entryType = 'Nursing';
+    } else {
+      entryType = 'Procedure';
+    }
+  }
+  const entryDate = e.entry_date || e.visit_date || e.date || (e.created_at ? e.created_at.split('T')[0] : '');
+  const headDesc = e.head_description || e.procedure_title || e.head || 'Consultant Round';
+  const rate = Number(e.rate ?? e.charges ?? e.amount ?? 0);
+  const qty = Number(e.quantity ?? 1);
+  const amount = Number(e.amount ?? (rate * qty) ?? e.charges ?? 0);
+  const remark = e.remark || e.notes || '';
+  const bedNumber = e.bed_number || e.bed_no || '';
+
+  return {
+    ...e,
+    entry_type: entryType,
+    entry_date: entryDate,
+    visit_date: entryDate,
+    date: entryDate,
+    head_description: headDesc,
+    procedure_title: headDesc,
+    head: headDesc,
+    rate: rate,
+    quantity: qty,
+    charges: amount,
+    amount: amount,
+    remark: remark,
+    notes: remark,
+    bed_number: bedNumber,
+    bed_no: bedNumber,
+  };
+};
+
 export const drVisitProcedureApi = {
   async getEntries(params?: { search?: string; uhid?: string }): Promise<DrVisitProcedureRecord[]> {
-    try {
-      const q = new URLSearchParams();
-      if (params?.search) q.set('search', params.search);
-      if (params?.uhid) q.set('uhid', params.uhid);
-      const res = await fetch(`${API_BASE_URL}/dr-visits-procedures/?${q.toString()}`, { headers: { 'Accept': 'application/json' } });
-      if (res.ok) {
-        const d = await res.json();
-        if (d.success && Array.isArray(d.entries)) return d.entries;
-      }
-    } catch {}
+    if (API_BASE_URL) {
+      try {
+        const q = new URLSearchParams();
+        if (params?.search) q.set('search', params.search);
+        if (params?.uhid) q.set('uhid', params.uhid);
+        const res = await fetch(`${API_BASE_URL}/dr-visits-procedures/?${q.toString()}`, { headers: { 'Accept': 'application/json' } });
+        if (res.ok) {
+          const d = await res.json();
+          if (d.success && Array.isArray(d.entries)) {
+            return d.entries.map(normalizeDrVisitProcedure);
+          }
+        }
+      } catch {}
+    }
 
     const local = await getLocal<DrVisitProcedureRecord>('dr_visits_procedures', 'dr_visits_procedures.json', 'entries');
+    const normalized = local.map(normalizeDrVisitProcedure);
     if (params?.uhid) {
-      return local.filter(x => (x.uhid || '').toLowerCase() === params.uhid!.toLowerCase());
+      return normalized.filter(x => (x.uhid || '').toLowerCase() === params.uhid!.toLowerCase());
     }
-    return local;
+    return normalized;
+  },
+
+  async getDrVisitProcedures(params?: { search?: string; uhid?: string }): Promise<DrVisitProcedureRecord[]> {
+    return drVisitProcedureApi.getEntries(params);
   },
 
   async createEntry(payload: Partial<DrVisitProcedureRecord>): Promise<DrVisitProcedureRecord> {
-    try {
-      const res = await fetch(`${API_BASE_URL}/dr-visits-procedures/`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      if (res.ok) {
-        const d = await res.json();
-        if (d.success && d.item) return d.item;
-      }
-    } catch {}
+    const rate = Number(payload.rate ?? payload.charges ?? payload.amount ?? 0);
+    const qty = Number(payload.quantity ?? 1);
+    const amount = Number(payload.amount ?? (rate * qty) ?? payload.charges ?? 0);
+    const entryDate = payload.entry_date || payload.date || payload.visit_date || new Date().toISOString().split('T')[0];
+    const headDesc = payload.head_description || payload.procedure_title || payload.head || 'Consultant Round';
+    const remark = payload.remark || payload.notes || '';
+
+    const backendPayload = {
+      ...payload,
+      entry_type: payload.entry_type || 'Doctor Visit',
+      entry_date: entryDate,
+      visit_date: entryDate,
+      date: entryDate,
+      head_description: headDesc,
+      procedure_title: headDesc,
+      head: headDesc,
+      rate: rate,
+      quantity: qty,
+      charges: amount,
+      amount: amount,
+      remark: remark,
+      notes: remark,
+    };
+
+    if (API_BASE_URL) {
+      try {
+        const res = await fetch(`${API_BASE_URL}/dr-visits-procedures/`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(backendPayload),
+        });
+        if (res.ok) {
+          const d = await res.json();
+          if (d.success && (d.item || d.entry)) {
+            const createdItem = normalizeDrVisitProcedure(d.item || d.entry);
+            const all = await getLocal<DrVisitProcedureRecord>('dr_visits_procedures', 'dr_visits_procedures.json', 'entries');
+            all.push(createdItem);
+            saveLocal('dr_visits_procedures', all);
+            return createdItem;
+          }
+        }
+      } catch {}
+    }
 
     const all = await getLocal<DrVisitProcedureRecord>('dr_visits_procedures', 'dr_visits_procedures.json', 'entries');
     const seq = all.length + 1;
     const now = new Date();
-    const created: DrVisitProcedureRecord = {
+    const created: DrVisitProcedureRecord = normalizeDrVisitProcedure({
       id: `DVP-${String(seq).padStart(6, '0')}`,
       admission_id: payload.admission_id || '',
       ipd_no: payload.ipd_no || '',
       patient_id: payload.uhid || payload.patient_id || 'UNKNOWN',
       uhid: payload.uhid || payload.patient_id || 'UNKNOWN',
       patient_name: payload.patient_name || 'Patient',
-      entry_type: payload.entry_type || 'VISIT',
-      date: payload.date || now.toISOString().split('T')[0],
-      head: payload.head || 'Visiting Charge',
+      entry_type: payload.entry_type || 'Doctor Visit',
+      entry_date: entryDate,
+      visit_date: entryDate,
+      date: entryDate,
+      head_description: headDesc,
+      procedure_title: headDesc,
+      head: headDesc,
       doctor_name: payload.doctor_name || 'Dr. Nilesh Mahale',
+      doctor_id: payload.doctor_id || null,
       room: payload.room || 'GEN',
-      bed_no: payload.bed_no || 'GEN-01',
-      charges: Number(payload.charges) || 500,
-      notes: payload.notes || '',
+      bed_no: payload.bed_number || payload.bed_no || 'GEN-01',
+      bed_number: payload.bed_number || payload.bed_no || 'GEN-01',
+      ward_name: payload.ward_name || 'General Ward',
+      rate: rate,
+      quantity: qty,
+      charges: amount,
+      amount: amount,
+      remark: remark,
+      notes: remark,
       is_active: true,
       created_at: now.toISOString(),
-    };
+    });
     all.push(created);
     saveLocal('dr_visits_procedures', all);
     return created;
+  },
+
+  async createDrVisitProcedure(payload: Partial<DrVisitProcedureRecord>): Promise<DrVisitProcedureRecord> {
+    return drVisitProcedureApi.createEntry(payload);
+  },
+
+  async updateEntry(id: string, payload: Partial<DrVisitProcedureRecord>): Promise<DrVisitProcedureRecord> {
+    const rate = payload.rate !== undefined ? Number(payload.rate) : undefined;
+    const qty = payload.quantity !== undefined ? Number(payload.quantity) : undefined;
+    const amount = payload.amount !== undefined ? Number(payload.amount) : (rate !== undefined && qty !== undefined ? rate * qty : undefined);
+
+    const updatePayload: Record<string, any> = { ...payload };
+    if (rate !== undefined) updatePayload.rate = rate;
+    if (qty !== undefined) updatePayload.quantity = qty;
+    if (amount !== undefined) {
+      updatePayload.amount = amount;
+      updatePayload.charges = amount;
+    }
+    if (payload.head_description) {
+      updatePayload.procedure_title = payload.head_description;
+      updatePayload.head = payload.head_description;
+    }
+    if (payload.entry_date) {
+      updatePayload.visit_date = payload.entry_date;
+      updatePayload.date = payload.entry_date;
+    }
+
+    if (API_BASE_URL) {
+      try {
+        const res = await fetch(`${API_BASE_URL}/dr-visits-procedures/${encodeURIComponent(id)}/`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(updatePayload),
+        });
+        if (res.ok) {
+          const d = await res.json();
+          if (d.success && (d.item || d.entry)) {
+            const updatedItem = normalizeDrVisitProcedure(d.item || d.entry);
+            const all = await getLocal<DrVisitProcedureRecord>('dr_visits_procedures', 'dr_visits_procedures.json', 'entries');
+            const idx = all.findIndex(x => x.id === id);
+            if (idx !== -1) {
+              all[idx] = updatedItem;
+              saveLocal('dr_visits_procedures', all);
+            }
+            return updatedItem;
+          }
+        }
+      } catch {}
+    }
+
+    const all = await getLocal<DrVisitProcedureRecord>('dr_visits_procedures', 'dr_visits_procedures.json', 'entries');
+    const idx = all.findIndex(x => x.id === id);
+    if (idx !== -1) {
+      const merged = normalizeDrVisitProcedure({
+        ...all[idx],
+        ...updatePayload,
+        id: all[idx].id,
+        updated_at: new Date().toISOString(),
+      });
+      all[idx] = merged;
+      saveLocal('dr_visits_procedures', all);
+      return merged;
+    }
+    throw new Error(`Record with id ${id} not found.`);
+  },
+
+  async updateDrVisitProcedure(id: string, payload: Partial<DrVisitProcedureRecord>): Promise<DrVisitProcedureRecord> {
+    return drVisitProcedureApi.updateEntry(id, payload);
+  },
+
+  async deleteEntry(id: string): Promise<boolean> {
+    if (API_BASE_URL) {
+      try {
+        const res = await fetch(`${API_BASE_URL}/dr-visits-procedures/${encodeURIComponent(id)}/`, {
+          method: 'DELETE',
+          headers: { 'Accept': 'application/json' },
+        });
+        if (res.ok) {
+          // Deleted on backend
+        }
+      } catch {}
+    }
+    const all = await getLocal<DrVisitProcedureRecord>('dr_visits_procedures', 'dr_visits_procedures.json', 'entries');
+    const filtered = all.filter(x => x.id !== id);
+    saveLocal('dr_visits_procedures', filtered);
+    return true;
+  },
+
+  async deleteDrVisitProcedure(id: string): Promise<boolean> {
+    return drVisitProcedureApi.deleteEntry(id);
   },
 };
 

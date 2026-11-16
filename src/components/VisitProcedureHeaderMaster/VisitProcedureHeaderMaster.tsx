@@ -1,23 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight,
-  Search, Save, LogOut, CheckSquare, Square, Edit2, Trash2, CheckCircle2
+  Search, Save, LogOut, CheckSquare, Square, Edit2, Trash2, CheckCircle2, AlertCircle
 } from 'lucide-react';
 import styles from './VisitProcedureHeaderMaster.module.css';
+import { visitProcedureHeaderApi, type VisitProcedureHeaderRecord } from '../../api/masterApi';
 
-interface VisitHeaderItem {
-  id: string;
-  headerFor: string;
-  headerName: string;
-  description: string;
-  priority: number;
-  status: 'Active' | 'Inactive';
-  notCalcService: boolean;
-  notCalcUnderCare: boolean;
-  isPackage: boolean;
-  notCalcInRef: boolean;
-}
+type VisitHeaderItem = VisitProcedureHeaderRecord;
 
 const INITIAL_HEADERS: VisitHeaderItem[] = [
   { id: '1', headerFor: 'Visiting Charge', headerName: 'Consultant Routine Visit', description: 'Standard daily inpatient bedside rounds', priority: 1, status: 'Active', notCalcService: false, notCalcUnderCare: false, isPackage: false, notCalcInRef: false },
@@ -35,6 +25,27 @@ const VisitProcedureHeaderMaster: React.FC = () => {
   const [headers, setHeaders] = useState<VisitHeaderItem[]>(INITIAL_HEADERS);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [notification, setNotification] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const loadHeaders = useCallback(async () => {
+    try {
+      setLoading(true);
+      const res = await visitProcedureHeaderApi.getAll();
+      const list = res.headers || (Array.isArray(res) ? res : []);
+      if (list && list.length > 0) {
+        setHeaders(list);
+      }
+    } catch (err: any) {
+      console.warn('Could not fetch visit headers from backend, using default list:', err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadHeaders();
+  }, [loadHeaders]);
 
   const current = headers[currentIndex] || headers[0];
 
@@ -49,13 +60,31 @@ const VisitProcedureHeaderMaster: React.FC = () => {
     setHeaders(prev => prev.map(h => h.id === current.id ? { ...h, [field]: value } : h));
   };
 
-  const handleSave = () => {
-    setNotification(`Header '${current.headerName}' updated successfully!`);
-    setTimeout(() => setNotification(''), 4000);
+  const handleSave = async () => {
+    if (!current) return;
+    try {
+      setLoading(true);
+      setErrorMessage('');
+      let saved: VisitHeaderItem;
+      try {
+        saved = await visitProcedureHeaderApi.update(current.id, current);
+      } catch {
+        saved = await visitProcedureHeaderApi.create(current);
+      }
+      setHeaders(prev => prev.map(h => h.id === current.id ? (saved || current) : h));
+      setNotification(`Header '${current.headerName}' updated persistently in hospital master!`);
+      setTimeout(() => setNotification(''), 4000);
+    } catch (err: any) {
+      setErrorMessage(err.message || 'Failed to persist visit header to backend.');
+      setTimeout(() => setErrorMessage(''), 5000);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleAddNew = () => {
-    const nextId = String(headers.length + 1);
+  const handleAddNew = async () => {
+    const nextSeq = headers.length + 1;
+    const nextId = `VPH-${String(nextSeq).padStart(3, '0')}`;
     const newH: VisitHeaderItem = {
       id: nextId,
       headerFor: 'Visiting Charge',
@@ -68,14 +97,25 @@ const VisitProcedureHeaderMaster: React.FC = () => {
       isPackage: false,
       notCalcInRef: false,
     };
-    setHeaders(prev => [...prev, newH]);
-    setNotification(`New Header created!`);
+    try {
+      const created = await visitProcedureHeaderApi.create(newH);
+      setHeaders(prev => [...prev, created || newH]);
+      setNotification(`New Header '${nextId}' created persistently!`);
+    } catch {
+      setHeaders(prev => [...prev, newH]);
+      setNotification(`New Header created!`);
+    }
     setTimeout(() => setNotification(''), 4000);
     setCurrentIndex(headers.length);
   };
 
-  const handleDelete = () => {
-    if (headers.length <= 1) return;
+  const handleDelete = async () => {
+    if (headers.length <= 1 || !current) return;
+    try {
+      await visitProcedureHeaderApi.delete(current.id, true);
+    } catch (e) {
+      console.warn('Backend delete failed, removing locally:', e);
+    }
     setHeaders(prev => prev.filter(h => h.id !== current.id));
     setNotification(`Header '${current.headerName}' removed.`);
     setTimeout(() => setNotification(''), 4000);
@@ -95,6 +135,12 @@ const VisitProcedureHeaderMaster: React.FC = () => {
       {notification && (
         <div style={{ background: '#dcfce7', border: '1px solid #86efac', color: '#166534', padding: '8px 14px', borderRadius: '6px', margin: '10px 0', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px' }}>
           <CheckCircle2 size={16} /> {notification}
+        </div>
+      )}
+
+      {errorMessage && (
+        <div style={{ background: '#fee2e2', border: '1px solid #f87171', color: '#991b1b', padding: '8px 14px', borderRadius: '6px', margin: '10px 0', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px' }}>
+          <AlertCircle size={16} /> {errorMessage}
         </div>
       )}
 

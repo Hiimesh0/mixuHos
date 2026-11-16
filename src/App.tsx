@@ -1261,9 +1261,12 @@ function App() {
                     <Route path="/login" element={<Navigate to="/patient-registration" replace />} />
                     <Route path="/" element={<Navigate to="/patient-registration" replace />} />
                     <Route path="/patient-registration" element={<PatientRegistration />} />
-                    <Route path="/patient-history" element={<PatientRegistrationList />} />
+                    <Route path="/patient-history" element={<PatientHistory />} />
                     <Route path="/patient-registration-list" element={<PatientRegistrationList />} />
                     <Route path="/clinical-notes-template" element={<PatientHistory />} />
+                    <Route path="/deposit" element={<Navigate to="/deposit-entry" replace />} />
+                    <Route path="/indoor-summary-chart" element={<Navigate to="/indoor-summary" replace />} />
+                    <Route path="/contacts" element={<Navigate to="/contact-list" replace />} />
                     <Route path="/bill-preview" element={<BillPreview />} />
                     <Route path="/patient-past-info" element={<PatientPastInfo />} />
                     <Route path="/part-payment" element={<PartPayment />} />

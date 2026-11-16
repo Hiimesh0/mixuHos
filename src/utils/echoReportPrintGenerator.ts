@@ -54,7 +54,7 @@ export function generateEchoReportHtml(report: EchoReportRecord): string {
   const referredBy = report.referredBy || 'DR. SAJID SHAIKH';
 
   // LVEF clean formatting
-  let lvefDisplay = report.lvef || '40 %';
+  let lvefDisplay = report.lvef != null && report.lvef !== '' ? `${report.lvef}` : '40 %';
   if (lvefDisplay && !lvefDisplay.includes('%')) {
     lvefDisplay = `${lvefDisplay} %`;
   }
@@ -63,7 +63,7 @@ export function generateEchoReportHtml(report: EchoReportRecord): string {
   const rwmaDisplay = report.rwma ? report.rwma : 'present';
 
   // RVSP / PASP clean formatting
-  let paspDisplay = report.rvsp || '45 mmHg';
+  let paspDisplay = report.rvsp != null && report.rvsp !== '' ? `${report.rvsp}` : '45 mmHg';
   if (paspDisplay && !paspDisplay.toLowerCase().includes('mmhg')) {
     paspDisplay = `${paspDisplay} mmHg`;
   }
@@ -696,13 +696,13 @@ export function generateEchoReportPdfBlob(report: EchoReportRecord): Blob {
   doc.text('LVEF', 140, 52);
   doc.text(':', 165, 52);
   doc.setFont('helvetica', 'bold');
-  doc.text(report.lvef || '40 %', 170, 52);
+  doc.text(lvefDisplay, 170, 52);
 
   doc.text(`RWMA ${report.rwma || 'present'}`, 140, 58);
 
   doc.text('PASP/RVSP', 140, 80);
   doc.text(':', 168, 80);
-  doc.text(report.rvsp || '45 mmHg', 172, 80);
+  doc.text(paspDisplay, 172, 80);
 
   // 3-Column Measurements Grid
   y = Math.max(y, 106) + 4;

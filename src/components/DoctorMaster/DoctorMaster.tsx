@@ -10,6 +10,7 @@ import { useAutoDismissNotification } from '../../hooks/useAutoDismissNotificati
 import { useFormKeyboardNavigation } from '../../hooks/useFormKeyboardNavigation';
 import { HOSPITAL_CONFIG } from '../../config/hospitalConfig';
 import { openDoctorPrintView } from '../../utils/doctorPrintGenerator';
+import { formatDoctorName } from '../../utils/doctorUtils';
 import styles from './DoctorMaster.module.css';
 
 const DEFAULT_DOCTOR: DoctorRecord = {
@@ -272,7 +273,7 @@ const DoctorMaster: React.FC = () => {
       if (searchSpeciality !== 'All' && d.speciality !== searchSpeciality) return false;
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase().trim();
-        const fullName = `${d.title} ${d.drName}`.toLowerCase();
+        const fullName = formatDoctorName(d.title, d.drName).toLowerCase();
         const matches =
           fullName.includes(q) ||
           d.id.toLowerCase().includes(q) ||
@@ -898,7 +899,7 @@ const DoctorMaster: React.FC = () => {
                         >
                           <td style={{ fontWeight: 600, color: 'var(--primary)' }}>{doc.id}</td>
                           <td>
-                            <strong>{doc.title} {doc.drName}</strong>
+                            <strong>{formatDoctorName(doc.title, doc.drName)}</strong>
                             {doc.degree && <span style={{ color: 'var(--text-muted)', fontSize: '12px', marginLeft: '6px' }}>({doc.degree})</span>}
                           </td>
                           <td>{doc.speciality || '-'}</td>
@@ -951,7 +952,7 @@ const DoctorMaster: React.FC = () => {
 
             <div className={styles.modalBody}>
               <p style={{ margin: 0, fontSize: '14px', lineHeight: 1.5 }}>
-                You are about to remove <strong>{formData.title} {formData.drName} ({formData.id})</strong>.
+                You are about to remove <strong>{formatDoctorName(formData.title, formData.drName)} ({formData.id})</strong>.
               </p>
               <div style={{ backgroundColor: 'var(--warning-soft)', padding: '12px', borderRadius: '6px', fontSize: '13px', color: 'var(--text-main)' }}>
                 <strong>Healthcare Best Practice:</strong> We recommend <em>Deactivating</em> the doctor instead of permanent deletion. This preserves historical patient registrations, prescriptions, and billing receipts while preventing future selections.
@@ -1014,7 +1015,7 @@ const DoctorMaster: React.FC = () => {
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '13px' }}>
                   <div><strong>Doctor ID:</strong> {formData.id}</div>
                   <div><strong>Doctor Type:</strong> {formData.drType}</div>
-                  <div><strong>Full Name:</strong> {formData.title} {formData.drName}</div>
+                  <div><strong>Full Name:</strong> {formatDoctorName(formData.title, formData.drName)}</div>
                   <div><strong>Degree:</strong> {formData.degree || '-'}</div>
                   <div><strong>Speciality:</strong> {formData.speciality || '-'}</div>
                   <div><strong>Department:</strong> {formData.department || '-'}</div>

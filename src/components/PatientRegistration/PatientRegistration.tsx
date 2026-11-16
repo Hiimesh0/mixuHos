@@ -36,6 +36,7 @@ import { useAutoDismissNotification } from '../../hooks/useAutoDismissNotificati
 import { useFormKeyboardNavigation } from '../../hooks/useFormKeyboardNavigation';
 import { openPatientStickerPdf } from '../../utils/patientStickerGenerator';
 import { openPatientBillPdf } from '../../utils/patientBillGenerator';
+import { formatDoctorName } from '../../utils/doctorUtils';
 import styles from './PatientRegistration.module.css';
 
 const BarcodeCameraModal = React.lazy(() => import('./BarcodeCameraModal').then(m => ({ default: m.BarcodeCameraModal })));
@@ -241,8 +242,8 @@ const PatientRegistration: React.FC = () => {
       .getDoctors({ active_only: true })
       .then(res => {
         if (res.doctors && res.doctors.length > 0) {
-          const names = res.doctors.map(d => `${d.title} ${d.drName}`.trim());
-          setDynamicDoctors(prev => Array.from(new Set([...names, ...prev])));
+          const names = res.doctors.map(d => formatDoctorName(d.title, d.drName));
+          setDynamicDoctors(prev => Array.from(new Set([...names, ...prev.map(p => formatDoctorName(undefined, p))])));
         }
       })
       .catch(() => {});

@@ -317,7 +317,7 @@ const IndoorSummaryChart: React.FC = () => {
                           <button className={styles.dropdownItem} onClick={() => navigate('/indoor-register')}>
                             Indoor Register
                           </button>
-                          <button className={styles.dropdownItem} onClick={() => navigate('/deposit')}>
+                          <button className={styles.dropdownItem} onClick={() => navigate(`/deposit-entry?id=${encodeURIComponent(row.uhid)}`)}>
                             Deposit Entry
                           </button>
                           <button className={styles.dropdownItem} onClick={() => navigate(`/patient-past-info?id=${encodeURIComponent(row.uhid)}`)}>

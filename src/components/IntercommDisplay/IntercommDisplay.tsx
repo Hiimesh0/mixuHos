@@ -177,7 +177,7 @@ const IntercommDisplay: React.FC = () => {
               />
               <label htmlFor="noWise" className={styles.checkboxLabel} style={{ cursor: 'pointer' }}>Sort No. Wise</label>
             </div>
-            <button className={styles.secondaryBtn} onClick={() => navigate('/contacts')}>
+            <button className={styles.secondaryBtn} onClick={() => navigate('/contact-list')}>
               <LogOut size={16} /> Exit
             </button>
           </div>

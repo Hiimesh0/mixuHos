@@ -24,16 +24,16 @@ export interface EchoReportRecord {
   ivc: string;
   aorticValve: string;
   pulmonaryValve: string;
-  lvef: string;
+  lvef: number | string;
   leftAtrium: string;
   rightAtrium: string;
-  rvsp: string;
+  rvsp: number | string;
   ivs: string;
-  septum: string;
-  lvidd: string;
+  septum: number | string;
+  lvidd: number | string;
   ias: string;
-  pWall: string;
-  lvids: string;
+  pWall: number | string;
+  lvids: number | string;
 
   // Lower section
   pericardium: string;

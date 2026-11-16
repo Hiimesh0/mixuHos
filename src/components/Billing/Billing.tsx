@@ -11,13 +11,15 @@ import {
   Trash2, 
   Search, 
   CheckCircle2, 
-  AlertCircle 
+  AlertCircle,
+  X
 } from 'lucide-react';
 import { patientApi } from '../../api/patientApi';
 import type { PatientRecord, PatientBillRecord } from '../../api/patientApi';
 import { doctorApi } from '../../api/masterApi';
 import { openPatientBillPdf } from '../../utils/patientBillGenerator';
 import { HOSPITAL_CONFIG } from '../../config/hospitalConfig';
+import { formatDoctorName } from '../../utils/doctorUtils';
 import styles from './Billing.module.css';
 
 interface BillChargeRow {
@@ -40,6 +42,7 @@ const Billing: React.FC = () => {
 
   // Doctors & Masters
   const [doctorList, setDoctorList] = useState<string[]>([]);
+  const [isOtpModalOpen, setIsOtpModalOpen] = useState<boolean>(false);
   const [standardCharges, setStandardCharges] = useState<Array<{ name: string; amount: number }>>([
     { name: 'Consultation Charge', amount: 500 },
     { name: 'Registration Charge', amount: 100 },
@@ -96,7 +99,9 @@ const Billing: React.FC = () => {
         }
 
         if (isMounted && docRes.status === 'fulfilled' && docRes.value?.doctors) {
-          const names = docRes.value.doctors.map(d => d.doctor_name || d.name).filter(Boolean);
+          const names = docRes.value.doctors
+            .map(d => formatDoctorName(d.title, d.drName || (d as any).doctor_name || (d as any).name))
+            .filter(Boolean);
           setDoctorList(names);
         }
 
@@ -780,7 +785,9 @@ const Billing: React.FC = () => {
           <button 
             type="button"
             className={styles.secondaryBtn} 
-            style={{ width: '100%', justifyContent: 'center', backgroundColor: 'var(--warning-soft)', borderColor: 'var(--warning-soft)', color: 'var(--warning-hover)', cursor: 'default' }}
+            style={{ width: '100%', justifyContent: 'center', backgroundColor: 'var(--warning-soft)', borderColor: 'var(--warning-soft)', color: 'var(--warning-hover)', cursor: 'pointer' }}
+            onClick={() => setIsOtpModalOpen(true)}
+            title="Batch delete test orders before payment settlement via OTP verification"
           >
             <ShieldAlert size={16} /> Delete Multiple Test By OTP Before Amount Received
           </button>
@@ -898,6 +905,60 @@ const Billing: React.FC = () => {
           </button>
         </div>
       </div>
+
+      {/* OTP Deletion Security Dialog Modal */}
+      {isOtpModalOpen && (
+        <div className={styles.modalOverlay} onClick={() => setIsOtpModalOpen(false)}>
+          <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
+            <div className={styles.modalHeader}>
+              <h3 style={{ color: 'var(--danger)', display: 'flex', alignItems: 'center', gap: '8px', margin: 0, fontSize: '16px' }}>
+                <ShieldAlert size={20} /> Batch Test Deletion — OTP Authorization
+              </h3>
+              <button
+                type="button"
+                className={styles.modalCloseBtn}
+                onClick={() => setIsOtpModalOpen(false)}
+                aria-label="Close"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '14px', fontSize: '13.5px', lineHeight: 1.5 }}>
+              <div style={{ backgroundColor: 'var(--warning-soft)', border: '1px solid var(--warning-hover)', borderRadius: '6px', padding: '12px 14px', color: 'var(--text-main)' }}>
+                <strong>NABH Clinical & Financial Audit Policy:</strong>
+                <p style={{ margin: '4px 0 0 0', fontSize: '13px' }}>
+                  Mass deletion of pre-settlement investigation orders and bill items requires dual-custody verification via SMS OTP sent to the attending consultant or billing administrator.
+                </p>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <div style={{ fontWeight: 600, color: 'var(--text-muted)' }}>SMS/OTP Gateway Status:</div>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: 'var(--warning-hover)', fontWeight: 600, fontSize: '13px' }}>
+                  <AlertCircle size={15} /> Gateway Offline / SMS Service not provisioned in local environment.
+                </div>
+              </div>
+
+              <div style={{ backgroundColor: 'var(--surface-muted)', borderRadius: '6px', padding: '12px 14px', fontSize: '13px' }}>
+                <strong>Recommended Standard Workflow:</strong>
+                <p style={{ margin: '4px 0 0 0' }}>
+                  To remove individual charges or test items from this bill, use the individual <strong>Delete</strong> icon (<Trash2 size={13} style={{ verticalAlign: 'middle', margin: '0 2px' }} />) located in the Bill Items table above. For supervisor override, please contact the hospital IT administration desk.
+                </p>
+              </div>
+            </div>
+
+            <div style={{ padding: '12px 20px', borderTop: '1px solid var(--border)', display: 'flex', justifyContent: 'flex-end' }}>
+              <button
+                type="button"
+                className={styles.primaryBtn}
+                onClick={() => setIsOtpModalOpen(false)}
+              >
+                Understood / Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );

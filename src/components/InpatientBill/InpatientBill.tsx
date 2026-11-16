@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Save, Printer, Lock, Calculator, Package, RefreshCw, Trash2, XCircle, ArrowLeft, CheckCircle2 } from 'lucide-react';
+import { Save, Printer, Lock, Calculator, Package, RefreshCw, Trash2, XCircle, ArrowLeft, CheckCircle2, AlertCircle } from 'lucide-react';
 import styles from './InpatientBill.module.css';
 import { admissionApi, type AdmissionRecord, depositApi, type DepositRecord } from '../../api/hospitalApi';
 import { patientApi, type PatientBillRecord, type BillItem } from '../../api/patientApi';
@@ -35,6 +35,7 @@ const InpatientBill: React.FC = () => {
   const [depositAmount, setDepositAmount] = useState<number>(0);
   const [isLocked, setIsLocked] = useState<boolean>(false);
   const [savedSuccess, setSavedSuccess] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
   const tabs = [
@@ -166,32 +167,53 @@ const InpatientBill: React.FC = () => {
       id: billNo || `IPD-BILL-${Date.now()}`,
       billNo: billNo || `BILL-${Date.now()}`,
       uhid: activeAdmission?.uhid || 'UHID-GEN',
+      patientId: activeAdmission?.uhid || 'UHID-GEN',
+      admission_id: activeAdmission?.id,
+      ipd_no: activeAdmission?.ipd_no,
       patientName: activeAdmission?.patient_name || 'Patient',
       billDate,
       billType: 'IPD',
       items,
+      subtotal: subTotal + maintCharges,
       totalAmount: subTotal + maintCharges,
       discountAmount: totalDiscount,
       netAmount: netPayable,
+      netPayable: netPayable,
       amountReceived: depositAmount,
+      totalReceived: depositAmount,
       balanceDue: finalPayable,
+      balanceAmount: finalPayable,
       paymentMode: 'Cash / Card / Online',
       status: finalPayable === 0 ? 'Settled' : 'Pending',
-      doctorName: activeAdmission?.admitting_doctor || 'Hospital Consultant',
+      treatingDoctor: activeAdmission?.admitting_doctor || 'Dr. Nilesh Mahale',
+      doctorName: activeAdmission?.admitting_doctor || 'Dr. Nilesh Mahale',
     };
   }, [billNo, activeAdmission, billDate, totalDays, roomRate, roomTotal, nursingRate, nursingTotal, doctorVisitRate, drVisitTotal, investigationRate, operationRate, subTotal, maintCharges, totalDiscount, netPayable, depositAmount, finalPayable]);
 
   // Save bill
   const handleSaveBill = async () => {
-    if (!activeAdmission) return;
+    if (!activeAdmission) {
+      setErrorMessage('Please select an active inpatient admission before saving the bill.');
+      setTimeout(() => setErrorMessage(''), 5000);
+      return;
+    }
+    if (loading) return;
+
     try {
       setLoading(true);
-      await patientApi.createBill(currentBillRecord);
-      setSavedSuccess(`Inpatient Bill '${billNo}' saved successfully!`);
-      setTimeout(() => setSavedSuccess(''), 4000);
-    } catch {
-      setSavedSuccess(`Bill '${billNo}' saved locally.`);
-      setTimeout(() => setSavedSuccess(''), 4000);
+      setErrorMessage('');
+      setSavedSuccess('');
+
+      const saved = await patientApi.createBill(currentBillRecord);
+      const generatedBillNo = saved.invoiceNo || saved.billNo || billNo;
+      setSavedSuccess(`Inpatient Bill '${generatedBillNo}' saved successfully to permanent hospital records!`);
+      if (saved.invoiceNo || saved.billNo) {
+        setBillNo(saved.invoiceNo || saved.billNo);
+      }
+      setTimeout(() => setSavedSuccess(''), 5000);
+    } catch (err: any) {
+      setErrorMessage(err.message || 'Failed to persist inpatient bill. Please check backend connection.');
+      setTimeout(() => setErrorMessage(''), 6000);
     } finally {
       setLoading(false);
     }
@@ -215,6 +237,12 @@ const InpatientBill: React.FC = () => {
         {savedSuccess && (
           <div style={{ background: '#dcfce7', border: '1px solid #86efac', color: '#166534', padding: '8px 14px', borderRadius: '6px', margin: '10px 0', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px' }}>
             <CheckCircle2 size={16} /> {savedSuccess}
+          </div>
+        )}
+
+        {errorMessage && (
+          <div style={{ background: '#fee2e2', border: '1px solid #f87171', color: '#991b1b', padding: '8px 14px', borderRadius: '6px', margin: '10px 0', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px' }}>
+            <AlertCircle size={16} /> {errorMessage}
           </div>
         )}
 
@@ -509,7 +537,7 @@ const InpatientBill: React.FC = () => {
           <button
             type="button"
             className={styles.secondaryBtn}
-            onClick={() => navigate('/indoor-summary-chart')}
+            onClick={() => navigate('/indoor-summary')}
           >
             <XCircle size={16} /> Return to Chart
           </button>

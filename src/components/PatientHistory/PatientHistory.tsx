@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Printer, Save, CheckCircle2, AlertCircle, Plus } from 'lucide-react';
 import styles from './PatientHistory.module.css';
 import { patientApi, type PatientRecord } from '../../api/patientApi';
@@ -43,6 +44,9 @@ const defaultFormData: HistoryFormData = {
 };
 
 const PatientHistory: React.FC = () => {
+  const [searchParams] = useSearchParams();
+  const queryPatientId = searchParams.get('id') || searchParams.get('uhid') || '';
+
   const [patients, setPatients] = useState<PatientRecord[]>([]);
   const [doctors, setDoctors] = useState<DoctorRecord[]>([]);
   const [selectedPatientId, setSelectedPatientId] = useState<string>('');
@@ -63,15 +67,21 @@ const PatientHistory: React.FC = () => {
       const patList: PatientRecord[] = Array.isArray(patRes) ? patRes : ((patRes as any)?.patients || []);
       setPatients(patList);
       setDoctors(docList.doctors || []);
-      if (patList.length > 0 && !selectedPatientId) {
-        populateFromPatient(patList[0]);
+
+      const targetUhid = (queryPatientId || selectedPatientId || '').toLowerCase().trim();
+      let matched = targetUhid ? patList.find(p => (p.uhid || p.id).toLowerCase() === targetUhid) : null;
+      if (!matched && patList.length > 0) {
+        matched = patList[0];
+      }
+      if (matched) {
+        populateFromPatient(matched);
       }
     } catch {
       setNotification({ type: 'error', message: 'Failed to load patient history.' });
     } finally {
       setLoading(false);
     }
-  }, [selectedPatientId, setNotification]);
+  }, [queryPatientId, selectedPatientId, setNotification]);
 
   useEffect(() => {
     loadData();
