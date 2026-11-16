@@ -1,0 +1,25 @@
+{
+  "entity": "DrVisitProcedure",
+  "last_sequence": 1,
+  "created_at": "2026-11-16T13:57:05+05:30",
+  "updated_at": "2026-11-16T13:57:05+05:30",
+  "entries": [
+    {
+      "id": "DVP-000001",
+      "admission_id": "ADM-000001",
+      "ipd_no": "IPD-2026-0001",
+      "patient_id": "UHID-1022",
+      "uhid": "UHID-1022",
+      "patient_name": "Rameshbhai Patel",
+      "entry_type": "VISIT",
+      "date": "2026-11-10",
+      "head": "Visiting Charge",
+      "doctor_name": "Dr. Nilesh Mahale",
+      "room": "GEN",
+      "bed_no": "GEN-01",
+      "charges": 500.0,
+      "notes": "Patient stable, hydration improving. Continued IV fluids.",
+      "is_active": true
+    }
+  ]
+}

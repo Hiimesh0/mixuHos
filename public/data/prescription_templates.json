@@ -1,0 +1,54 @@
+{
+  "entity": "PrescriptionTemplate",
+  "last_sequence": 2,
+  "created_at": "2026-11-16T13:57:05+05:30",
+  "updated_at": "2026-11-16T13:57:05+05:30",
+  "templates": [
+    {
+      "id": "PRX-000001",
+      "name": "Standard Essential Hypertension",
+      "diagnosis": "Essential Hypertension (Stage 1/2)",
+      "items": [
+        {
+          "medicine_name": "Telmisartan 40mg",
+          "dosage": "1 Tab",
+          "frequency": "Once Daily (OD)",
+          "timing": "Morning after breakfast",
+          "duration_days": 30
+        },
+        {
+          "medicine_name": "Amlodipine 5mg",
+          "dosage": "1 Tab",
+          "frequency": "Once Daily (OD)",
+          "timing": "Night before bed",
+          "duration_days": 30
+        }
+      ],
+      "instructions": "Monitor BP weekly. Report dizziness or peripheral edema.",
+      "is_active": true
+    },
+    {
+      "id": "PRX-000002",
+      "name": "Type 2 Diabetes Mellitus Starter",
+      "diagnosis": "Type 2 Diabetes Mellitus",
+      "items": [
+        {
+          "medicine_name": "Metformin 500mg SR",
+          "dosage": "1 Tab",
+          "frequency": "Twice Daily (BD)",
+          "timing": "With meals",
+          "duration_days": 30
+        },
+        {
+          "medicine_name": "Glimepiride 1mg",
+          "dosage": "1 Tab",
+          "frequency": "Once Daily (OD)",
+          "timing": "Before breakfast",
+          "duration_days": 30
+        }
+      ],
+      "instructions": "Maintain diabetic diet. Keep fast-acting sugar sweets available for hypoglycemia.",
+      "is_active": true
+    }
+  ]
+}

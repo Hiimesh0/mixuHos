@@ -796,3 +796,238 @@ export const reportTemplateApi = {
   },
 };
 
+// ============================================================================
+// Generic Master Helper for Domain Master Entities
+// ============================================================================
+
+export interface DepartmentRecord {
+  id: string;
+  name: string;
+  code: string;
+  head_of_dept?: string;
+  is_active: boolean;
+}
+
+export interface OperationGroupRecord {
+  id: string;
+  code: string;
+  name: string;
+  description?: string;
+  is_active: boolean;
+}
+
+export interface InsuranceCompanyRecord {
+  id: string;
+  name: string;
+  code: string;
+  tpa_name?: string;
+  phone?: string;
+  email?: string;
+  no_ipd_charges?: boolean;
+  is_active: boolean;
+}
+
+export interface VisitingTypeRecord {
+  id: string;
+  name: string;
+  default_rate: number;
+  is_active: boolean;
+}
+
+export interface ShortFormRecord {
+  id: string;
+  abbreviation: string;
+  full_form: string;
+  category?: string;
+  is_active: boolean;
+}
+
+export interface AdviceRecord {
+  id: string;
+  title: string;
+  instructions: string;
+  category?: string;
+  is_active: boolean;
+}
+
+export interface ContactRecord {
+  id: string;
+  name: string;
+  department?: string;
+  designation?: string;
+  intercomm?: string;
+  mobile: string;
+  email?: string;
+  is_active: boolean;
+}
+
+export interface PrescriptionTemplateRecord {
+  id: string;
+  name: string;
+  diagnosis: string;
+  items: Array<{
+    medicine_name: string;
+    dosage: string;
+    frequency: string;
+    timing: string;
+    duration_days: number;
+  }>;
+  instructions?: string;
+  is_active: boolean;
+}
+
+function createDomainMasterClient<T extends { id: string; is_active?: boolean }>(
+  endpoint: string,
+  storageKey: string,
+  jsonFile: string,
+  jsonRootKey: string,
+  idPrefix: string
+) {
+  const getFallback = async (): Promise<T[]> => {
+    if (typeof window === 'undefined') return [];
+    try {
+      const raw = localStorage.getItem(`mixu_${storageKey}_storage`);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+      const baseUrl = import.meta.env.BASE_URL || '/';
+      const jsonUrl = `${baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`}data/${jsonFile}`;
+      const res = await fetch(jsonUrl);
+      if (res.ok) {
+        const data = await res.json();
+        const list: T[] = data[jsonRootKey] || (Array.isArray(data) ? data : []);
+        if (list.length > 0) {
+          localStorage.setItem(`mixu_${storageKey}_storage`, JSON.stringify(list));
+          return list;
+        }
+      }
+    } catch {}
+    return [];
+  };
+
+  const saveFallback = (list: T[]) => {
+    if (typeof window === 'undefined') return;
+    try {
+      localStorage.setItem(`mixu_${storageKey}_storage`, JSON.stringify(list));
+    } catch {}
+  };
+
+  return {
+    async getAll(params?: { search?: string; active_only?: boolean }): Promise<T[]> {
+      try {
+        const q = new URLSearchParams();
+        if (params?.search) q.set('search', params.search);
+        if (params?.active_only) q.set('active_only', 'true');
+        const res = await fetch(`${API_BASE_URL}/${endpoint}/?${q.toString()}`, { headers: { Accept: 'application/json' } });
+        if (res.ok) {
+          const d = await res.json();
+          if (d.success && Array.isArray(d[jsonRootKey])) return d[jsonRootKey];
+        }
+      } catch {}
+
+      const all = await getFallback();
+      return all.filter(item => {
+        if (params?.active_only && item.is_active === false) return false;
+        if (params?.search) {
+          const s = params.search.toLowerCase();
+          return Object.values(item).some(v => typeof v === 'string' && v.toLowerCase().includes(s));
+        }
+        return true;
+      });
+    },
+
+    async getById(id: string): Promise<T | null> {
+      try {
+        const res = await fetch(`${API_BASE_URL}/${endpoint}/${encodeURIComponent(id)}/`, { headers: { Accept: 'application/json' } });
+        if (res.ok) {
+          const d = await res.json();
+          if (d.success && d.item) return d.item;
+        }
+      } catch {}
+
+      const all = await getFallback();
+      return all.find(x => x.id === id) || null;
+    },
+
+    async create(payload: Partial<T>): Promise<T> {
+      try {
+        const res = await fetch(`${API_BASE_URL}/${endpoint}/`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (res.ok) {
+          const d = await res.json();
+          if (d.success && d.item) return d.item;
+        }
+      } catch {}
+
+      const all = await getFallback();
+      const seq = all.length + 1;
+      const created = {
+        id: `${idPrefix}-${String(seq).padStart(6, '0')}`,
+        is_active: true,
+        ...payload,
+      } as unknown as T;
+      all.push(created);
+      saveFallback(all);
+      return created;
+    },
+
+    async update(id: string, payload: Partial<T>): Promise<T> {
+      try {
+        const res = await fetch(`${API_BASE_URL}/${endpoint}/${encodeURIComponent(id)}/`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (res.ok) {
+          const d = await res.json();
+          if (d.success && d.item) return d.item;
+        }
+      } catch {}
+
+      const all = await getFallback();
+      const idx = all.findIndex(x => x.id === id);
+      if (idx !== -1) {
+        all[idx] = { ...all[idx], ...payload, id };
+        saveFallback(all);
+        return all[idx];
+      }
+      throw new Error(`Record ${id} not found.`);
+    },
+
+    async delete(id: string, force = false): Promise<boolean> {
+      try {
+        const res = await fetch(`${API_BASE_URL}/${endpoint}/${encodeURIComponent(id)}/?force=${force}`, {
+          method: 'DELETE',
+        });
+        if (res.ok) return true;
+      } catch {}
+
+      const all = await getFallback();
+      if (force) {
+        saveFallback(all.filter(x => x.id !== id));
+      } else {
+        const idx = all.findIndex(x => x.id === id);
+        if (idx !== -1) {
+          all[idx].is_active = false;
+          saveFallback(all);
+        }
+      }
+      return true;
+    },
+  };
+}
+
+export const departmentApi = createDomainMasterClient<DepartmentRecord>('departments', 'departments', 'departments.json', 'departments', 'DEP');
+export const operationGroupApi = createDomainMasterClient<OperationGroupRecord>('operation-groups', 'operation_groups', 'operation_groups.json', 'operation_groups', 'OPG');
+export const insuranceCompanyApi = createDomainMasterClient<InsuranceCompanyRecord>('insurance-companies', 'insurance_companies', 'insurance_companies.json', 'insurance_companies', 'INS');
+export const visitingTypeApi = createDomainMasterClient<VisitingTypeRecord>('visiting-types', 'visiting_types', 'visiting_types.json', 'visiting_types', 'VST');
+export const shortFormApi = createDomainMasterClient<ShortFormRecord>('short-forms', 'short_forms', 'short_forms.json', 'short_forms', 'SHT');
+export const adviceApi = createDomainMasterClient<AdviceRecord>('advices', 'advices', 'advices.json', 'advices', 'ADV');
+export const contactApi = createDomainMasterClient<ContactRecord>('contacts', 'contacts', 'contacts.json', 'contacts', 'CNT');
+export const prescriptionTemplateApi = createDomainMasterClient<PrescriptionTemplateRecord>('prescription-templates', 'prescription_templates', 'prescription_templates.json', 'templates', 'PRX');
+
+

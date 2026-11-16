@@ -1,0 +1,36 @@
+{
+  "entity": "Advice",
+  "last_sequence": 4,
+  "created_at": "2026-11-16T13:57:05+05:30",
+  "updated_at": "2026-11-16T13:57:05+05:30",
+  "advices": [
+    {
+      "id": "ADV-000001",
+      "title": "Hypertension Dietary Advice",
+      "instructions": "Strict salt restriction (< 4g/day). Avoid fried, oily, and processed foods. Regular brisk walking 30 mins daily.",
+      "category": "Diet & Lifestyle",
+      "is_active": true
+    },
+    {
+      "id": "ADV-000002",
+      "title": "Diabetic Foot Care",
+      "instructions": "Inspect feet daily. Keep feet clean and moisturized. Do not walk barefoot. Wear comfortable padded footwear.",
+      "category": "Endocrine",
+      "is_active": true
+    },
+    {
+      "id": "ADV-000003",
+      "title": "Post-Op Wound Care",
+      "instructions": "Keep incision clean and dry. Avoid lifting heavy weights for 4 weeks. Report fever or purulent discharge immediately.",
+      "category": "Surgical",
+      "is_active": true
+    },
+    {
+      "id": "ADV-000004",
+      "title": "Hydration in Fever",
+      "instructions": "Drink plenty of oral fluids (ORS, coconut water, lemon water, boiled water). Take paracetamol as prescribed.",
+      "category": "General",
+      "is_active": true
+    }
+  ]
+}

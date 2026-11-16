@@ -1,0 +1,104 @@
+{
+  "entity": "Department",
+  "last_sequence": 11,
+  "created_at": "2026-11-16T13:57:05+05:30",
+  "updated_at": "2026-11-16T13:59:24+05:30",
+  "departments": [
+    {
+      "id": "DEP-000001",
+      "code": "MED",
+      "name": "General Medicine",
+      "head_doctor": "Dr. Nilesh Mahale",
+      "extension": "101",
+      "is_active": true
+    },
+    {
+      "id": "DEP-000002",
+      "code": "SURG",
+      "name": "General Surgery",
+      "head_doctor": "Dr. Snehal Mahale",
+      "extension": "102",
+      "is_active": true
+    },
+    {
+      "id": "DEP-000003",
+      "code": "CARDIO",
+      "name": "Cardiology",
+      "head_doctor": "Dr. Nilesh Mahale",
+      "extension": "103",
+      "is_active": true
+    },
+    {
+      "id": "DEP-000004",
+      "code": "ORTHO",
+      "name": "Orthopedics",
+      "head_doctor": "Dr. Snehal Mahale",
+      "extension": "104",
+      "is_active": true
+    },
+    {
+      "id": "DEP-000005",
+      "code": "ICU",
+      "name": "Intensive Care Unit (ICU)",
+      "head_doctor": "Dr. Nilesh Mahale",
+      "extension": "105",
+      "is_active": true
+    },
+    {
+      "id": "DEP-000006",
+      "code": "RADIO",
+      "name": "Radiology & Imaging",
+      "head_doctor": "Dr. Nilesh Mahale",
+      "extension": "106",
+      "is_active": true
+    },
+    {
+      "id": "DEP-000007",
+      "code": "PATH",
+      "name": "Pathology & Laboratory",
+      "head_doctor": "Dr. Nilesh Mahale",
+      "extension": "107",
+      "is_active": true
+    },
+    {
+      "name": "Neurology",
+      "code": "NEURO",
+      "head_doctor": "Dr. Nilesh Mahale",
+      "extension": "108",
+      "id": "DEP-000008",
+      "created_at": "2026-11-16T13:57:44+05:30",
+      "updated_at": "2026-11-16T13:57:44+05:30",
+      "is_active": true
+    },
+    {
+      "name": "Neurology",
+      "code": "NEURO",
+      "head_doctor": "Dr. Nilesh Mahale",
+      "extension": "108",
+      "id": "DEP-000009",
+      "created_at": "2026-11-16T13:58:15+05:30",
+      "updated_at": "2026-11-16T13:58:15+05:30",
+      "is_active": true
+    },
+    {
+      "name": "Neurology",
+      "code": "NEURO",
+      "head_doctor": "Dr. Nilesh Mahale",
+      "extension": "108",
+      "id": "DEP-000010",
+      "created_at": "2026-11-16T13:58:28+05:30",
+      "updated_at": "2026-11-16T13:58:28+05:30",
+      "is_active": true
+    },
+    {
+      "name": "Neurology",
+      "code": "NEURO",
+      "head_doctor": "Dr. Nilesh Mahale",
+      "extension": "108",
+      "id": "DEP-000011",
+      "created_at": "2026-11-16T13:59:24+05:30",
+      "updated_at": "2026-11-16T13:59:24+05:30",
+      "is_active": true
+    }
+  ]
+}

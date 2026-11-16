@@ -1,0 +1,109 @@
+{
+  "entity": "PatientVisit",
+  "last_sequence": 5,
+  "created_at": "2026-11-16T13:57:05+05:30",
+  "updated_at": "2026-11-16T13:59:24+05:30",
+  "visits": [
+    {
+      "id": "VST-2026-0001",
+      "patient_id": "UHID-1023",
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "visit_no": 1,
+      "visit_date": "2026-10-28T10:00:00+05:30",
+      "visit_type": "New Registration",
+      "consulting_doctor": "Dr. Nilesh Mahale",
+      "department": "Medicine",
+      "chief_complaint": "Chest heaviness and fatigue for 3 days",
+      "vitals": {
+        "bp": "130/84",
+        "pulse": "76",
+        "temp": "98.4",
+        "spo2": "98"
+      },
+      "status": "Completed",
+      "invoice_no": "OPD2627/6146",
+      "is_active": true
+    },
+    {
+      "patient_id": "UHID-1023",
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "visit_no": 2,
+      "visit_date": "2026-11-16T13:57:44+05:30",
+      "visit_type": "Follow-up Consultation",
+      "consulting_doctor": "Dr. Nilesh Mahale",
+      "chief_complaint": "Follow-up post fever, no active symptoms",
+      "vitals": {
+        "bp": "120/80",
+        "pulse": "72",
+        "temp": "98.2"
+      },
+      "status": "Completed",
+      "is_active": true,
+      "id": "VST-000002",
+      "created_at": "2026-11-16T13:57:44+05:30",
+      "updated_at": "2026-11-16T13:57:44+05:30"
+    },
+    {
+      "patient_id": "UHID-1023",
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "visit_no": 3,
+      "visit_date": "2026-11-16T13:58:15+05:30",
+      "visit_type": "Follow-up Consultation",
+      "consulting_doctor": "Dr. Nilesh Mahale",
+      "chief_complaint": "Follow-up post fever, no active symptoms",
+      "vitals": {
+        "bp": "120/80",
+        "pulse": "72",
+        "temp": "98.2"
+      },
+      "status": "Completed",
+      "is_active": true,
+      "id": "VST-000003",
+      "created_at": "2026-11-16T13:58:15+05:30",
+      "updated_at": "2026-11-16T13:58:15+05:30"
+    },
+    {
+      "patient_id": "UHID-1023",
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "visit_no": 4,
+      "visit_date": "2026-11-16T13:58:28+05:30",
+      "visit_type": "Follow-up Consultation",
+      "consulting_doctor": "Dr. Nilesh Mahale",
+      "chief_complaint": "Follow-up post fever, no active symptoms",
+      "vitals": {
+        "bp": "120/80",
+        "pulse": "72",
+        "temp": "98.2"
+      },
+      "status": "Completed",
+      "is_active": true,
+      "id": "VST-000004",
+      "created_at": "2026-11-16T13:58:28+05:30",
+      "updated_at": "2026-11-16T13:58:28+05:30"
+    },
+    {
+      "patient_id": "UHID-1023",
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "visit_no": 5,
+      "visit_date": "2026-11-16T13:59:24+05:30",
+      "visit_type": "Follow-up Consultation",
+      "consulting_doctor": "Dr. Nilesh Mahale",
+      "chief_complaint": "Follow-up post fever, no active symptoms",
+      "vitals": {
+        "bp": "120/80",
+        "pulse": "72",
+        "temp": "98.2"
+      },
+      "status": "Completed",
+      "is_active": true,
+      "id": "VST-000005",
+      "created_at": "2026-11-16T13:59:24+05:30",
+      "updated_at": "2026-11-16T13:59:24+05:30"
+    }
+  ]
+}

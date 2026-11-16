@@ -1,0 +1,96 @@
+{
+  "beds": [
+    {
+      "id": "BED-000001",
+      "bed_number": "GEN-01",
+      "ward_name": "General Ward Male",
+      "room_type_id": "RMT-000001",
+      "status": "Vacant",
+      "current_admission_id": null,
+      "current_patient_id": null,
+      "daily_rate": 800.0,
+      "is_active": true
+    },
+    {
+      "id": "BED-000002",
+      "bed_number": "GEN-02",
+      "ward_name": "General Ward Male",
+      "room_type_id": "RMT-000001",
+      "status": "Vacant",
+      "current_admission_id": null,
+      "current_patient_id": null,
+      "daily_rate": 800.0,
+      "is_active": true,
+      "updated_at": "2026-11-16T13:59:24+05:30"
+    },
+    {
+      "id": "BED-000003",
+      "bed_number": "GEN-03",
+      "ward_name": "General Ward Female",
+      "room_type_id": "RMT-000001",
+      "status": "Vacant",
+      "current_admission_id": null,
+      "current_patient_id": null,
+      "daily_rate": 800.0,
+      "is_active": true
+    },
+    {
+      "id": "BED-000004",
+      "bed_number": "SEMI-101",
+      "ward_name": "1st Floor East",
+      "room_type_id": "RMT-000002",
+      "status": "Vacant",
+      "current_admission_id": null,
+      "current_patient_id": null,
+      "daily_rate": 1800.0,
+      "is_active": true,
+      "updated_at": "2026-11-16T13:59:24+05:30"
+    },
+    {
+      "id": "BED-000005",
+      "bed_number": "SEMI-102",
+      "ward_name": "1st Floor East",
+      "room_type_id": "RMT-000002",
+      "status": "Vacant",
+      "current_admission_id": null,
+      "current_patient_id": null,
+      "daily_rate": 1800.0,
+      "is_active": true
+    },
+    {
+      "id": "BED-000006",
+      "bed_number": "DEL-201",
+      "ward_name": "2nd Floor Deluxe",
+      "room_type_id": "RMT-000003",
+      "status": "Vacant",
+      "current_admission_id": null,
+      "current_patient_id": null,
+      "daily_rate": 3500.0,
+      "is_active": true
+    },
+    {
+      "id": "BED-000007",
+      "bed_number": "ICU-01",
+      "ward_name": "Critical Care Unit",
+      "room_type_id": "RMT-000004",
+      "status": "Vacant",
+      "current_admission_id": null,
+      "current_patient_id": null,
+      "daily_rate": 5500.0,
+      "is_active": true
+    },
+    {
+      "id": "BED-000008",
+      "bed_number": "ICU-02",
+      "ward_name": "Critical Care Unit",
+      "room_type_id": "RMT-000004",
+      "status": "Vacant",
+      "current_admission_id": null,
+      "current_patient_id": null,
+      "daily_rate": 5500.0,
+      "is_active": true
+    }
+  ],
+  "last_sequence": 8,
+  "updated_at": "2026-11-16T13:59:24+05:30"
+}
