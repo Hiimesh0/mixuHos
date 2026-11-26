@@ -653,9 +653,22 @@ export const depositApi = {
 // --- Dr. Visit & Procedure API ---
 
 const normalizeDrVisitProcedure = (e: any): DrVisitProcedureRecord => {
+  if (!e || typeof e !== 'object') {
+    return {
+      id: `DVP-AUTO-${Date.now()}`,
+      uhid: '',
+      entry_type: 'Doctor Visit',
+      entry_date: new Date().toISOString().split('T')[0],
+      doctor_name: 'Dr. Nilesh Mahale',
+      head_description: 'Consultant Round',
+      rate: 750,
+      quantity: 1,
+      amount: 750,
+    };
+  }
   let entryType = e.entry_type;
   if (!entryType) {
-    const title = e.head_description || e.procedure_title || e.head || '';
+    const title = String(e.head_description || e.procedure_title || e.head || '');
     if (/round|visit|consult/i.test(title)) {
       entryType = 'Doctor Visit';
     } else if (/nurs|dress/i.test(title)) {
@@ -664,16 +677,23 @@ const normalizeDrVisitProcedure = (e: any): DrVisitProcedureRecord => {
       entryType = 'Procedure';
     }
   }
-  const entryDate = e.entry_date || e.visit_date || e.date || (e.created_at ? e.created_at.split('T')[0] : '');
-  const headDesc = e.head_description || e.procedure_title || e.head || 'Consultant Round';
+  const entryDate = String(e.entry_date || e.visit_date || e.date || (typeof e.created_at === 'string' ? e.created_at.split('T')[0] : '') || new Date().toISOString().split('T')[0]);
+  const headDesc = String(e.head_description || e.procedure_title || e.head || 'Consultant Round');
   const rate = Number(e.rate ?? e.charges ?? e.amount ?? 0);
   const qty = Number(e.quantity ?? 1);
   const amount = Number(e.amount ?? (rate * qty) ?? e.charges ?? 0);
-  const remark = e.remark || e.notes || '';
-  const bedNumber = e.bed_number || e.bed_no || '';
+  const remark = String(e.remark || e.notes || '');
+  const bedNumber = String(e.bed_number || e.bed_no || '');
 
   return {
     ...e,
+    id: String(e.id || `DVP-${Date.now()}`),
+    admission_id: String(e.admission_id || ''),
+    ipd_no: String(e.ipd_no || ''),
+    patient_id: String(e.patient_id || e.uhid || ''),
+    uhid: String(e.uhid || e.patient_id || ''),
+    patient_name: String(e.patient_name || 'Patient'),
+    doctor_name: String(e.doctor_name || 'Dr. Nilesh Mahale'),
     entry_type: entryType,
     entry_date: entryDate,
     visit_date: entryDate,

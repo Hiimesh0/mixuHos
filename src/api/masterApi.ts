@@ -176,11 +176,11 @@ export const doctorApi = {
       const q = params.search.toLowerCase().trim();
       filtered = filtered.filter(
         d =>
-          d.drName.toLowerCase().includes(q) ||
-          d.id.toLowerCase().includes(q) ||
-          d.drRegNo?.toLowerCase().includes(q) ||
-          d.mobileNo.includes(q) ||
-          d.speciality?.toLowerCase().includes(q)
+          (d.drName || '').toLowerCase().includes(q) ||
+          (d.id || '').toLowerCase().includes(q) ||
+          (d.drRegNo || '').toLowerCase().includes(q) ||
+          (d.mobileNo || '').includes(q) ||
+          (d.speciality || '').toLowerCase().includes(q)
       );
     }
 
@@ -204,25 +204,27 @@ export const doctorApi = {
   },
 
   async createDoctor(data: Partial<DoctorRecord>): Promise<{ success: boolean; doctor: DoctorRecord; message?: string }> {
-    try {
-      const res = await fetch(`${API_BASE_URL}/doctors/`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify(data),
-      });
-      if (res.ok) {
-        const result = await res.json();
-        const all = await getFallbackDoctorsStorage();
-        all.push(result.doctor);
-        saveFallbackDoctorsStorage(all);
-        return result;
-      } else {
-        const errData = await res.json().catch(() => ({}));
-        throw new Error(errData.error || Object.values(errData.details || {})[0] || 'Failed to create doctor.');
-      }
-    } catch (err: unknown) {
-      if (err instanceof Error && !err.message.includes('fetch')) {
-        throw err;
+    if (API_BASE_URL) {
+      try {
+        const res = await fetch(`${API_BASE_URL}/doctors/`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(data),
+        });
+        if (res.ok) {
+          const result = await res.json();
+          const all = await getFallbackDoctorsStorage();
+          all.push(result.doctor);
+          saveFallbackDoctorsStorage(all);
+          return result;
+        } else {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.error || Object.values(errData.details || {})[0] || 'Failed to create doctor.');
+        }
+      } catch (err: unknown) {
+        if (err instanceof Error && !err.message.includes('fetch')) {
+          throw err;
+        }
       }
     }
 
@@ -269,24 +271,26 @@ export const doctorApi = {
   },
 
   async updateDoctor(id: string, data: Partial<DoctorRecord>): Promise<{ success: boolean; doctor: DoctorRecord; message?: string }> {
-    try {
-      const res = await fetch(`${API_BASE_URL}/doctors/${encodeURIComponent(id)}/`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify(data),
-      });
-      if (res.ok) {
-        const result = await res.json();
-        const all = await getFallbackDoctorsStorage();
-        const idx = all.findIndex(d => d.id.toLowerCase() === id.toLowerCase());
-        if (idx !== -1) {
-          all[idx] = result.doctor;
-          saveFallbackDoctorsStorage(all);
+    if (API_BASE_URL) {
+      try {
+        const res = await fetch(`${API_BASE_URL}/doctors/${encodeURIComponent(id)}/`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(data),
+        });
+        if (res.ok) {
+          const result = await res.json();
+          const all = await getFallbackDoctorsStorage();
+          const idx = all.findIndex(d => d.id.toLowerCase() === id.toLowerCase());
+          if (idx !== -1) {
+            all[idx] = result.doctor;
+            saveFallbackDoctorsStorage(all);
+          }
+          return result;
         }
-        return result;
+      } catch {
+        // Fallback
       }
-    } catch {
-      // Fallback
     }
 
     const all = await getFallbackDoctorsStorage();
@@ -298,27 +302,29 @@ export const doctorApi = {
   },
 
   async deleteDoctor(id: string, force = false): Promise<{ success: boolean; action: string; message: string }> {
-    try {
-      const res = await fetch(`${API_BASE_URL}/doctors/${encodeURIComponent(id)}/?force=${force}`, {
-        method: 'DELETE',
-        headers: { Accept: 'application/json' },
-      });
-      if (res.ok) {
-        const result = await res.json();
-        const all = await getFallbackDoctorsStorage();
-        if (result.action === 'deleted') {
-          saveFallbackDoctorsStorage(all.filter(d => d.id.toLowerCase() !== id.toLowerCase()));
-        } else {
-          const idx = all.findIndex(d => d.id.toLowerCase() === id.toLowerCase());
-          if (idx !== -1) {
-            all[idx].status = 'inactive';
-            saveFallbackDoctorsStorage(all);
+    if (API_BASE_URL) {
+      try {
+        const res = await fetch(`${API_BASE_URL}/doctors/${encodeURIComponent(id)}/?force=${force}`, {
+          method: 'DELETE',
+          headers: { Accept: 'application/json' },
+        });
+        if (res.ok) {
+          const result = await res.json();
+          const all = await getFallbackDoctorsStorage();
+          if (result.action === 'deleted') {
+            saveFallbackDoctorsStorage(all.filter(d => d.id.toLowerCase() !== id.toLowerCase()));
+          } else {
+            const idx = all.findIndex(d => d.id.toLowerCase() === id.toLowerCase());
+            if (idx !== -1) {
+              all[idx].status = 'inactive';
+              saveFallbackDoctorsStorage(all);
+            }
           }
+          return result;
         }
-        return result;
+      } catch {
+        // Fallback
       }
-    } catch {
-      // Fallback
     }
 
     const all = await getFallbackDoctorsStorage();

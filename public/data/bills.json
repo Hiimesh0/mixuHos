@@ -1074,7 +1074,59 @@
       "pcName": "DESK-OPD-01",
       "createdAt": "2026-11-13T06:40:56.653138",
       "updatedAt": "2026-11-13T06:40:56.653138"
+    },
+    {
+      "id": "BILL-18C0EAAC",
+      "billNo": "OPD2627/6146",
+      "invoiceNo": "OPD2627/6146",
+      "patientId": "UHID-1023",
+      "uhid": "UHID-1023",
+      "admission_id": "ADM-000001",
+      "ipd_no": "IPD2627/1001",
+      "patientName": "TestBillPatient",
+      "billDate": "2026-11-16T14:28:13.708332+00:00",
+      "billType": "IPD",
+      "treatingDoctor": "Dr. NILESH MAHALE",
+      "items": [
+        {
+          "srNo": 1,
+          "details": "Bed & Room Tariff (2 days @ 1500)",
+          "name": "Bed & Room Tariff (2 days @ 1500)",
+          "rate": 1500.0,
+          "quantity": 2.0,
+          "amount": 3000.0,
+          "chargeMasterId": ""
+        },
+        {
+          "srNo": 2,
+          "details": "Consultant Round (2 days @ 800)",
+          "name": "Consultant Round (2 days @ 800)",
+          "rate": 800.0,
+          "quantity": 2.0,
+          "amount": 1600.0,
+          "chargeMasterId": ""
+        }
+      ],
+      "subtotal": 4600.0,
+      "totalAmount": 4600.0,
+      "discountType": "fixed",
+      "discountValue": 200.0,
+      "discountAmount": 200.0,
+      "netAmount": 4400.0,
+      "netPayable": 4400.0,
+      "totalReceived": 1000.0,
+      "amountReceived": 1000.0,
+      "balanceDue": 3400.0,
+      "balanceAmount": 3400.0,
+      "paymentMode": "Cash",
+      "paymentType": "Cash",
+      "status": "Unpaid",
+      "remarks": "Inpatient Settlement Bill",
+      "entryBy": "SYSTEM",
+      "pcName": "DESK-IPD-01",
+      "createdAt": "2026-11-16T14:28:06.992624+00:00",
+      "updatedAt": "2026-11-16T14:28:13.708332+00:00"
     }
   ],
-  "last_invoice_seq": 6125
+  "last_invoice_seq": 6147
 }
