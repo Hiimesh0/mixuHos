@@ -1,0 +1,64 @@
+{
+  "entity": "ShortForm",
+  "last_sequence": 8,
+  "created_at": "2026-11-16T13:57:05+05:30",
+  "updated_at": "2026-11-16T13:57:05+05:30",
+  "short_forms": [
+    {
+      "id": "SHT-000001",
+      "abbreviation": "BP",
+      "full_form": "Blood Pressure (mmHg)",
+      "category": "Vitals",
+      "is_active": true
+    },
+    {
+      "id": "SHT-000002",
+      "abbreviation": "PR",
+      "full_form": "Pulse Rate (beats/min)",
+      "category": "Vitals",
+      "is_active": true
+    },
+    {
+      "id": "SHT-000003",
+      "abbreviation": "SpO2",
+      "full_form": "Oxygen Saturation (%)",
+      "category": "Vitals",
+      "is_active": true
+    },
+    {
+      "id": "SHT-000004",
+      "abbreviation": "RBS",
+      "full_form": "Random Blood Sugar (mg/dL)",
+      "category": "Laboratory",
+      "is_active": true
+    },
+    {
+      "id": "SHT-000005",
+      "abbreviation": "ECG",
+      "full_form": "12-Lead Electrocardiogram",
+      "category": "Investigation",
+      "is_active": true
+    },
+    {
+      "id": "SHT-000006",
+      "abbreviation": "CXR",
+      "full_form": "Chest X-Ray PA View",
+      "category": "Radiology",
+      "is_active": true
+    },
+    {
+      "id": "SHT-000007",
+      "abbreviation": "USG",
+      "full_form": "Ultrasonography Whole Abdomen",
+      "category": "Radiology",
+      "is_active": true
+    },
+    {
+      "id": "SHT-000008",
+      "abbreviation": "ECHO",
+      "full_form": "2D Echocardiography with Color Doppler",
+      "category": "Cardiology",
+      "is_active": true
+    }
+  ]
+}

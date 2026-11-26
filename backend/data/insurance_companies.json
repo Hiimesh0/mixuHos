@@ -1,0 +1,58 @@
+{
+  "entity": "InsuranceCompany",
+  "last_sequence": 5,
+  "created_at": "2026-11-16T13:57:05+05:30",
+  "updated_at": "2026-11-16T13:57:05+05:30",
+  "insurance_companies": [
+    {
+      "id": "INS-000001",
+      "name": "Star Health and Allied Insurance",
+      "code": "STAR",
+      "tpa_name": "In-house TPA",
+      "phone": "18004252255",
+      "email": "tpa@starhealth.in",
+      "no_ipd_charges": false,
+      "is_active": true
+    },
+    {
+      "id": "INS-000002",
+      "name": "HDFC ERGO General Insurance",
+      "code": "HDFCERGO",
+      "tpa_name": "Medi Assist TPA",
+      "phone": "02262346234",
+      "email": "info@hdfcergo.com",
+      "no_ipd_charges": false,
+      "is_active": true
+    },
+    {
+      "id": "INS-000003",
+      "name": "ICICI Lombard General Insurance",
+      "code": "ICICI",
+      "tpa_name": "Paramount TPA",
+      "phone": "18002666",
+      "email": "hospital@icicilombard.com",
+      "no_ipd_charges": false,
+      "is_active": true
+    },
+    {
+      "id": "INS-000004",
+      "name": "New India Assurance Co Ltd",
+      "code": "NEWINDIA",
+      "tpa_name": "MDIndia Health Insurance TPA",
+      "phone": "18002091415",
+      "email": "corporate@newindia.co.in",
+      "no_ipd_charges": false,
+      "is_active": true
+    },
+    {
+      "id": "INS-000005",
+      "name": "Ayushman Bharat / PMJAY Scheme",
+      "code": "PMJAY",
+      "tpa_name": "State Health Agency Gujarat",
+      "phone": "14555",
+      "email": "helpdesk@pmjay.gov.in",
+      "no_ipd_charges": true,
+      "is_active": true
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "entity": "opd_charges",
+  "last_sequence": 12,
+  "created_at": "2026-11-16T20:00:00+05:30",
+  "updated_at": "2026-11-16T20:00:00+05:30",
+  "charges": [
+    { "id": "CHG-001", "name": "General Consultation Charge", "group": "OPD-GEN", "shortName": "CONS", "priority": 1, "rate": 500, "active": true, "isBio": false, "concernDr": true, "excludeRoomRate": false, "outsideTest": false, "testFor": "Both", "unit": "Visit" },
+    { "id": "CHG-002", "name": "Follow-up Consultation", "group": "OPD-GEN", "shortName": "FUP", "priority": 2, "rate": 300, "active": true, "isBio": false, "concernDr": true, "excludeRoomRate": false, "outsideTest": false, "testFor": "Both", "unit": "Visit" },
+    { "id": "CHG-003", "name": "Emergency / Casualty Triage", "group": "OPD-EMG", "shortName": "EMG", "priority": 1, "rate": 750, "active": true, "isBio": false, "concernDr": true, "excludeRoomRate": false, "outsideTest": false, "testFor": "Both", "unit": "Episode" },
+    { "id": "CHG-004", "name": "Complete Blood Count (CBC)", "group": "OPD-BCH", "shortName": "CBC", "priority": 1, "rate": 350, "active": true, "isBio": true, "concernDr": false, "excludeRoomRate": false, "outsideTest": false, "testFor": "Both", "unit": "Report", "refRange": "Standard" },
+    { "id": "CHG-005", "name": "Lipid Profile Comprehensive", "group": "OPD-BCH", "shortName": "LIPID", "priority": 2, "rate": 900, "active": true, "isBio": true, "concernDr": false, "excludeRoomRate": false, "outsideTest": false, "testFor": "Both", "unit": "mg/dL", "refRange": "Fasting" },
+    { "id": "CHG-006", "name": "Liver Function Test (LFT)", "group": "OPD-BCH", "shortName": "LFT", "priority": 2, "rate": 800, "active": true, "isBio": true, "concernDr": false, "excludeRoomRate": false, "outsideTest": false, "testFor": "Both", "unit": "IU/L", "refRange": "Enzyme" },
+    { "id": "CHG-007", "name": "Kidney Function Test (KFT)", "group": "OPD-BCH", "shortName": "KFT", "priority": 2, "rate": 750, "active": true, "isBio": true, "concernDr": false, "excludeRoomRate": false, "outsideTest": false, "testFor": "Both", "unit": "mg/dL", "refRange": "Urea/Creat" },
+    { "id": "CHG-008", "name": "12-Lead Electrocardiogram (ECG)", "group": "OPD-CARD", "shortName": "ECG", "priority": 1, "rate": 350, "active": true, "isBio": false, "concernDr": true, "excludeRoomRate": false, "outsideTest": false, "testFor": "Both", "unit": "Tracing" },
+    { "id": "CHG-009", "name": "Chest X-Ray PA View", "group": "OPD-RAD", "shortName": "CXR", "priority": 1, "rate": 400, "active": true, "isBio": false, "concernDr": false, "excludeRoomRate": false, "outsideTest": false, "testFor": "Both", "unit": "Film" },
+    { "id": "CHG-010", "name": "Urine Routine & Microscopy", "group": "OPD-PATH", "shortName": "URINE", "priority": 3, "rate": 200, "active": true, "isBio": true, "concernDr": false, "excludeRoomRate": false, "outsideTest": false, "testFor": "Both", "unit": "HPF" },
+    { "id": "CHG-011", "name": "Minor Surgical Procedure / Suture", "group": "OPD-SURG", "shortName": "SUTR", "priority": 3, "rate": 1200, "active": true, "isBio": false, "concernDr": true, "excludeRoomRate": false, "outsideTest": false, "testFor": "Both", "unit": "Proc" },
+    { "id": "CHG-012", "name": "Dressing & Wound Care", "group": "OPD-GEN", "shortName": "DRSS", "priority": 4, "rate": 200, "active": true, "isBio": false, "concernDr": false, "excludeRoomRate": false, "outsideTest": false, "testFor": "Both", "unit": "Session" }
+  ]
+}
+

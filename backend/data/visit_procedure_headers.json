@@ -1,0 +1,17 @@
+{
+  "entity": "visit_procedure_headers",
+  "last_sequence": 8,
+  "created_at": "2026-11-16T20:00:00+05:30",
+  "updated_at": "2026-11-16T20:00:00+05:30",
+  "headers": [
+    { "id": "VPH-001", "headerFor": "Visiting Charge", "headerName": "Consultant Routine Visit", "description": "Standard daily inpatient bedside rounds", "priority": 1, "status": "Active", "notCalcService": false, "notCalcUnderCare": false, "isPackage": false, "notCalcInRef": false },
+    { "id": "VPH-002", "headerFor": "Visiting Charge", "headerName": "Emergency Night Visit", "description": "After-hours call / emergency bedside round", "priority": 2, "status": "Active", "notCalcService": false, "notCalcUnderCare": false, "isPackage": false, "notCalcInRef": false },
+    { "id": "VPH-003", "headerFor": "Visiting Charge", "headerName": "Cross Consultation Special", "description": "Super-specialist opinion and treatment review", "priority": 3, "status": "Active", "notCalcService": false, "notCalcUnderCare": false, "isPackage": false, "notCalcInRef": false },
+    { "id": "VPH-004", "headerFor": "Visiting Charge", "headerName": "ICU Intensivist Round", "description": "Critical care physician intensive monitoring", "priority": 1, "status": "Active", "notCalcService": false, "notCalcUnderCare": false, "isPackage": false, "notCalcInRef": false },
+    { "id": "VPH-005", "headerFor": "Other Charge", "headerName": "Minor Bedside Procedure", "description": "Wound dressing, catheterization, Ryle tube insertion", "priority": 4, "status": "Active", "notCalcService": false, "notCalcUnderCare": false, "isPackage": false, "notCalcInRef": false },
+    { "id": "VPH-006", "headerFor": "Other Charge", "headerName": "Central Venous Line Insertion", "description": "Triple lumen CVC insertion under ultrasound", "priority": 5, "status": "Active", "notCalcService": true, "notCalcUnderCare": false, "isPackage": false, "notCalcInRef": false },
+    { "id": "VPH-007", "headerFor": "Other Charge", "headerName": "Endotracheal Intubation", "description": "Emergency airway control and ventilator connection", "priority": 5, "status": "Active", "notCalcService": true, "notCalcUnderCare": false, "isPackage": false, "notCalcInRef": false },
+    { "id": "VPH-008", "headerFor": "Other Charge", "headerName": "Lumbar Puncture (CSF Study)", "description": "Diagnostic or therapeutic spinal fluid tapping", "priority": 6, "status": "Active", "notCalcService": false, "notCalcUnderCare": false, "isPackage": false, "notCalcInRef": false }
+  ]
+}
+

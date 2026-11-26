@@ -1,0 +1,1459 @@
+{
+  "entity": "Investigation",
+  "last_sequence": 44,
+  "created_at": "2026-10-01T00:00:00+05:30",
+  "updated_at": "2026-11-27T02:06:56+05:30",
+  "investigations": [
+    {
+      "id": "INV-000001",
+      "order_no": "LAB2627/4001",
+      "patient_id": "UHID-1023",
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "age": "33",
+      "gender": "Male",
+      "order_date": "2026-11-13",
+      "ordering_doctor": "Dr. NILESH MAHALE",
+      "test_name": "Complete Blood Count (CBC)",
+      "category": "Hematology",
+      "status": "Sample Collected",
+      "sample_type": "Whole Blood EDTA / Serum",
+      "results": [
+        {
+          "parameter": "Hemoglobin",
+          "value": "13.8",
+          "unit": "g/dL",
+          "reference": "13.0 - 17.0",
+          "status": "Normal"
+        },
+        {
+          "parameter": "Total WBC Count",
+          "value": "7,800",
+          "unit": "/cumm",
+          "reference": "4,000 - 11,000",
+          "status": "Normal"
+        },
+        {
+          "parameter": "Platelet Count",
+          "value": "240,000",
+          "unit": "/cumm",
+          "reference": "150,000 - 450,000",
+          "status": "Normal"
+        },
+        {
+          "parameter": "RBC Count",
+          "value": "4.8",
+          "unit": "mil/cumm",
+          "reference": "4.5 - 5.5",
+          "status": "Normal"
+        },
+        {
+          "parameter": "ESR",
+          "value": "12",
+          "unit": "mm/1st hr",
+          "reference": "0 - 15",
+          "status": "Normal"
+        }
+      ],
+      "reported_by": "Dr. Ritu Saxena, MD (Pathology)",
+      "remarks": "Results clinically correlated with patient history.",
+      "is_active": true,
+      "created_at": "2026-11-01T13:40:56.653138"
+    },
+    {
+      "id": "INV-000002",
+      "order_no": "LAB2627/4002",
+      "patient_id": "UHID-1022",
+      "uhid": "UHID-1022",
+      "patient_name": "TestBanner",
+      "age": "30",
+      "gender": "Male",
+      "order_date": "2026-11-11",
+      "ordering_doctor": "Dr. NILESH MAHALE",
+      "test_name": "Lipid Profile",
+      "category": "Biochemistry",
+      "status": "Completed",
+      "sample_type": "Whole Blood EDTA / Serum",
+      "results": [
+        {
+          "parameter": "Total Cholesterol",
+          "value": "210",
+          "unit": "mg/dL",
+          "reference": "< 200",
+          "status": "High"
+        },
+        {
+          "parameter": "Triglycerides",
+          "value": "165",
+          "unit": "mg/dL",
+          "reference": "< 150",
+          "status": "High"
+        },
+        {
+          "parameter": "HDL Cholesterol",
+          "value": "42",
+          "unit": "mg/dL",
+          "reference": "> 40",
+          "status": "Normal"
+        },
+        {
+          "parameter": "LDL Cholesterol",
+          "value": "135",
+          "unit": "mg/dL",
+          "reference": "< 100",
+          "status": "High"
+        },
+        {
+          "parameter": "VLDL Cholesterol",
+          "value": "33",
+          "unit": "mg/dL",
+          "reference": "< 30",
+          "status": "High"
+        }
+      ],
+      "reported_by": "Dr. Ritu Saxena, MD (Pathology)",
+      "remarks": "Results clinically correlated with patient history.",
+      "is_active": true,
+      "created_at": "2026-11-08T05:40:56.653138"
+    },
+    {
+      "id": "INV-000003",
+      "order_no": "LAB2627/4003",
+      "patient_id": "UHID-1021",
+      "uhid": "UHID-1021",
+      "patient_name": "AutoTimer",
+      "age": "28",
+      "gender": "Male",
+      "order_date": "2026-11-03",
+      "ordering_doctor": "Dr. NILESH MAHALE",
+      "test_name": "Renal Function Test (RFT / KFT)",
+      "category": "Biochemistry",
+      "status": "Completed",
+      "sample_type": "Venous Blood",
+      "results": [
+        {
+          "parameter": "Blood Urea",
+          "value": "28",
+          "unit": "mg/dL",
+          "reference": "15 - 40",
+          "status": "Normal"
+        },
+        {
+          "parameter": "Serum Creatinine",
+          "value": "0.95",
+          "unit": "mg/dL",
+          "reference": "0.6 - 1.2",
+          "status": "Normal"
+        },
+        {
+          "parameter": "Serum Uric Acid",
+          "value": "5.4",
+          "unit": "mg/dL",
+          "reference": "3.5 - 7.2",
+          "status": "Normal"
+        },
+        {
+          "parameter": "Serum Sodium",
+          "value": "138",
+          "unit": "mEq/L",
+          "reference": "135 - 145",
+          "status": "Normal"
+        },
+        {
+          "parameter": "Serum Potassium",
+          "value": "4.2",
+          "unit": "mEq/L",
+          "reference": "3.5 - 5.0",
+          "status": "Normal"
+        }
+      ],
+      "reported_by": "Dr. Ritu Saxena, MD (Pathology)",
+      "remarks": "Results clinically correlated with patient history.",
+      "is_active": true,
+      "created_at": "2026-11-06T05:40:56.653138"
+    },
+    {
+      "id": "INV-000004",
+      "order_no": "LAB2627/4004",
+      "patient_id": "UHID-1020",
+      "uhid": "UHID-1020",
+      "patient_name": "AutoTimer",
+      "age": "28",
+      "gender": "Male",
+      "order_date": "2026-11-15",
+      "ordering_doctor": "Dr. NILESH MAHALE",
+      "test_name": "Liver Function Test (LFT)",
+      "category": "Biochemistry",
+      "status": "Completed",
+      "sample_type": "Venous Blood",
+      "results": [
+        {
+          "parameter": "Total Bilirubin",
+          "value": "0.8",
+          "unit": "mg/dL",
+          "reference": "0.2 - 1.2",
+          "status": "Normal"
+        },
+        {
+          "parameter": "Direct Bilirubin",
+          "value": "0.2",
+          "unit": "mg/dL",
+          "reference": "0.0 - 0.3",
+          "status": "Normal"
+        },
+        {
+          "parameter": "SGOT / AST",
+          "value": "26",
+          "unit": "U/L",
+          "reference": "< 40",
+          "status": "Normal"
+        },
+        {
+          "parameter": "SGPT / ALT",
+          "value": "31",
+          "unit": "U/L",
+          "reference": "< 45",
+          "status": "Normal"
+        },
+        {
+          "parameter": "Alkaline Phosphatase",
+          "value": "88",
+          "unit": "U/L",
+          "reference": "30 - 120",
+          "status": "Normal"
+        }
+      ],
+      "reported_by": "Dr. Ritu Saxena, MD (Pathology)",
+      "remarks": "Results clinically correlated with patient history.",
+      "is_active": true,
+      "created_at": "2026-11-11T06:40:56.653138"
+    },
+    {
+      "id": "INV-000005",
+      "order_no": "LAB2627/4005",
+      "patient_id": "UHID-1019",
+      "uhid": "UHID-1019",
+      "patient_name": "Nikhil Subhash Roy",
+      "age": "28",
+      "gender": "Other",
+      "order_date": "2026-11-11",
+      "ordering_doctor": "Dr. SHARMA",
+      "test_name": "Glycated Hemoglobin (HbA1c)",
+      "category": "Diabetes Panel",
+      "status": "Completed",
+      "sample_type": "Venous Blood",
+      "results": [
+        {
+          "parameter": "HbA1c",
+          "value": "6.8",
+          "unit": "%",
+          "reference": "< 5.7 (Normal), > 6.5 (Diabetic)",
+          "status": "High"
+        },
+        {
+          "parameter": "Estimated Average Glucose",
+          "value": "148",
+          "unit": "mg/dL",
+          "reference": "< 126",
+          "status": "High"
+        }
+      ],
+      "reported_by": "Dr. Ritu Saxena, MD (Pathology)",
+      "remarks": "Results clinically correlated with patient history.",
+      "is_active": true,
+      "created_at": "2026-11-06T08:40:56.653138"
+    },
+    {
+      "id": "INV-000006",
+      "order_no": "LAB2627/4006",
+      "patient_id": "UHID-1018",
+      "uhid": "UHID-1018",
+      "patient_name": "Ritu Devi Choudhury",
+      "age": "11",
+      "gender": "Female",
+      "order_date": "2026-11-11",
+      "ordering_doctor": "Dr. ASHOK PATEL",
+      "test_name": "Cardiac Troponin I (High Sensitive)",
+      "category": "Cardiology / Critical Care",
+      "status": "Completed",
+      "sample_type": "Venous Blood",
+      "results": [
+        {
+          "parameter": "hs-Troponin I",
+          "value": "0.012",
+          "unit": "ng/mL",
+          "reference": "< 0.040 (Negative)",
+          "status": "Normal"
+        }
+      ],
+      "reported_by": "Dr. Ritu Saxena, MD (Pathology)",
+      "remarks": "Results clinically correlated with patient history.",
+      "is_active": true,
+      "created_at": "2026-11-03T04:40:56.653138"
+    },
+    {
+      "id": "INV-000007",
+      "order_no": "LAB2627/4007",
+      "patient_id": "UHID-1017",
+      "uhid": "UHID-1017",
+      "patient_name": "Sanjay Mohan Saxena",
+      "age": "56",
+      "gender": "Male",
+      "order_date": "2026-11-11",
+      "ordering_doctor": "Dr. NILESH MAHALE",
+      "test_name": "Complete Blood Count (CBC)",
+      "category": "Hematology",
+      "status": "Sample Collected",
+      "sample_type": "Whole Blood EDTA / Serum",
+      "results": [
+        {
+          "parameter": "Hemoglobin",
+          "value": "13.8",
+          "unit": "g/dL",
+          "reference": "13.0 - 17.0",
+          "status": "Normal"
+        },
+        {
+          "parameter": "Total WBC Count",
+          "value": "7,800",
+          "unit": "/cumm",
+          "reference": "4,000 - 11,000",
+          "status": "Normal"
+        },
+        {
+          "parameter": "Platelet Count",
+          "value": "240,000",
+          "unit": "/cumm",
+          "reference": "150,000 - 450,000",
+          "status": "Normal"
+        },
+        {
+          "parameter": "RBC Count",
+          "value": "4.8",
+          "unit": "mil/cumm",
+          "reference": "4.5 - 5.5",
+          "status": "Normal"
+        },
+        {
+          "parameter": "ESR",
+          "value": "12",
+          "unit": "mm/1st hr",
+          "reference": "0 - 15",
+          "status": "Normal"
+        }
+      ],
+      "reported_by": "Dr. Ritu Saxena, MD (Pathology)",
+      "remarks": "Results clinically correlated with patient history.",
+      "is_active": true,
+      "created_at": "2026-11-12T06:40:56.653138"
+    },
+    {
+      "id": "INV-000008",
+      "order_no": "LAB2627/4008",
+      "patient_id": "UHID-1016",
+      "uhid": "UHID-1016",
+      "patient_name": "Kavita Srinivas Rao",
+      "age": "33",
+      "gender": "Female",
+      "order_date": "2026-11-13",
+      "ordering_doctor": "Dr. R. K. DESAI",
+      "test_name": "Lipid Profile",
+      "category": "Biochemistry",
+      "status": "Completed",
+      "sample_type": "Whole Blood EDTA / Serum",
+      "results": [
+        {
+          "parameter": "Total Cholesterol",
+          "value": "210",
+          "unit": "mg/dL",
+          "reference": "< 200",
+          "status": "High"
+        },
+        {
+          "parameter": "Triglycerides",
+          "value": "165",
+          "unit": "mg/dL",
+          "reference": "< 150",
+          "status": "High"
+        },
+        {
+          "parameter": "HDL Cholesterol",
+          "value": "42",
+          "unit": "mg/dL",
+          "reference": "> 40",
+          "status": "Normal"
+        },
+        {
+          "parameter": "LDL Cholesterol",
+          "value": "135",
+          "unit": "mg/dL",
+          "reference": "< 100",
+          "status": "High"
+        },
+        {
+          "parameter": "VLDL Cholesterol",
+          "value": "33",
+          "unit": "mg/dL",
+          "reference": "< 30",
+          "status": "High"
+        }
+      ],
+      "reported_by": "Dr. Ritu Saxena, MD (Pathology)",
+      "remarks": "Results clinically correlated with patient history.",
+      "is_active": true,
+      "created_at": "2026-11-11T06:40:56.653138"
+    },
+    {
+      "id": "INV-000009",
+      "order_no": "LAB2627/4009",
+      "patient_id": "UHID-1015",
+      "uhid": "UHID-1015",
+      "patient_name": "Manoj Dinanath Tiwari",
+      "age": "62",
+      "gender": "Male",
+      "order_date": "2026-11-09",
+      "ordering_doctor": "Dr. SHARMA",
+      "test_name": "Renal Function Test (RFT / KFT)",
+      "category": "Biochemistry",
+      "status": "Completed",
+      "sample_type": "Venous Blood",
+      "results": [
+        {
+          "parameter": "Blood Urea",
+          "value": "28",
+          "unit": "mg/dL",
+          "reference": "15 - 40",
+          "status": "Normal"
+        },
+        {
+          "parameter": "Serum Creatinine",
+          "value": "0.95",
+          "unit": "mg/dL",
+          "reference": "0.6 - 1.2",
+          "status": "Normal"
+        },
+        {
+          "parameter": "Serum Uric Acid",
+          "value": "5.4",
+          "unit": "mg/dL",
+          "reference": "3.5 - 7.2",
+          "status": "Normal"
+        },
+        {
+          "parameter": "Serum Sodium",
+          "value": "138",
+          "unit": "mEq/L",
+          "reference": "135 - 145",
+          "status": "Normal"
+        },
+        {
+          "parameter": "Serum Potassium",
+          "value": "4.2",
+          "unit": "mEq/L",
+          "reference": "3.5 - 5.0",
+          "status": "Normal"
+        }
+      ],
+      "reported_by": "Dr. Ritu Saxena, MD (Pathology)",
+      "remarks": "Results clinically correlated with patient history.",
+      "is_active": true,
+      "created_at": "2026-11-07T10:40:56.653138"
+    },
+    {
+      "id": "INV-000010",
+      "order_no": "LAB2627/4010",
+      "patient_id": "UHID-1014",
+      "uhid": "UHID-1014",
+      "patient_name": "Neha Kishore Chawla",
+      "age": "27",
+      "gender": "Female",
+      "order_date": "2026-11-08",
+      "ordering_doctor": "Dr. ASHOK PATEL",
+      "test_name": "Liver Function Test (LFT)",
+      "category": "Biochemistry",
+      "status": "Completed",
+      "sample_type": "Venous Blood",
+      "results": [
+        {
+          "parameter": "Total Bilirubin",
+          "value": "0.8",
+          "unit": "mg/dL",
+          "reference": "0.2 - 1.2",
+          "status": "Normal"
+        },
+        {
+          "parameter": "Direct Bilirubin",
+          "value": "0.2",
+          "unit": "mg/dL",
+          "reference": "0.0 - 0.3",
+          "status": "Normal"
+        },
+        {
+          "parameter": "SGOT / AST",
+          "value": "26",
+          "unit": "U/L",
+          "reference": "< 40",
+          "status": "Normal"
+        },
+        {
+          "parameter": "SGPT / ALT",
+          "value": "31",
+          "unit": "U/L",
+          "reference": "< 45",
+          "status": "Normal"
+        },
+        {
+          "parameter": "Alkaline Phosphatase",
+          "value": "88",
+          "unit": "U/L",
+          "reference": "30 - 120",
+          "status": "Normal"
+        }
+      ],
+      "reported_by": "Dr. Ritu Saxena, MD (Pathology)",
+      "remarks": "Results clinically correlated with patient history.",
+      "is_active": true,
+      "created_at": "2026-11-15T05:40:56.653138"
+    },
+    {
+      "id": "INV-000011",
+      "order_no": "LAB2627/4011",
+      "patient_id": "UHID-1013",
+      "uhid": "UHID-1013",
+      "patient_name": "Amit Rajendra Kumar",
+      "age": "40",
+      "gender": "Male",
+      "order_date": "2026-11-02",
+      "ordering_doctor": "Dr. NILESH MAHALE",
+      "test_name": "Glycated Hemoglobin (HbA1c)",
+      "category": "Diabetes Panel",
+      "status": "Completed",
+      "sample_type": "Venous Blood",
+      "results": [
+        {
+          "parameter": "HbA1c",
+          "value": "6.8",
+          "unit": "%",
+          "reference": "< 5.7 (Normal), > 6.5 (Diabetic)",
+          "status": "High"
+        },
+        {
+          "parameter": "Estimated Average Glucose",
+          "value": "148",
+          "unit": "mg/dL",
+          "reference": "< 126",
+          "status": "High"
+        }
+      ],
+      "reported_by": "Dr. Ritu Saxena, MD (Pathology)",
+      "remarks": "Results clinically correlated with patient history.",
+      "is_active": true,
+      "created_at": "2026-11-03T10:40:56.653138"
+    },
+    {
+      "id": "INV-000012",
+      "order_no": "LAB2627/4012",
+      "patient_id": "UHID-1012",
+      "uhid": "UHID-1012",
+      "patient_name": "Pooja Vinod Sharma",
+      "age": "31",
+      "gender": "Female",
+      "order_date": "2026-11-02",
+      "ordering_doctor": "Dr. R. K. DESAI",
+      "test_name": "Cardiac Troponin I (High Sensitive)",
+      "category": "Cardiology / Critical Care",
+      "status": "Completed",
+      "sample_type": "Venous Blood",
+      "results": [
+        {
+          "parameter": "hs-Troponin I",
+          "value": "0.012",
+          "unit": "ng/mL",
+          "reference": "< 0.040 (Negative)",
+          "status": "Normal"
+        }
+      ],
+      "reported_by": "Dr. Ritu Saxena, MD (Pathology)",
+      "remarks": "Results clinically correlated with patient history.",
+      "is_active": true,
+      "created_at": "2026-11-05T05:40:56.653138"
+    },
+    {
+      "id": "INV-000013",
+      "order_no": "LAB2627/4013",
+      "patient_id": "UHID-1011",
+      "uhid": "UHID-1011",
+      "patient_name": "Deepak Chand Gupta",
+      "age": "53",
+      "gender": "Male",
+      "order_date": "2026-11-15",
+      "ordering_doctor": "Dr. SHARMA",
+      "test_name": "Complete Blood Count (CBC)",
+      "category": "Hematology",
+      "status": "Sample Collected",
+      "sample_type": "Whole Blood EDTA / Serum",
+      "results": [
+        {
+          "parameter": "Hemoglobin",
+          "value": "13.8",
+          "unit": "g/dL",
+          "reference": "13.0 - 17.0",
+          "status": "Normal"
+        },
+        {
+          "parameter": "Total WBC Count",
+          "value": "7,800",
+          "unit": "/cumm",
+          "reference": "4,000 - 11,000",
+          "status": "Normal"
+        },
+        {
+          "parameter": "Platelet Count",
+          "value": "240,000",
+          "unit": "/cumm",
+          "reference": "150,000 - 450,000",
+          "status": "Normal"
+        },
+        {
+          "parameter": "RBC Count",
+          "value": "4.8",
+          "unit": "mil/cumm",
+          "reference": "4.5 - 5.5",
+          "status": "Normal"
+        },
+        {
+          "parameter": "ESR",
+          "value": "12",
+          "unit": "mm/1st hr",
+          "reference": "0 - 15",
+          "status": "Normal"
+        }
+      ],
+      "reported_by": "Dr. Ritu Saxena, MD (Pathology)",
+      "remarks": "Results clinically correlated with patient history.",
+      "is_active": true,
+      "created_at": "2026-11-06T04:40:56.653138"
+    },
+    {
+      "id": "INV-000014",
+      "order_no": "LAB2627/4014",
+      "patient_id": "UHID-1010",
+      "uhid": "UHID-1010",
+      "patient_name": "Meera Narayanan Nair",
+      "age": "26",
+      "gender": "Female",
+      "order_date": "2026-11-11",
+      "ordering_doctor": "Dr. ASHOK PATEL",
+      "test_name": "Lipid Profile",
+      "category": "Biochemistry",
+      "status": "Completed",
+      "sample_type": "Whole Blood EDTA / Serum",
+      "results": [
+        {
+          "parameter": "Total Cholesterol",
+          "value": "210",
+          "unit": "mg/dL",
+          "reference": "< 200",
+          "status": "High"
+        },
+        {
+          "parameter": "Triglycerides",
+          "value": "165",
+          "unit": "mg/dL",
+          "reference": "< 150",
+          "status": "High"
+        },
+        {
+          "parameter": "HDL Cholesterol",
+          "value": "42",
+          "unit": "mg/dL",
+          "reference": "> 40",
+          "status": "Normal"
+        },
+        {
+          "parameter": "LDL Cholesterol",
+          "value": "135",
+          "unit": "mg/dL",
+          "reference": "< 100",
+          "status": "High"
+        },
+        {
+          "parameter": "VLDL Cholesterol",
+          "value": "33",
+          "unit": "mg/dL",
+          "reference": "< 30",
+          "status": "High"
+        }
+      ],
+      "reported_by": "Dr. Ritu Saxena, MD (Pathology)",
+      "remarks": "Results clinically correlated with patient history.",
+      "is_active": true,
+      "created_at": "2026-11-11T05:40:56.653138"
+    },
+    {
+      "id": "INV-000015",
+      "order_no": "LAB2627/4015",
+      "patient_id": "UHID-1009",
+      "uhid": "UHID-1009",
+      "patient_name": "Rajesh Babu Verma",
+      "age": "48",
+      "gender": "Male",
+      "order_date": "2026-11-04",
+      "ordering_doctor": "Dr. NILESH MAHALE",
+      "test_name": "Renal Function Test (RFT / KFT)",
+      "category": "Biochemistry",
+      "status": "Completed",
+      "sample_type": "Venous Blood",
+      "results": [
+        {
+          "parameter": "Blood Urea",
+          "value": "28",
+          "unit": "mg/dL",
+          "reference": "15 - 40",
+          "status": "Normal"
+        },
+        {
+          "parameter": "Serum Creatinine",
+          "value": "0.95",
+          "unit": "mg/dL",
+          "reference": "0.6 - 1.2",
+          "status": "Normal"
+        },
+        {
+          "parameter": "Serum Uric Acid",
+          "value": "5.4",
+          "unit": "mg/dL",
+          "reference": "3.5 - 7.2",
+          "status": "Normal"
+        },
+        {
+          "parameter": "Serum Sodium",
+          "value": "138",
+          "unit": "mEq/L",
+          "reference": "135 - 145",
+          "status": "Normal"
+        },
+        {
+          "parameter": "Serum Potassium",
+          "value": "4.2",
+          "unit": "mEq/L",
+          "reference": "3.5 - 5.0",
+          "status": "Normal"
+        }
+      ],
+      "reported_by": "Dr. Ritu Saxena, MD (Pathology)",
+      "remarks": "Results clinically correlated with patient history.",
+      "is_active": true,
+      "created_at": "2026-11-10T12:40:56.653138"
+    },
+    {
+      "id": "INV-000016",
+      "order_no": "LAB2627/4016",
+      "patient_id": "UHID-1008",
+      "uhid": "UHID-1008",
+      "patient_name": "Sunita Prabhakar Joshi",
+      "age": "66",
+      "gender": "Female",
+      "order_date": "2026-11-05",
+      "ordering_doctor": "Dr. R. K. DESAI",
+      "test_name": "Liver Function Test (LFT)",
+      "category": "Biochemistry",
+      "status": "Completed",
+      "sample_type": "Venous Blood",
+      "results": [
+        {
+          "parameter": "Total Bilirubin",
+          "value": "0.8",
+          "unit": "mg/dL",
+          "reference": "0.2 - 1.2",
+          "status": "Normal"
+        },
+        {
+          "parameter": "Direct Bilirubin",
+          "value": "0.2",
+          "unit": "mg/dL",
+          "reference": "0.0 - 0.3",
+          "status": "Normal"
+        },
+        {
+          "parameter": "SGOT / AST",
+          "value": "26",
+          "unit": "U/L",
+          "reference": "< 40",
+          "status": "Normal"
+        },
+        {
+          "parameter": "SGPT / ALT",
+          "value": "31",
+          "unit": "U/L",
+          "reference": "< 45",
+          "status": "Normal"
+        },
+        {
+          "parameter": "Alkaline Phosphatase",
+          "value": "88",
+          "unit": "U/L",
+          "reference": "30 - 120",
+          "status": "Normal"
+        }
+      ],
+      "reported_by": "Dr. Ritu Saxena, MD (Pathology)",
+      "remarks": "Results clinically correlated with patient history.",
+      "is_active": true,
+      "created_at": "2026-11-07T11:40:56.653138"
+    },
+    {
+      "id": "INV-000017",
+      "order_no": "LAB2627/4017",
+      "patient_id": "UHID-1007",
+      "uhid": "UHID-1007",
+      "patient_name": "Arjun Venkatesh Reddy",
+      "age": "30",
+      "gender": "Male",
+      "order_date": "2026-11-02",
+      "ordering_doctor": "Dr. SHARMA",
+      "test_name": "Glycated Hemoglobin (HbA1c)",
+      "category": "Diabetes Panel",
+      "status": "Completed",
+      "sample_type": "Venous Blood",
+      "results": [
+        {
+          "parameter": "HbA1c",
+          "value": "6.8",
+          "unit": "%",
+          "reference": "< 5.7 (Normal), > 6.5 (Diabetic)",
+          "status": "High"
+        },
+        {
+          "parameter": "Estimated Average Glucose",
+          "value": "148",
+          "unit": "mg/dL",
+          "reference": "< 126",
+          "status": "High"
+        }
+      ],
+      "reported_by": "Dr. Ritu Saxena, MD (Pathology)",
+      "remarks": "Results clinically correlated with patient history.",
+      "is_active": true,
+      "created_at": "2026-11-01T07:40:56.653138"
+    },
+    {
+      "id": "INV-000018",
+      "order_no": "LAB2627/4018",
+      "patient_id": "UHID-1006",
+      "uhid": "UHID-1006",
+      "patient_name": "Sneha Ganesh Kulkarni",
+      "age": "38",
+      "gender": "Female",
+      "order_date": "2026-11-13",
+      "ordering_doctor": "Dr. ASHOK PATEL",
+      "test_name": "Cardiac Troponin I (High Sensitive)",
+      "category": "Cardiology / Critical Care",
+      "status": "Completed",
+      "sample_type": "Venous Blood",
+      "results": [
+        {
+          "parameter": "hs-Troponin I",
+          "value": "0.012",
+          "unit": "ng/mL",
+          "reference": "< 0.040 (Negative)",
+          "status": "Normal"
+        }
+      ],
+      "reported_by": "Dr. Ritu Saxena, MD (Pathology)",
+      "remarks": "Results clinically correlated with patient history.",
+      "is_active": true,
+      "created_at": "2026-11-06T10:40:56.653138"
+    },
+    {
+      "id": "INV-000019",
+      "order_no": "LAB2627/4019",
+      "patient_id": "UHID-1005",
+      "uhid": "UHID-1005",
+      "patient_name": "Vikram Pratap Malhotra",
+      "age": "58",
+      "gender": "Male",
+      "order_date": "2026-11-11",
+      "ordering_doctor": "Dr. NILESH MAHALE",
+      "test_name": "Complete Blood Count (CBC)",
+      "category": "Hematology",
+      "status": "Sample Collected",
+      "sample_type": "Whole Blood EDTA / Serum",
+      "results": [
+        {
+          "parameter": "Hemoglobin",
+          "value": "13.8",
+          "unit": "g/dL",
+          "reference": "13.0 - 17.0",
+          "status": "Normal"
+        },
+        {
+          "parameter": "Total WBC Count",
+          "value": "7,800",
+          "unit": "/cumm",
+          "reference": "4,000 - 11,000",
+          "status": "Normal"
+        },
+        {
+          "parameter": "Platelet Count",
+          "value": "240,000",
+          "unit": "/cumm",
+          "reference": "150,000 - 450,000",
+          "status": "Normal"
+        },
+        {
+          "parameter": "RBC Count",
+          "value": "4.8",
+          "unit": "mil/cumm",
+          "reference": "4.5 - 5.5",
+          "status": "Normal"
+        },
+        {
+          "parameter": "ESR",
+          "value": "12",
+          "unit": "mm/1st hr",
+          "reference": "0 - 15",
+          "status": "Normal"
+        }
+      ],
+      "reported_by": "Dr. Ritu Saxena, MD (Pathology)",
+      "remarks": "Results clinically correlated with patient history.",
+      "is_active": true,
+      "created_at": "2026-11-14T12:40:56.653138"
+    },
+    {
+      "id": "INV-000020",
+      "order_no": "LAB2627/4020",
+      "patient_id": "UHID-1004",
+      "uhid": "UHID-1004",
+      "patient_name": "Ananya Sundaram Iyer",
+      "age": "24",
+      "gender": "Female",
+      "order_date": "2026-11-07",
+      "ordering_doctor": "Dr. R. K. DESAI",
+      "test_name": "Lipid Profile",
+      "category": "Biochemistry",
+      "status": "Completed",
+      "sample_type": "Whole Blood EDTA / Serum",
+      "results": [
+        {
+          "parameter": "Total Cholesterol",
+          "value": "210",
+          "unit": "mg/dL",
+          "reference": "< 200",
+          "status": "High"
+        },
+        {
+          "parameter": "Triglycerides",
+          "value": "165",
+          "unit": "mg/dL",
+          "reference": "< 150",
+          "status": "High"
+        },
+        {
+          "parameter": "HDL Cholesterol",
+          "value": "42",
+          "unit": "mg/dL",
+          "reference": "> 40",
+          "status": "Normal"
+        },
+        {
+          "parameter": "LDL Cholesterol",
+          "value": "135",
+          "unit": "mg/dL",
+          "reference": "< 100",
+          "status": "High"
+        },
+        {
+          "parameter": "VLDL Cholesterol",
+          "value": "33",
+          "unit": "mg/dL",
+          "reference": "< 30",
+          "status": "High"
+        }
+      ],
+      "reported_by": "Dr. Ritu Saxena, MD (Pathology)",
+      "remarks": "Results clinically correlated with patient history.",
+      "is_active": true,
+      "created_at": "2026-11-07T07:40:56.653138"
+    },
+    {
+      "id": "INV-000021",
+      "order_no": "LAB2627/4021",
+      "patient_id": "UHID-1003",
+      "uhid": "UHID-1003",
+      "patient_name": "Rohan Suresh Desai",
+      "age": "45",
+      "gender": "Male",
+      "order_date": "2026-11-12",
+      "ordering_doctor": "Dr. SHARMA",
+      "test_name": "Renal Function Test (RFT / KFT)",
+      "category": "Biochemistry",
+      "status": "Completed",
+      "sample_type": "Venous Blood",
+      "results": [
+        {
+          "parameter": "Blood Urea",
+          "value": "28",
+          "unit": "mg/dL",
+          "reference": "15 - 40",
+          "status": "Normal"
+        },
+        {
+          "parameter": "Serum Creatinine",
+          "value": "0.95",
+          "unit": "mg/dL",
+          "reference": "0.6 - 1.2",
+          "status": "Normal"
+        },
+        {
+          "parameter": "Serum Uric Acid",
+          "value": "5.4",
+          "unit": "mg/dL",
+          "reference": "3.5 - 7.2",
+          "status": "Normal"
+        },
+        {
+          "parameter": "Serum Sodium",
+          "value": "138",
+          "unit": "mEq/L",
+          "reference": "135 - 145",
+          "status": "Normal"
+        },
+        {
+          "parameter": "Serum Potassium",
+          "value": "4.2",
+          "unit": "mEq/L",
+          "reference": "3.5 - 5.0",
+          "status": "Normal"
+        }
+      ],
+      "reported_by": "Dr. Ritu Saxena, MD (Pathology)",
+      "remarks": "Results clinically correlated with patient history.",
+      "is_active": true,
+      "created_at": "2026-11-15T08:40:56.653138"
+    },
+    {
+      "id": "INV-000022",
+      "order_no": "LAB2627/4022",
+      "patient_id": "UHID-1002",
+      "uhid": "UHID-1002",
+      "patient_name": "Priya Ramesh Shah",
+      "age": "29",
+      "gender": "Female",
+      "order_date": "2026-11-01",
+      "ordering_doctor": "Dr. ASHOK PATEL",
+      "test_name": "Liver Function Test (LFT)",
+      "category": "Biochemistry",
+      "status": "Completed",
+      "sample_type": "Venous Blood",
+      "results": [
+        {
+          "parameter": "Total Bilirubin",
+          "value": "0.8",
+          "unit": "mg/dL",
+          "reference": "0.2 - 1.2",
+          "status": "Normal"
+        },
+        {
+          "parameter": "Direct Bilirubin",
+          "value": "0.2",
+          "unit": "mg/dL",
+          "reference": "0.0 - 0.3",
+          "status": "Normal"
+        },
+        {
+          "parameter": "SGOT / AST",
+          "value": "26",
+          "unit": "U/L",
+          "reference": "< 40",
+          "status": "Normal"
+        },
+        {
+          "parameter": "SGPT / ALT",
+          "value": "31",
+          "unit": "U/L",
+          "reference": "< 45",
+          "status": "Normal"
+        },
+        {
+          "parameter": "Alkaline Phosphatase",
+          "value": "88",
+          "unit": "U/L",
+          "reference": "30 - 120",
+          "status": "Normal"
+        }
+      ],
+      "reported_by": "Dr. Ritu Saxena, MD (Pathology)",
+      "remarks": "Results clinically correlated with patient history.",
+      "is_active": true,
+      "created_at": "2026-11-04T05:40:56.653138"
+    },
+    {
+      "id": "INV-000023",
+      "order_no": "LAB2627/4023",
+      "patient_id": "UHID-1001",
+      "uhid": "UHID-1001",
+      "patient_name": "Aarav Kishore Patel",
+      "age": "32",
+      "gender": "Male",
+      "order_date": "2026-11-01",
+      "ordering_doctor": "Dr. NILESH MAHALE",
+      "test_name": "Glycated Hemoglobin (HbA1c)",
+      "category": "Diabetes Panel",
+      "status": "Completed",
+      "sample_type": "Venous Blood",
+      "results": [
+        {
+          "parameter": "HbA1c",
+          "value": "6.8",
+          "unit": "%",
+          "reference": "< 5.7 (Normal), > 6.5 (Diabetic)",
+          "status": "High"
+        },
+        {
+          "parameter": "Estimated Average Glucose",
+          "value": "148",
+          "unit": "mg/dL",
+          "reference": "< 126",
+          "status": "High"
+        }
+      ],
+      "reported_by": "Dr. Ritu Saxena, MD (Pathology)",
+      "remarks": "Results clinically correlated with patient history.",
+      "is_active": true,
+      "created_at": "2026-11-15T11:40:56.653138"
+    },
+    {
+      "id": "INV-000024",
+      "order_no": "LAB2627/4024",
+      "patient_id": "UHID-1024",
+      "uhid": "UHID-1024",
+      "patient_name": "Jayshree Rasik Radadiya",
+      "age": "59",
+      "gender": "Female",
+      "order_date": "2026-11-01",
+      "ordering_doctor": "Dr. ARVIND KEJRIWAL",
+      "test_name": "Cardiac Troponin I (High Sensitive)",
+      "category": "Cardiology / Critical Care",
+      "status": "Completed",
+      "sample_type": "Venous Blood",
+      "results": [
+        {
+          "parameter": "hs-Troponin I",
+          "value": "0.012",
+          "unit": "ng/mL",
+          "reference": "< 0.040 (Negative)",
+          "status": "Normal"
+        }
+      ],
+      "reported_by": "Dr. Ritu Saxena, MD (Pathology)",
+      "remarks": "Results clinically correlated with patient history.",
+      "is_active": true,
+      "created_at": "2026-11-14T11:40:56.653138"
+    },
+    {
+      "id": "INV-000025",
+      "order_no": "LAB2627/4025",
+      "patient_id": "UHID-1025",
+      "uhid": "UHID-1025",
+      "patient_name": "Chetan Mohan Savani",
+      "age": "36",
+      "gender": "Male",
+      "order_date": "2026-11-02",
+      "ordering_doctor": "Dr. NIKUNJ VITHALANI",
+      "test_name": "Complete Blood Count (CBC)",
+      "category": "Hematology",
+      "status": "Sample Collected",
+      "sample_type": "Whole Blood EDTA / Serum",
+      "results": [
+        {
+          "parameter": "Hemoglobin",
+          "value": "13.8",
+          "unit": "g/dL",
+          "reference": "13.0 - 17.0",
+          "status": "Normal"
+        },
+        {
+          "parameter": "Total WBC Count",
+          "value": "7,800",
+          "unit": "/cumm",
+          "reference": "4,000 - 11,000",
+          "status": "Normal"
+        },
+        {
+          "parameter": "Platelet Count",
+          "value": "240,000",
+          "unit": "/cumm",
+          "reference": "150,000 - 450,000",
+          "status": "Normal"
+        },
+        {
+          "parameter": "RBC Count",
+          "value": "4.8",
+          "unit": "mil/cumm",
+          "reference": "4.5 - 5.5",
+          "status": "Normal"
+        },
+        {
+          "parameter": "ESR",
+          "value": "12",
+          "unit": "mm/1st hr",
+          "reference": "0 - 15",
+          "status": "Normal"
+        }
+      ],
+      "reported_by": "Dr. Ritu Saxena, MD (Pathology)",
+      "remarks": "Results clinically correlated with patient history.",
+      "is_active": true,
+      "created_at": "2026-11-08T12:40:56.653138"
+    },
+    {
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "doctor_name": "Dr. Nilesh Mahale",
+      "test_name": "Serum Creatinine",
+      "category": "Biochemistry",
+      "sample_status": "Processing",
+      "lab_id": "LAB-201",
+      "id": "INV-000026",
+      "created_at": "2026-11-16T14:41:19+05:30",
+      "updated_at": "2026-11-16T14:41:19+05:30",
+      "is_active": true
+    },
+    {
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "doctor_name": "Dr. Nilesh Mahale",
+      "test_name": "Serum Creatinine",
+      "category": "Biochemistry",
+      "sample_status": "Processing",
+      "lab_id": "LAB-201",
+      "id": "INV-000027",
+      "created_at": "2026-11-16T16:21:25+05:30",
+      "updated_at": "2026-11-16T16:21:25+05:30",
+      "is_active": true
+    },
+    {
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "doctor_name": "Dr. Nilesh Mahale",
+      "test_name": "Serum Creatinine",
+      "category": "Biochemistry",
+      "sample_status": "Processing",
+      "lab_id": "LAB-201",
+      "id": "INV-000028",
+      "created_at": "2026-11-16T19:44:20+05:30",
+      "updated_at": "2026-11-16T19:44:20+05:30",
+      "is_active": true
+    },
+    {
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "doctor_name": "Dr. Nilesh Mahale",
+      "test_name": "Serum Creatinine",
+      "category": "Biochemistry",
+      "sample_status": "Processing",
+      "lab_id": "LAB-201",
+      "id": "INV-000029",
+      "created_at": "2026-11-16T19:56:00+05:30",
+      "updated_at": "2026-11-16T19:56:00+05:30",
+      "is_active": true
+    },
+    {
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "doctor_name": "Dr. Nilesh Mahale",
+      "test_name": "Serum Creatinine",
+      "category": "Biochemistry",
+      "sample_status": "Processing",
+      "lab_id": "LAB-201",
+      "id": "INV-000030",
+      "created_at": "2026-11-16T20:03:13+05:30",
+      "updated_at": "2026-11-16T20:03:13+05:30",
+      "is_active": true
+    },
+    {
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "doctor_name": "Dr. Nilesh Mahale",
+      "test_name": "Serum Creatinine",
+      "category": "Biochemistry",
+      "sample_status": "Processing",
+      "lab_id": "LAB-201",
+      "id": "INV-000031",
+      "created_at": "2026-11-16T20:06:40+05:30",
+      "updated_at": "2026-11-16T20:06:40+05:30",
+      "is_active": true
+    },
+    {
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "doctor_name": "Dr. Nilesh Mahale",
+      "test_name": "Serum Creatinine",
+      "category": "Biochemistry",
+      "sample_status": "Processing",
+      "lab_id": "LAB-201",
+      "id": "INV-000032",
+      "created_at": "2026-11-16T20:07:28+05:30",
+      "updated_at": "2026-11-16T20:07:28+05:30",
+      "is_active": true
+    },
+    {
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "doctor_name": "Dr. Nilesh Mahale",
+      "test_name": "Serum Creatinine",
+      "category": "Biochemistry",
+      "sample_status": "Processing",
+      "lab_id": "LAB-201",
+      "id": "INV-000033",
+      "created_at": "2026-11-16T20:15:28+05:30",
+      "updated_at": "2026-11-16T20:15:28+05:30",
+      "is_active": true
+    },
+    {
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "doctor_name": "Dr. Nilesh Mahale",
+      "test_name": "Serum Creatinine",
+      "category": "Biochemistry",
+      "sample_status": "Processing",
+      "lab_id": "LAB-201",
+      "id": "INV-000034",
+      "created_at": "2026-11-16T20:16:01+05:30",
+      "updated_at": "2026-11-16T20:16:01+05:30",
+      "is_active": true
+    },
+    {
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "doctor_name": "Dr. Nilesh Mahale",
+      "test_name": "Serum Creatinine",
+      "category": "Biochemistry",
+      "sample_status": "Processing",
+      "lab_id": "LAB-201",
+      "id": "INV-000035",
+      "created_at": "2026-11-16T20:23:34+05:30",
+      "updated_at": "2026-11-16T20:23:34+05:30",
+      "is_active": true
+    },
+    {
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "doctor_name": "Dr. Nilesh Mahale",
+      "test_name": "Serum Creatinine",
+      "category": "Biochemistry",
+      "sample_status": "Processing",
+      "lab_id": "LAB-201",
+      "id": "INV-000036",
+      "created_at": "2026-11-16T20:24:50+05:30",
+      "updated_at": "2026-11-16T20:24:50+05:30",
+      "is_active": true
+    },
+    {
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "doctor_name": "Dr. Nilesh Mahale",
+      "test_name": "Serum Creatinine",
+      "category": "Biochemistry",
+      "sample_status": "Processing",
+      "lab_id": "LAB-201",
+      "id": "INV-000037",
+      "created_at": "2026-11-16T20:27:45+05:30",
+      "updated_at": "2026-11-16T20:27:45+05:30",
+      "is_active": true
+    },
+    {
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "doctor_name": "Dr. Nilesh Mahale",
+      "test_name": "Serum Creatinine",
+      "category": "Biochemistry",
+      "sample_status": "Processing",
+      "lab_id": "LAB-201",
+      "id": "INV-000038",
+      "created_at": "2026-11-16T20:34:56+05:30",
+      "updated_at": "2026-11-16T20:34:56+05:30",
+      "is_active": true
+    },
+    {
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "doctor_name": "Dr. Nilesh Mahale",
+      "test_name": "Serum Creatinine",
+      "category": "Biochemistry",
+      "sample_status": "Processing",
+      "lab_id": "LAB-201",
+      "id": "INV-000039",
+      "created_at": "2026-11-16T20:39:23+05:30",
+      "updated_at": "2026-11-16T20:39:23+05:30",
+      "is_active": true
+    },
+    {
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "doctor_name": "Dr. Nilesh Mahale",
+      "test_name": "Serum Creatinine",
+      "category": "Biochemistry",
+      "sample_status": "Processing",
+      "lab_id": "LAB-201",
+      "id": "INV-000040",
+      "created_at": "2026-11-16T20:56:19+05:30",
+      "updated_at": "2026-11-16T20:56:19+05:30",
+      "is_active": true
+    },
+    {
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "doctor_name": "Dr. Nilesh Mahale",
+      "test_name": "Serum Creatinine",
+      "category": "Biochemistry",
+      "sample_status": "Processing",
+      "lab_id": "LAB-201",
+      "id": "INV-000041",
+      "created_at": "2026-11-16T21:36:29+05:30",
+      "updated_at": "2026-11-16T21:36:29+05:30",
+      "is_active": true
+    },
+    {
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "doctor_name": "Dr. Nilesh Mahale",
+      "test_name": "Serum Creatinine",
+      "category": "Biochemistry",
+      "sample_status": "Processing",
+      "lab_id": "LAB-201",
+      "id": "INV-000042",
+      "created_at": "2026-11-27T01:32:18+05:30",
+      "updated_at": "2026-11-27T01:32:18+05:30",
+      "is_active": true
+    },
+    {
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "doctor_name": "Dr. Nilesh Mahale",
+      "test_name": "Serum Creatinine",
+      "category": "Biochemistry",
+      "sample_status": "Processing",
+      "lab_id": "LAB-201",
+      "id": "INV-000043",
+      "created_at": "2026-11-27T01:52:07+05:30",
+      "updated_at": "2026-11-27T01:52:07+05:30",
+      "is_active": true
+    },
+    {
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "doctor_name": "Dr. Nilesh Mahale",
+      "test_name": "Serum Creatinine",
+      "category": "Biochemistry",
+      "sample_status": "Processing",
+      "lab_id": "LAB-201",
+      "id": "INV-000044",
+      "created_at": "2026-11-27T02:06:56+05:30",
+      "updated_at": "2026-11-27T02:06:56+05:30",
+      "is_active": true
+    }
+  ]
+}

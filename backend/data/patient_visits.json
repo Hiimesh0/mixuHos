@@ -1,0 +1,2002 @@
+{
+  "entity": "PatientVisit",
+  "last_sequence": 54,
+  "created_at": "2026-10-01T00:00:00+05:30",
+  "updated_at": "2026-11-27T02:06:56+05:30",
+  "visits": [
+    {
+      "id": "VST-000001",
+      "visit_no": "VST-2026-1001",
+      "patient_id": "UHID-1023",
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "doctor_name": "Dr. NILESH MAHALE",
+      "visit_date": "2026-10-25",
+      "visit_type": "Follow-up Visit",
+      "symptoms": "Headache, mild generalized body ache and fever since 2 days.",
+      "diagnosis": "Viral Pyrexia with upper respiratory tract infection",
+      "bp": "120/80",
+      "pulse": "72",
+      "temperature": "98.2",
+      "spo2": "98",
+      "weight": "58",
+      "height": "168",
+      "bmi": "24.5",
+      "prescriptions": [
+        {
+          "medicine": "Paracetamol 650 (Dolo)",
+          "dosage": "650mg",
+          "frequency": "1-0-1",
+          "days": "5",
+          "instructions": "After food"
+        },
+        {
+          "medicine": "Pantocid 40",
+          "dosage": "40mg",
+          "frequency": "1-0-0",
+          "days": "10",
+          "instructions": "Before breakfast"
+        },
+        {
+          "medicine": "Becosules Z Capsules",
+          "dosage": "Forte",
+          "frequency": "0-1-0",
+          "days": "15",
+          "instructions": "After lunch"
+        }
+      ],
+      "advice": "Drink 2.5-3 liters of clean boiled water daily. Maintain light salt diet. Review in OPD after 1 week.",
+      "is_active": true,
+      "created_at": "2026-10-25T09:40:56.653138",
+      "doctor_id": "DR-101"
+    },
+    {
+      "id": "VST-000002",
+      "visit_no": "VST-2026-1002",
+      "patient_id": "UHID-1022",
+      "uhid": "UHID-1022",
+      "patient_name": "TestBanner",
+      "doctor_name": "Dr. NILESH MAHALE",
+      "visit_date": "2026-10-04",
+      "visit_type": "OPD Consultation",
+      "symptoms": "Chest tightness on climbing stairs, relieved with rest.",
+      "diagnosis": "Essential Hypertension Stage 1 / Angina on exertion",
+      "bp": "130/84",
+      "pulse": "76",
+      "temperature": "98.4",
+      "spo2": "99",
+      "weight": "64",
+      "height": "168",
+      "bmi": "24.5",
+      "prescriptions": [
+        {
+          "medicine": "Paracetamol 650 (Dolo)",
+          "dosage": "650mg",
+          "frequency": "1-0-1",
+          "days": "5",
+          "instructions": "After food"
+        },
+        {
+          "medicine": "Pantocid 40",
+          "dosage": "40mg",
+          "frequency": "1-0-0",
+          "days": "10",
+          "instructions": "Before breakfast"
+        },
+        {
+          "medicine": "Becosules Z Capsules",
+          "dosage": "Forte",
+          "frequency": "0-1-0",
+          "days": "15",
+          "instructions": "After lunch"
+        }
+      ],
+      "advice": "Drink 2.5-3 liters of clean boiled water daily. Maintain light salt diet. Review in OPD after 1 week.",
+      "is_active": true,
+      "created_at": "2026-10-04T11:40:56.653138",
+      "doctor_id": "DR-101"
+    },
+    {
+      "id": "VST-000003",
+      "visit_no": "VST-2026-1003",
+      "patient_id": "UHID-1021",
+      "uhid": "UHID-1021",
+      "patient_name": "AutoTimer",
+      "doctor_name": "Dr. NILESH MAHALE",
+      "visit_date": "2026-11-14",
+      "visit_type": "OPD Consultation",
+      "symptoms": "Epigastric burning sensation after meals, sour eructations.",
+      "diagnosis": "Gastroesophageal Reflux Disease (GERD) with Dyspepsia",
+      "bp": "118/76",
+      "pulse": "80",
+      "temperature": "98.6",
+      "spo2": "97",
+      "weight": "70",
+      "height": "168",
+      "bmi": "24.5",
+      "prescriptions": [
+        {
+          "medicine": "Paracetamol 650 (Dolo)",
+          "dosage": "650mg",
+          "frequency": "1-0-1",
+          "days": "5",
+          "instructions": "After food"
+        },
+        {
+          "medicine": "Pantocid 40",
+          "dosage": "40mg",
+          "frequency": "1-0-0",
+          "days": "10",
+          "instructions": "Before breakfast"
+        },
+        {
+          "medicine": "Becosules Z Capsules",
+          "dosage": "Forte",
+          "frequency": "0-1-0",
+          "days": "15",
+          "instructions": "After lunch"
+        }
+      ],
+      "advice": "Drink 2.5-3 liters of clean boiled water daily. Maintain light salt diet. Review in OPD after 1 week.",
+      "is_active": true,
+      "created_at": "2026-11-14T13:40:56.653138",
+      "doctor_id": "DR-101"
+    },
+    {
+      "id": "VST-000004",
+      "visit_no": "VST-2026-1004",
+      "patient_id": "UHID-1020",
+      "uhid": "UHID-1020",
+      "patient_name": "AutoTimer",
+      "doctor_name": "Dr. NILESH MAHALE",
+      "visit_date": "2026-11-02",
+      "visit_type": "Follow-up Visit",
+      "symptoms": "Routine diabetic checkup, polyuria and fatigue.",
+      "diagnosis": "Type 2 Diabetes Mellitus - Inadequate Glycemic Control",
+      "bp": "140/90",
+      "pulse": "84",
+      "temperature": "99.1",
+      "spo2": "98",
+      "weight": "75",
+      "height": "168",
+      "bmi": "24.5",
+      "prescriptions": [
+        {
+          "medicine": "Paracetamol 650 (Dolo)",
+          "dosage": "650mg",
+          "frequency": "1-0-1",
+          "days": "5",
+          "instructions": "After food"
+        },
+        {
+          "medicine": "Pantocid 40",
+          "dosage": "40mg",
+          "frequency": "1-0-0",
+          "days": "10",
+          "instructions": "Before breakfast"
+        },
+        {
+          "medicine": "Becosules Z Capsules",
+          "dosage": "Forte",
+          "frequency": "0-1-0",
+          "days": "15",
+          "instructions": "After lunch"
+        }
+      ],
+      "advice": "Drink 2.5-3 liters of clean boiled water daily. Maintain light salt diet. Review in OPD after 1 week.",
+      "is_active": true,
+      "created_at": "2026-11-02T06:40:56.653138",
+      "doctor_id": "DR-101"
+    },
+    {
+      "id": "VST-000005",
+      "visit_no": "VST-2026-1005",
+      "patient_id": "UHID-1019",
+      "uhid": "UHID-1019",
+      "patient_name": "Nikhil Subhash Roy",
+      "doctor_name": "Dr. SHARMA",
+      "visit_date": "2026-10-03",
+      "visit_type": "OPD Consultation",
+      "symptoms": "Persistent dry cough, mild wheezing especially at night.",
+      "diagnosis": "Allergic Bronchitis / Cough Variant Asthma",
+      "bp": "124/82",
+      "pulse": "88",
+      "temperature": "98.0",
+      "spo2": "96",
+      "weight": "82",
+      "height": "168",
+      "bmi": "24.5",
+      "prescriptions": [
+        {
+          "medicine": "Paracetamol 650 (Dolo)",
+          "dosage": "650mg",
+          "frequency": "1-0-1",
+          "days": "5",
+          "instructions": "After food"
+        },
+        {
+          "medicine": "Pantocid 40",
+          "dosage": "40mg",
+          "frequency": "1-0-0",
+          "days": "10",
+          "instructions": "Before breakfast"
+        },
+        {
+          "medicine": "Becosules Z Capsules",
+          "dosage": "Forte",
+          "frequency": "0-1-0",
+          "days": "15",
+          "instructions": "After lunch"
+        }
+      ],
+      "advice": "Drink 2.5-3 liters of clean boiled water daily. Maintain light salt diet. Review in OPD after 1 week.",
+      "is_active": true,
+      "created_at": "2026-10-03T09:40:56.653138",
+      "doctor_id": null
+    },
+    {
+      "id": "VST-000006",
+      "visit_no": "VST-2026-1006",
+      "patient_id": "UHID-1018",
+      "uhid": "UHID-1018",
+      "patient_name": "Ritu Devi Choudhury",
+      "doctor_name": "Dr. ASHOK PATEL",
+      "visit_date": "2026-10-23",
+      "visit_type": "OPD Consultation",
+      "symptoms": "Right knee joint pain on prolonged standing and morning stiffness.",
+      "diagnosis": "Bilateral Osteoarthritis Knee (Grade 2)",
+      "bp": "110/70",
+      "pulse": "68",
+      "temperature": "99.4",
+      "spo2": "99",
+      "weight": "67",
+      "height": "168",
+      "bmi": "24.5",
+      "prescriptions": [
+        {
+          "medicine": "Paracetamol 650 (Dolo)",
+          "dosage": "650mg",
+          "frequency": "1-0-1",
+          "days": "5",
+          "instructions": "After food"
+        },
+        {
+          "medicine": "Pantocid 40",
+          "dosage": "40mg",
+          "frequency": "1-0-0",
+          "days": "10",
+          "instructions": "Before breakfast"
+        },
+        {
+          "medicine": "Becosules Z Capsules",
+          "dosage": "Forte",
+          "frequency": "0-1-0",
+          "days": "15",
+          "instructions": "After lunch"
+        }
+      ],
+      "advice": "Drink 2.5-3 liters of clean boiled water daily. Maintain light salt diet. Review in OPD after 1 week.",
+      "is_active": true,
+      "created_at": "2026-10-23T09:40:56.653138",
+      "doctor_id": null
+    },
+    {
+      "id": "VST-000007",
+      "visit_no": "VST-2026-1007",
+      "patient_id": "UHID-1017",
+      "uhid": "UHID-1017",
+      "patient_name": "Sanjay Mohan Saxena",
+      "doctor_name": "Dr. NILESH MAHALE",
+      "visit_date": "2026-10-20",
+      "visit_type": "Follow-up Visit",
+      "symptoms": "General weakness, loss of appetite, occasional giddiness.",
+      "diagnosis": "Iron Deficiency Anemia with Nutritional Deficiency",
+      "bp": "138/88",
+      "pulse": "74",
+      "temperature": "98.2",
+      "spo2": "98",
+      "weight": "72",
+      "height": "168",
+      "bmi": "24.5",
+      "prescriptions": [
+        {
+          "medicine": "Paracetamol 650 (Dolo)",
+          "dosage": "650mg",
+          "frequency": "1-0-1",
+          "days": "5",
+          "instructions": "After food"
+        },
+        {
+          "medicine": "Pantocid 40",
+          "dosage": "40mg",
+          "frequency": "1-0-0",
+          "days": "10",
+          "instructions": "Before breakfast"
+        },
+        {
+          "medicine": "Becosules Z Capsules",
+          "dosage": "Forte",
+          "frequency": "0-1-0",
+          "days": "15",
+          "instructions": "After lunch"
+        }
+      ],
+      "advice": "Drink 2.5-3 liters of clean boiled water daily. Maintain light salt diet. Review in OPD after 1 week.",
+      "is_active": true,
+      "created_at": "2026-10-20T08:40:56.653138",
+      "doctor_id": "DR-101"
+    },
+    {
+      "id": "VST-000008",
+      "visit_no": "VST-2026-1008",
+      "patient_id": "UHID-1016",
+      "uhid": "UHID-1016",
+      "patient_name": "Kavita Srinivas Rao",
+      "doctor_name": "Dr. R. K. DESAI",
+      "visit_date": "2026-10-21",
+      "visit_type": "OPD Consultation",
+      "symptoms": "Headache, mild generalized body ache and fever since 2 days.",
+      "diagnosis": "Viral Pyrexia with upper respiratory tract infection",
+      "bp": "120/80",
+      "pulse": "72",
+      "temperature": "98.4",
+      "spo2": "99",
+      "weight": "58",
+      "height": "168",
+      "bmi": "24.5",
+      "prescriptions": [
+        {
+          "medicine": "Paracetamol 650 (Dolo)",
+          "dosage": "650mg",
+          "frequency": "1-0-1",
+          "days": "5",
+          "instructions": "After food"
+        },
+        {
+          "medicine": "Pantocid 40",
+          "dosage": "40mg",
+          "frequency": "1-0-0",
+          "days": "10",
+          "instructions": "Before breakfast"
+        },
+        {
+          "medicine": "Becosules Z Capsules",
+          "dosage": "Forte",
+          "frequency": "0-1-0",
+          "days": "15",
+          "instructions": "After lunch"
+        }
+      ],
+      "advice": "Drink 2.5-3 liters of clean boiled water daily. Maintain light salt diet. Review in OPD after 1 week.",
+      "is_active": true,
+      "created_at": "2026-10-21T09:40:56.653138",
+      "doctor_id": null
+    },
+    {
+      "id": "VST-000009",
+      "visit_no": "VST-2026-1009",
+      "patient_id": "UHID-1015",
+      "uhid": "UHID-1015",
+      "patient_name": "Manoj Dinanath Tiwari",
+      "doctor_name": "Dr. SHARMA",
+      "visit_date": "2026-10-05",
+      "visit_type": "OPD Consultation",
+      "symptoms": "Chest tightness on climbing stairs, relieved with rest.",
+      "diagnosis": "Essential Hypertension Stage 1 / Angina on exertion",
+      "bp": "130/84",
+      "pulse": "76",
+      "temperature": "98.6",
+      "spo2": "97",
+      "weight": "64",
+      "height": "168",
+      "bmi": "24.5",
+      "prescriptions": [
+        {
+          "medicine": "Paracetamol 650 (Dolo)",
+          "dosage": "650mg",
+          "frequency": "1-0-1",
+          "days": "5",
+          "instructions": "After food"
+        },
+        {
+          "medicine": "Pantocid 40",
+          "dosage": "40mg",
+          "frequency": "1-0-0",
+          "days": "10",
+          "instructions": "Before breakfast"
+        },
+        {
+          "medicine": "Becosules Z Capsules",
+          "dosage": "Forte",
+          "frequency": "0-1-0",
+          "days": "15",
+          "instructions": "After lunch"
+        }
+      ],
+      "advice": "Drink 2.5-3 liters of clean boiled water daily. Maintain light salt diet. Review in OPD after 1 week.",
+      "is_active": true,
+      "created_at": "2026-10-05T13:40:56.653138",
+      "doctor_id": null
+    },
+    {
+      "id": "VST-000010",
+      "visit_no": "VST-2026-1010",
+      "patient_id": "UHID-1014",
+      "uhid": "UHID-1014",
+      "patient_name": "Neha Kishore Chawla",
+      "doctor_name": "Dr. ASHOK PATEL",
+      "visit_date": "2026-10-30",
+      "visit_type": "Follow-up Visit",
+      "symptoms": "Epigastric burning sensation after meals, sour eructations.",
+      "diagnosis": "Gastroesophageal Reflux Disease (GERD) with Dyspepsia",
+      "bp": "118/76",
+      "pulse": "80",
+      "temperature": "99.1",
+      "spo2": "98",
+      "weight": "70",
+      "height": "168",
+      "bmi": "24.5",
+      "prescriptions": [
+        {
+          "medicine": "Paracetamol 650 (Dolo)",
+          "dosage": "650mg",
+          "frequency": "1-0-1",
+          "days": "5",
+          "instructions": "After food"
+        },
+        {
+          "medicine": "Pantocid 40",
+          "dosage": "40mg",
+          "frequency": "1-0-0",
+          "days": "10",
+          "instructions": "Before breakfast"
+        },
+        {
+          "medicine": "Becosules Z Capsules",
+          "dosage": "Forte",
+          "frequency": "0-1-0",
+          "days": "15",
+          "instructions": "After lunch"
+        }
+      ],
+      "advice": "Drink 2.5-3 liters of clean boiled water daily. Maintain light salt diet. Review in OPD after 1 week.",
+      "is_active": true,
+      "created_at": "2026-10-30T06:40:56.653138",
+      "doctor_id": null
+    },
+    {
+      "id": "VST-000011",
+      "visit_no": "VST-2026-1011",
+      "patient_id": "UHID-1013",
+      "uhid": "UHID-1013",
+      "patient_name": "Amit Rajendra Kumar",
+      "doctor_name": "Dr. NILESH MAHALE",
+      "visit_date": "2026-10-31",
+      "visit_type": "OPD Consultation",
+      "symptoms": "Routine diabetic checkup, polyuria and fatigue.",
+      "diagnosis": "Type 2 Diabetes Mellitus - Inadequate Glycemic Control",
+      "bp": "140/90",
+      "pulse": "84",
+      "temperature": "98.0",
+      "spo2": "96",
+      "weight": "75",
+      "height": "168",
+      "bmi": "24.5",
+      "prescriptions": [
+        {
+          "medicine": "Paracetamol 650 (Dolo)",
+          "dosage": "650mg",
+          "frequency": "1-0-1",
+          "days": "5",
+          "instructions": "After food"
+        },
+        {
+          "medicine": "Pantocid 40",
+          "dosage": "40mg",
+          "frequency": "1-0-0",
+          "days": "10",
+          "instructions": "Before breakfast"
+        },
+        {
+          "medicine": "Becosules Z Capsules",
+          "dosage": "Forte",
+          "frequency": "0-1-0",
+          "days": "15",
+          "instructions": "After lunch"
+        }
+      ],
+      "advice": "Drink 2.5-3 liters of clean boiled water daily. Maintain light salt diet. Review in OPD after 1 week.",
+      "is_active": true,
+      "created_at": "2026-10-31T11:40:56.653138",
+      "doctor_id": "DR-101"
+    },
+    {
+      "id": "VST-000012",
+      "visit_no": "VST-2026-1012",
+      "patient_id": "UHID-1012",
+      "uhid": "UHID-1012",
+      "patient_name": "Pooja Vinod Sharma",
+      "doctor_name": "Dr. R. K. DESAI",
+      "visit_date": "2026-11-06",
+      "visit_type": "OPD Consultation",
+      "symptoms": "Persistent dry cough, mild wheezing especially at night.",
+      "diagnosis": "Allergic Bronchitis / Cough Variant Asthma",
+      "bp": "124/82",
+      "pulse": "88",
+      "temperature": "99.4",
+      "spo2": "99",
+      "weight": "82",
+      "height": "168",
+      "bmi": "24.5",
+      "prescriptions": [
+        {
+          "medicine": "Paracetamol 650 (Dolo)",
+          "dosage": "650mg",
+          "frequency": "1-0-1",
+          "days": "5",
+          "instructions": "After food"
+        },
+        {
+          "medicine": "Pantocid 40",
+          "dosage": "40mg",
+          "frequency": "1-0-0",
+          "days": "10",
+          "instructions": "Before breakfast"
+        },
+        {
+          "medicine": "Becosules Z Capsules",
+          "dosage": "Forte",
+          "frequency": "0-1-0",
+          "days": "15",
+          "instructions": "After lunch"
+        }
+      ],
+      "advice": "Drink 2.5-3 liters of clean boiled water daily. Maintain light salt diet. Review in OPD after 1 week.",
+      "is_active": true,
+      "created_at": "2026-11-06T12:40:56.653138",
+      "doctor_id": null
+    },
+    {
+      "id": "VST-000013",
+      "visit_no": "VST-2026-1013",
+      "patient_id": "UHID-1011",
+      "uhid": "UHID-1011",
+      "patient_name": "Deepak Chand Gupta",
+      "doctor_name": "Dr. SHARMA",
+      "visit_date": "2026-11-01",
+      "visit_type": "Follow-up Visit",
+      "symptoms": "Right knee joint pain on prolonged standing and morning stiffness.",
+      "diagnosis": "Bilateral Osteoarthritis Knee (Grade 2)",
+      "bp": "110/70",
+      "pulse": "68",
+      "temperature": "98.2",
+      "spo2": "98",
+      "weight": "67",
+      "height": "168",
+      "bmi": "24.5",
+      "prescriptions": [
+        {
+          "medicine": "Paracetamol 650 (Dolo)",
+          "dosage": "650mg",
+          "frequency": "1-0-1",
+          "days": "5",
+          "instructions": "After food"
+        },
+        {
+          "medicine": "Pantocid 40",
+          "dosage": "40mg",
+          "frequency": "1-0-0",
+          "days": "10",
+          "instructions": "Before breakfast"
+        },
+        {
+          "medicine": "Becosules Z Capsules",
+          "dosage": "Forte",
+          "frequency": "0-1-0",
+          "days": "15",
+          "instructions": "After lunch"
+        }
+      ],
+      "advice": "Drink 2.5-3 liters of clean boiled water daily. Maintain light salt diet. Review in OPD after 1 week.",
+      "is_active": true,
+      "created_at": "2026-11-01T10:40:56.653138",
+      "doctor_id": null
+    },
+    {
+      "id": "VST-000014",
+      "visit_no": "VST-2026-1014",
+      "patient_id": "UHID-1010",
+      "uhid": "UHID-1010",
+      "patient_name": "Meera Narayanan Nair",
+      "doctor_name": "Dr. ASHOK PATEL",
+      "visit_date": "2026-10-27",
+      "visit_type": "OPD Consultation",
+      "symptoms": "General weakness, loss of appetite, occasional giddiness.",
+      "diagnosis": "Iron Deficiency Anemia with Nutritional Deficiency",
+      "bp": "138/88",
+      "pulse": "74",
+      "temperature": "98.4",
+      "spo2": "99",
+      "weight": "72",
+      "height": "168",
+      "bmi": "24.5",
+      "prescriptions": [
+        {
+          "medicine": "Paracetamol 650 (Dolo)",
+          "dosage": "650mg",
+          "frequency": "1-0-1",
+          "days": "5",
+          "instructions": "After food"
+        },
+        {
+          "medicine": "Pantocid 40",
+          "dosage": "40mg",
+          "frequency": "1-0-0",
+          "days": "10",
+          "instructions": "Before breakfast"
+        },
+        {
+          "medicine": "Becosules Z Capsules",
+          "dosage": "Forte",
+          "frequency": "0-1-0",
+          "days": "15",
+          "instructions": "After lunch"
+        }
+      ],
+      "advice": "Drink 2.5-3 liters of clean boiled water daily. Maintain light salt diet. Review in OPD after 1 week.",
+      "is_active": true,
+      "created_at": "2026-10-27T13:40:56.653138",
+      "doctor_id": null
+    },
+    {
+      "id": "VST-000015",
+      "visit_no": "VST-2026-1015",
+      "patient_id": "UHID-1009",
+      "uhid": "UHID-1009",
+      "patient_name": "Rajesh Babu Verma",
+      "doctor_name": "Dr. NILESH MAHALE",
+      "visit_date": "2026-11-01",
+      "visit_type": "OPD Consultation",
+      "symptoms": "Headache, mild generalized body ache and fever since 2 days.",
+      "diagnosis": "Viral Pyrexia with upper respiratory tract infection",
+      "bp": "120/80",
+      "pulse": "72",
+      "temperature": "98.6",
+      "spo2": "97",
+      "weight": "58",
+      "height": "168",
+      "bmi": "24.5",
+      "prescriptions": [
+        {
+          "medicine": "Paracetamol 650 (Dolo)",
+          "dosage": "650mg",
+          "frequency": "1-0-1",
+          "days": "5",
+          "instructions": "After food"
+        },
+        {
+          "medicine": "Pantocid 40",
+          "dosage": "40mg",
+          "frequency": "1-0-0",
+          "days": "10",
+          "instructions": "Before breakfast"
+        },
+        {
+          "medicine": "Becosules Z Capsules",
+          "dosage": "Forte",
+          "frequency": "0-1-0",
+          "days": "15",
+          "instructions": "After lunch"
+        }
+      ],
+      "advice": "Drink 2.5-3 liters of clean boiled water daily. Maintain light salt diet. Review in OPD after 1 week.",
+      "is_active": true,
+      "created_at": "2026-11-01T07:40:56.653138",
+      "doctor_id": "DR-101"
+    },
+    {
+      "id": "VST-000016",
+      "visit_no": "VST-2026-1016",
+      "patient_id": "UHID-1008",
+      "uhid": "UHID-1008",
+      "patient_name": "Sunita Prabhakar Joshi",
+      "doctor_name": "Dr. R. K. DESAI",
+      "visit_date": "2026-10-23",
+      "visit_type": "Follow-up Visit",
+      "symptoms": "Chest tightness on climbing stairs, relieved with rest.",
+      "diagnosis": "Essential Hypertension Stage 1 / Angina on exertion",
+      "bp": "130/84",
+      "pulse": "76",
+      "temperature": "99.1",
+      "spo2": "98",
+      "weight": "64",
+      "height": "168",
+      "bmi": "24.5",
+      "prescriptions": [
+        {
+          "medicine": "Paracetamol 650 (Dolo)",
+          "dosage": "650mg",
+          "frequency": "1-0-1",
+          "days": "5",
+          "instructions": "After food"
+        },
+        {
+          "medicine": "Pantocid 40",
+          "dosage": "40mg",
+          "frequency": "1-0-0",
+          "days": "10",
+          "instructions": "Before breakfast"
+        },
+        {
+          "medicine": "Becosules Z Capsules",
+          "dosage": "Forte",
+          "frequency": "0-1-0",
+          "days": "15",
+          "instructions": "After lunch"
+        }
+      ],
+      "advice": "Drink 2.5-3 liters of clean boiled water daily. Maintain light salt diet. Review in OPD after 1 week.",
+      "is_active": true,
+      "created_at": "2026-10-23T07:40:56.653138",
+      "doctor_id": null
+    },
+    {
+      "id": "VST-000017",
+      "visit_no": "VST-2026-1017",
+      "patient_id": "UHID-1007",
+      "uhid": "UHID-1007",
+      "patient_name": "Arjun Venkatesh Reddy",
+      "doctor_name": "Dr. SHARMA",
+      "visit_date": "2026-10-08",
+      "visit_type": "OPD Consultation",
+      "symptoms": "Epigastric burning sensation after meals, sour eructations.",
+      "diagnosis": "Gastroesophageal Reflux Disease (GERD) with Dyspepsia",
+      "bp": "118/76",
+      "pulse": "80",
+      "temperature": "98.0",
+      "spo2": "96",
+      "weight": "70",
+      "height": "168",
+      "bmi": "24.5",
+      "prescriptions": [
+        {
+          "medicine": "Paracetamol 650 (Dolo)",
+          "dosage": "650mg",
+          "frequency": "1-0-1",
+          "days": "5",
+          "instructions": "After food"
+        },
+        {
+          "medicine": "Pantocid 40",
+          "dosage": "40mg",
+          "frequency": "1-0-0",
+          "days": "10",
+          "instructions": "Before breakfast"
+        },
+        {
+          "medicine": "Becosules Z Capsules",
+          "dosage": "Forte",
+          "frequency": "0-1-0",
+          "days": "15",
+          "instructions": "After lunch"
+        }
+      ],
+      "advice": "Drink 2.5-3 liters of clean boiled water daily. Maintain light salt diet. Review in OPD after 1 week.",
+      "is_active": true,
+      "created_at": "2026-10-08T10:40:56.653138",
+      "doctor_id": null
+    },
+    {
+      "id": "VST-000018",
+      "visit_no": "VST-2026-1018",
+      "patient_id": "UHID-1006",
+      "uhid": "UHID-1006",
+      "patient_name": "Sneha Ganesh Kulkarni",
+      "doctor_name": "Dr. ASHOK PATEL",
+      "visit_date": "2026-11-13",
+      "visit_type": "OPD Consultation",
+      "symptoms": "Routine diabetic checkup, polyuria and fatigue.",
+      "diagnosis": "Type 2 Diabetes Mellitus - Inadequate Glycemic Control",
+      "bp": "140/90",
+      "pulse": "84",
+      "temperature": "99.4",
+      "spo2": "99",
+      "weight": "75",
+      "height": "168",
+      "bmi": "24.5",
+      "prescriptions": [
+        {
+          "medicine": "Paracetamol 650 (Dolo)",
+          "dosage": "650mg",
+          "frequency": "1-0-1",
+          "days": "5",
+          "instructions": "After food"
+        },
+        {
+          "medicine": "Pantocid 40",
+          "dosage": "40mg",
+          "frequency": "1-0-0",
+          "days": "10",
+          "instructions": "Before breakfast"
+        },
+        {
+          "medicine": "Becosules Z Capsules",
+          "dosage": "Forte",
+          "frequency": "0-1-0",
+          "days": "15",
+          "instructions": "After lunch"
+        }
+      ],
+      "advice": "Drink 2.5-3 liters of clean boiled water daily. Maintain light salt diet. Review in OPD after 1 week.",
+      "is_active": true,
+      "created_at": "2026-11-13T06:40:56.653138",
+      "doctor_id": null
+    },
+    {
+      "id": "VST-000019",
+      "visit_no": "VST-2026-1019",
+      "patient_id": "UHID-1005",
+      "uhid": "UHID-1005",
+      "patient_name": "Vikram Pratap Malhotra",
+      "doctor_name": "Dr. NILESH MAHALE",
+      "visit_date": "2026-10-23",
+      "visit_type": "Follow-up Visit",
+      "symptoms": "Persistent dry cough, mild wheezing especially at night.",
+      "diagnosis": "Allergic Bronchitis / Cough Variant Asthma",
+      "bp": "124/82",
+      "pulse": "88",
+      "temperature": "98.2",
+      "spo2": "98",
+      "weight": "82",
+      "height": "168",
+      "bmi": "24.5",
+      "prescriptions": [
+        {
+          "medicine": "Paracetamol 650 (Dolo)",
+          "dosage": "650mg",
+          "frequency": "1-0-1",
+          "days": "5",
+          "instructions": "After food"
+        },
+        {
+          "medicine": "Pantocid 40",
+          "dosage": "40mg",
+          "frequency": "1-0-0",
+          "days": "10",
+          "instructions": "Before breakfast"
+        },
+        {
+          "medicine": "Becosules Z Capsules",
+          "dosage": "Forte",
+          "frequency": "0-1-0",
+          "days": "15",
+          "instructions": "After lunch"
+        }
+      ],
+      "advice": "Drink 2.5-3 liters of clean boiled water daily. Maintain light salt diet. Review in OPD after 1 week.",
+      "is_active": true,
+      "created_at": "2026-10-23T11:40:56.653138",
+      "doctor_id": "DR-101"
+    },
+    {
+      "id": "VST-000020",
+      "visit_no": "VST-2026-1020",
+      "patient_id": "UHID-1004",
+      "uhid": "UHID-1004",
+      "patient_name": "Ananya Sundaram Iyer",
+      "doctor_name": "Dr. R. K. DESAI",
+      "visit_date": "2026-11-16",
+      "visit_type": "OPD Consultation",
+      "symptoms": "Right knee joint pain on prolonged standing and morning stiffness.",
+      "diagnosis": "Bilateral Osteoarthritis Knee (Grade 2)",
+      "bp": "110/70",
+      "pulse": "68",
+      "temperature": "98.4",
+      "spo2": "99",
+      "weight": "67",
+      "height": "168",
+      "bmi": "24.5",
+      "prescriptions": [
+        {
+          "medicine": "Paracetamol 650 (Dolo)",
+          "dosage": "650mg",
+          "frequency": "1-0-1",
+          "days": "5",
+          "instructions": "After food"
+        },
+        {
+          "medicine": "Pantocid 40",
+          "dosage": "40mg",
+          "frequency": "1-0-0",
+          "days": "10",
+          "instructions": "Before breakfast"
+        },
+        {
+          "medicine": "Becosules Z Capsules",
+          "dosage": "Forte",
+          "frequency": "0-1-0",
+          "days": "15",
+          "instructions": "After lunch"
+        }
+      ],
+      "advice": "Drink 2.5-3 liters of clean boiled water daily. Maintain light salt diet. Review in OPD after 1 week.",
+      "is_active": true,
+      "created_at": "2026-11-16T09:40:56.653138",
+      "doctor_id": null
+    },
+    {
+      "id": "VST-000021",
+      "visit_no": "VST-2026-1021",
+      "patient_id": "UHID-1003",
+      "uhid": "UHID-1003",
+      "patient_name": "Rohan Suresh Desai",
+      "doctor_name": "Dr. SHARMA",
+      "visit_date": "2026-10-14",
+      "visit_type": "OPD Consultation",
+      "symptoms": "General weakness, loss of appetite, occasional giddiness.",
+      "diagnosis": "Iron Deficiency Anemia with Nutritional Deficiency",
+      "bp": "138/88",
+      "pulse": "74",
+      "temperature": "98.6",
+      "spo2": "97",
+      "weight": "72",
+      "height": "168",
+      "bmi": "24.5",
+      "prescriptions": [
+        {
+          "medicine": "Paracetamol 650 (Dolo)",
+          "dosage": "650mg",
+          "frequency": "1-0-1",
+          "days": "5",
+          "instructions": "After food"
+        },
+        {
+          "medicine": "Pantocid 40",
+          "dosage": "40mg",
+          "frequency": "1-0-0",
+          "days": "10",
+          "instructions": "Before breakfast"
+        },
+        {
+          "medicine": "Becosules Z Capsules",
+          "dosage": "Forte",
+          "frequency": "0-1-0",
+          "days": "15",
+          "instructions": "After lunch"
+        }
+      ],
+      "advice": "Drink 2.5-3 liters of clean boiled water daily. Maintain light salt diet. Review in OPD after 1 week.",
+      "is_active": true,
+      "created_at": "2026-10-14T07:40:56.653138",
+      "doctor_id": null
+    },
+    {
+      "id": "VST-000022",
+      "visit_no": "VST-2026-1022",
+      "patient_id": "UHID-1002",
+      "uhid": "UHID-1002",
+      "patient_name": "Priya Ramesh Shah",
+      "doctor_name": "Dr. ASHOK PATEL",
+      "visit_date": "2026-11-05",
+      "visit_type": "Follow-up Visit",
+      "symptoms": "Headache, mild generalized body ache and fever since 2 days.",
+      "diagnosis": "Viral Pyrexia with upper respiratory tract infection",
+      "bp": "120/80",
+      "pulse": "72",
+      "temperature": "99.1",
+      "spo2": "98",
+      "weight": "58",
+      "height": "168",
+      "bmi": "24.5",
+      "prescriptions": [
+        {
+          "medicine": "Paracetamol 650 (Dolo)",
+          "dosage": "650mg",
+          "frequency": "1-0-1",
+          "days": "5",
+          "instructions": "After food"
+        },
+        {
+          "medicine": "Pantocid 40",
+          "dosage": "40mg",
+          "frequency": "1-0-0",
+          "days": "10",
+          "instructions": "Before breakfast"
+        },
+        {
+          "medicine": "Becosules Z Capsules",
+          "dosage": "Forte",
+          "frequency": "0-1-0",
+          "days": "15",
+          "instructions": "After lunch"
+        }
+      ],
+      "advice": "Drink 2.5-3 liters of clean boiled water daily. Maintain light salt diet. Review in OPD after 1 week.",
+      "is_active": true,
+      "created_at": "2026-11-05T13:40:56.653138",
+      "doctor_id": null
+    },
+    {
+      "id": "VST-000023",
+      "visit_no": "VST-2026-1023",
+      "patient_id": "UHID-1001",
+      "uhid": "UHID-1001",
+      "patient_name": "Aarav Kishore Patel",
+      "doctor_name": "Dr. NILESH MAHALE",
+      "visit_date": "2026-10-05",
+      "visit_type": "OPD Consultation",
+      "symptoms": "Chest tightness on climbing stairs, relieved with rest.",
+      "diagnosis": "Essential Hypertension Stage 1 / Angina on exertion",
+      "bp": "130/84",
+      "pulse": "76",
+      "temperature": "98.0",
+      "spo2": "96",
+      "weight": "64",
+      "height": "168",
+      "bmi": "24.5",
+      "prescriptions": [
+        {
+          "medicine": "Paracetamol 650 (Dolo)",
+          "dosage": "650mg",
+          "frequency": "1-0-1",
+          "days": "5",
+          "instructions": "After food"
+        },
+        {
+          "medicine": "Pantocid 40",
+          "dosage": "40mg",
+          "frequency": "1-0-0",
+          "days": "10",
+          "instructions": "Before breakfast"
+        },
+        {
+          "medicine": "Becosules Z Capsules",
+          "dosage": "Forte",
+          "frequency": "0-1-0",
+          "days": "15",
+          "instructions": "After lunch"
+        }
+      ],
+      "advice": "Drink 2.5-3 liters of clean boiled water daily. Maintain light salt diet. Review in OPD after 1 week.",
+      "is_active": true,
+      "created_at": "2026-10-05T12:40:56.653138",
+      "doctor_id": "DR-101"
+    },
+    {
+      "id": "VST-000024",
+      "visit_no": "VST-2026-1024",
+      "patient_id": "UHID-1024",
+      "uhid": "UHID-1024",
+      "patient_name": "Jayshree Rasik Radadiya",
+      "doctor_name": "Dr. ARVIND KEJRIWAL",
+      "visit_date": "2026-11-02",
+      "visit_type": "OPD Consultation",
+      "symptoms": "Epigastric burning sensation after meals, sour eructations.",
+      "diagnosis": "Gastroesophageal Reflux Disease (GERD) with Dyspepsia",
+      "bp": "118/76",
+      "pulse": "80",
+      "temperature": "99.4",
+      "spo2": "99",
+      "weight": "70",
+      "height": "168",
+      "bmi": "24.5",
+      "prescriptions": [
+        {
+          "medicine": "Paracetamol 650 (Dolo)",
+          "dosage": "650mg",
+          "frequency": "1-0-1",
+          "days": "5",
+          "instructions": "After food"
+        },
+        {
+          "medicine": "Pantocid 40",
+          "dosage": "40mg",
+          "frequency": "1-0-0",
+          "days": "10",
+          "instructions": "Before breakfast"
+        },
+        {
+          "medicine": "Becosules Z Capsules",
+          "dosage": "Forte",
+          "frequency": "0-1-0",
+          "days": "15",
+          "instructions": "After lunch"
+        }
+      ],
+      "advice": "Drink 2.5-3 liters of clean boiled water daily. Maintain light salt diet. Review in OPD after 1 week.",
+      "is_active": true,
+      "created_at": "2026-11-02T13:40:56.653138",
+      "doctor_id": "DR-105"
+    },
+    {
+      "id": "VST-000025",
+      "visit_no": "VST-2026-1025",
+      "patient_id": "UHID-1025",
+      "uhid": "UHID-1025",
+      "patient_name": "Chetan Mohan Savani",
+      "doctor_name": "Dr. NIKUNJ VITHALANI",
+      "visit_date": "2026-10-18",
+      "visit_type": "Follow-up Visit",
+      "symptoms": "Routine diabetic checkup, polyuria and fatigue.",
+      "diagnosis": "Type 2 Diabetes Mellitus - Inadequate Glycemic Control",
+      "bp": "140/90",
+      "pulse": "84",
+      "temperature": "98.2",
+      "spo2": "98",
+      "weight": "75",
+      "height": "168",
+      "bmi": "24.5",
+      "prescriptions": [
+        {
+          "medicine": "Paracetamol 650 (Dolo)",
+          "dosage": "650mg",
+          "frequency": "1-0-1",
+          "days": "5",
+          "instructions": "After food"
+        },
+        {
+          "medicine": "Pantocid 40",
+          "dosage": "40mg",
+          "frequency": "1-0-0",
+          "days": "10",
+          "instructions": "Before breakfast"
+        },
+        {
+          "medicine": "Becosules Z Capsules",
+          "dosage": "Forte",
+          "frequency": "0-1-0",
+          "days": "15",
+          "instructions": "After lunch"
+        }
+      ],
+      "advice": "Drink 2.5-3 liters of clean boiled water daily. Maintain light salt diet. Review in OPD after 1 week.",
+      "is_active": true,
+      "created_at": "2026-10-18T12:40:56.653138",
+      "doctor_id": "DR-103"
+    },
+    {
+      "id": "VST-000026",
+      "visit_no": "VST-2026-1026",
+      "patient_id": "UHID-1026",
+      "uhid": "UHID-1026",
+      "patient_name": "Usha Vinod Sanghavi",
+      "doctor_name": "Dr. ARVIND KEJRIWAL",
+      "visit_date": "2026-10-09",
+      "visit_type": "OPD Consultation",
+      "symptoms": "Persistent dry cough, mild wheezing especially at night.",
+      "diagnosis": "Allergic Bronchitis / Cough Variant Asthma",
+      "bp": "124/82",
+      "pulse": "88",
+      "temperature": "98.4",
+      "spo2": "99",
+      "weight": "82",
+      "height": "168",
+      "bmi": "24.5",
+      "prescriptions": [
+        {
+          "medicine": "Paracetamol 650 (Dolo)",
+          "dosage": "650mg",
+          "frequency": "1-0-1",
+          "days": "5",
+          "instructions": "After food"
+        },
+        {
+          "medicine": "Pantocid 40",
+          "dosage": "40mg",
+          "frequency": "1-0-0",
+          "days": "10",
+          "instructions": "Before breakfast"
+        },
+        {
+          "medicine": "Becosules Z Capsules",
+          "dosage": "Forte",
+          "frequency": "0-1-0",
+          "days": "15",
+          "instructions": "After lunch"
+        }
+      ],
+      "advice": "Drink 2.5-3 liters of clean boiled water daily. Maintain light salt diet. Review in OPD after 1 week.",
+      "is_active": true,
+      "created_at": "2026-10-09T12:40:56.653138",
+      "doctor_id": "DR-105"
+    },
+    {
+      "id": "VST-000027",
+      "visit_no": "VST-2026-1027",
+      "patient_id": "UHID-1027",
+      "uhid": "UHID-1027",
+      "patient_name": "Paresh Gunvant Vaghani",
+      "doctor_name": "Dr. SNEHAL MAHALE",
+      "visit_date": "2026-10-16",
+      "visit_type": "OPD Consultation",
+      "symptoms": "Right knee joint pain on prolonged standing and morning stiffness.",
+      "diagnosis": "Bilateral Osteoarthritis Knee (Grade 2)",
+      "bp": "110/70",
+      "pulse": "68",
+      "temperature": "98.6",
+      "spo2": "97",
+      "weight": "67",
+      "height": "168",
+      "bmi": "24.5",
+      "prescriptions": [
+        {
+          "medicine": "Paracetamol 650 (Dolo)",
+          "dosage": "650mg",
+          "frequency": "1-0-1",
+          "days": "5",
+          "instructions": "After food"
+        },
+        {
+          "medicine": "Pantocid 40",
+          "dosage": "40mg",
+          "frequency": "1-0-0",
+          "days": "10",
+          "instructions": "Before breakfast"
+        },
+        {
+          "medicine": "Becosules Z Capsules",
+          "dosage": "Forte",
+          "frequency": "0-1-0",
+          "days": "15",
+          "instructions": "After lunch"
+        }
+      ],
+      "advice": "Drink 2.5-3 liters of clean boiled water daily. Maintain light salt diet. Review in OPD after 1 week.",
+      "is_active": true,
+      "created_at": "2026-10-16T13:40:56.653138",
+      "doctor_id": "DR-102"
+    },
+    {
+      "id": "VST-000028",
+      "visit_no": "VST-2026-1028",
+      "patient_id": "UHID-1028",
+      "uhid": "UHID-1028",
+      "patient_name": "Kokila Hasmukh Kathiriya",
+      "doctor_name": "Dr. DEVANG DESAI",
+      "visit_date": "2026-10-09",
+      "visit_type": "Follow-up Visit",
+      "symptoms": "General weakness, loss of appetite, occasional giddiness.",
+      "diagnosis": "Iron Deficiency Anemia with Nutritional Deficiency",
+      "bp": "138/88",
+      "pulse": "74",
+      "temperature": "99.1",
+      "spo2": "98",
+      "weight": "72",
+      "height": "168",
+      "bmi": "24.5",
+      "prescriptions": [
+        {
+          "medicine": "Paracetamol 650 (Dolo)",
+          "dosage": "650mg",
+          "frequency": "1-0-1",
+          "days": "5",
+          "instructions": "After food"
+        },
+        {
+          "medicine": "Pantocid 40",
+          "dosage": "40mg",
+          "frequency": "1-0-0",
+          "days": "10",
+          "instructions": "Before breakfast"
+        },
+        {
+          "medicine": "Becosules Z Capsules",
+          "dosage": "Forte",
+          "frequency": "0-1-0",
+          "days": "15",
+          "instructions": "After lunch"
+        }
+      ],
+      "advice": "Drink 2.5-3 liters of clean boiled water daily. Maintain light salt diet. Review in OPD after 1 week.",
+      "is_active": true,
+      "created_at": "2026-10-09T12:40:56.653138",
+      "doctor_id": "DR-104"
+    },
+    {
+      "id": "VST-000029",
+      "visit_no": "VST-2026-1029",
+      "patient_id": "UHID-1029",
+      "uhid": "UHID-1029",
+      "patient_name": "Bhavesh Narayan Kakadiya",
+      "doctor_name": "Dr. SHALINI REDDY",
+      "visit_date": "2026-11-09",
+      "visit_type": "OPD Consultation",
+      "symptoms": "Headache, mild generalized body ache and fever since 2 days.",
+      "diagnosis": "Viral Pyrexia with upper respiratory tract infection",
+      "bp": "120/80",
+      "pulse": "72",
+      "temperature": "98.0",
+      "spo2": "96",
+      "weight": "58",
+      "height": "168",
+      "bmi": "24.5",
+      "prescriptions": [
+        {
+          "medicine": "Paracetamol 650 (Dolo)",
+          "dosage": "650mg",
+          "frequency": "1-0-1",
+          "days": "5",
+          "instructions": "After food"
+        },
+        {
+          "medicine": "Pantocid 40",
+          "dosage": "40mg",
+          "frequency": "1-0-0",
+          "days": "10",
+          "instructions": "Before breakfast"
+        },
+        {
+          "medicine": "Becosules Z Capsules",
+          "dosage": "Forte",
+          "frequency": "0-1-0",
+          "days": "15",
+          "instructions": "After lunch"
+        }
+      ],
+      "advice": "Drink 2.5-3 liters of clean boiled water daily. Maintain light salt diet. Review in OPD after 1 week.",
+      "is_active": true,
+      "created_at": "2026-11-09T11:40:56.653138",
+      "doctor_id": "DR-106"
+    },
+    {
+      "id": "VST-000030",
+      "visit_no": "VST-2026-1030",
+      "patient_id": "UHID-1030",
+      "uhid": "UHID-1030",
+      "patient_name": "Dakshaben Popatlal Gondaliya",
+      "doctor_name": "Dr. DEVANG DESAI",
+      "visit_date": "2026-10-23",
+      "visit_type": "OPD Consultation",
+      "symptoms": "Chest tightness on climbing stairs, relieved with rest.",
+      "diagnosis": "Essential Hypertension Stage 1 / Angina on exertion",
+      "bp": "130/84",
+      "pulse": "76",
+      "temperature": "99.4",
+      "spo2": "99",
+      "weight": "64",
+      "height": "168",
+      "bmi": "24.5",
+      "prescriptions": [
+        {
+          "medicine": "Paracetamol 650 (Dolo)",
+          "dosage": "650mg",
+          "frequency": "1-0-1",
+          "days": "5",
+          "instructions": "After food"
+        },
+        {
+          "medicine": "Pantocid 40",
+          "dosage": "40mg",
+          "frequency": "1-0-0",
+          "days": "10",
+          "instructions": "Before breakfast"
+        },
+        {
+          "medicine": "Becosules Z Capsules",
+          "dosage": "Forte",
+          "frequency": "0-1-0",
+          "days": "15",
+          "instructions": "After lunch"
+        }
+      ],
+      "advice": "Drink 2.5-3 liters of clean boiled water daily. Maintain light salt diet. Review in OPD after 1 week.",
+      "is_active": true,
+      "created_at": "2026-10-23T06:40:56.653138",
+      "doctor_id": "DR-104"
+    },
+    {
+      "id": "VST-000031",
+      "visit_no": "VST-2026-1031",
+      "patient_id": "UHID-1031",
+      "uhid": "UHID-1031",
+      "patient_name": "Hitesh Maganbhai Moradiya",
+      "doctor_name": "Dr. SNEHAL MAHALE",
+      "visit_date": "2026-11-09",
+      "visit_type": "Follow-up Visit",
+      "symptoms": "Epigastric burning sensation after meals, sour eructations.",
+      "diagnosis": "Gastroesophageal Reflux Disease (GERD) with Dyspepsia",
+      "bp": "118/76",
+      "pulse": "80",
+      "temperature": "98.2",
+      "spo2": "98",
+      "weight": "70",
+      "height": "168",
+      "bmi": "24.5",
+      "prescriptions": [
+        {
+          "medicine": "Paracetamol 650 (Dolo)",
+          "dosage": "650mg",
+          "frequency": "1-0-1",
+          "days": "5",
+          "instructions": "After food"
+        },
+        {
+          "medicine": "Pantocid 40",
+          "dosage": "40mg",
+          "frequency": "1-0-0",
+          "days": "10",
+          "instructions": "Before breakfast"
+        },
+        {
+          "medicine": "Becosules Z Capsules",
+          "dosage": "Forte",
+          "frequency": "0-1-0",
+          "days": "15",
+          "instructions": "After lunch"
+        }
+      ],
+      "advice": "Drink 2.5-3 liters of clean boiled water daily. Maintain light salt diet. Review in OPD after 1 week.",
+      "is_active": true,
+      "created_at": "2026-11-09T07:40:56.653138",
+      "doctor_id": "DR-102"
+    },
+    {
+      "id": "VST-000032",
+      "visit_no": "VST-2026-1032",
+      "patient_id": "UHID-1032",
+      "uhid": "UHID-1032",
+      "patient_name": "Varsha Chhagan Golakiya",
+      "doctor_name": "Dr. SHALINI REDDY",
+      "visit_date": "2026-10-31",
+      "visit_type": "OPD Consultation",
+      "symptoms": "Routine diabetic checkup, polyuria and fatigue.",
+      "diagnosis": "Type 2 Diabetes Mellitus - Inadequate Glycemic Control",
+      "bp": "140/90",
+      "pulse": "84",
+      "temperature": "98.4",
+      "spo2": "99",
+      "weight": "75",
+      "height": "168",
+      "bmi": "24.5",
+      "prescriptions": [
+        {
+          "medicine": "Paracetamol 650 (Dolo)",
+          "dosage": "650mg",
+          "frequency": "1-0-1",
+          "days": "5",
+          "instructions": "After food"
+        },
+        {
+          "medicine": "Pantocid 40",
+          "dosage": "40mg",
+          "frequency": "1-0-0",
+          "days": "10",
+          "instructions": "Before breakfast"
+        },
+        {
+          "medicine": "Becosules Z Capsules",
+          "dosage": "Forte",
+          "frequency": "0-1-0",
+          "days": "15",
+          "instructions": "After lunch"
+        }
+      ],
+      "advice": "Drink 2.5-3 liters of clean boiled water daily. Maintain light salt diet. Review in OPD after 1 week.",
+      "is_active": true,
+      "created_at": "2026-10-31T12:40:56.653138",
+      "doctor_id": "DR-106"
+    },
+    {
+      "id": "VST-000033",
+      "visit_no": "VST-2026-1033",
+      "patient_id": "UHID-1033",
+      "uhid": "UHID-1033",
+      "patient_name": "Mayur Jethalal Kikani",
+      "doctor_name": "Dr. ARVIND KEJRIWAL",
+      "visit_date": "2026-10-27",
+      "visit_type": "OPD Consultation",
+      "symptoms": "Persistent dry cough, mild wheezing especially at night.",
+      "diagnosis": "Allergic Bronchitis / Cough Variant Asthma",
+      "bp": "124/82",
+      "pulse": "88",
+      "temperature": "98.6",
+      "spo2": "97",
+      "weight": "82",
+      "height": "168",
+      "bmi": "24.5",
+      "prescriptions": [
+        {
+          "medicine": "Paracetamol 650 (Dolo)",
+          "dosage": "650mg",
+          "frequency": "1-0-1",
+          "days": "5",
+          "instructions": "After food"
+        },
+        {
+          "medicine": "Pantocid 40",
+          "dosage": "40mg",
+          "frequency": "1-0-0",
+          "days": "10",
+          "instructions": "Before breakfast"
+        },
+        {
+          "medicine": "Becosules Z Capsules",
+          "dosage": "Forte",
+          "frequency": "0-1-0",
+          "days": "15",
+          "instructions": "After lunch"
+        }
+      ],
+      "advice": "Drink 2.5-3 liters of clean boiled water daily. Maintain light salt diet. Review in OPD after 1 week.",
+      "is_active": true,
+      "created_at": "2026-10-27T11:40:56.653138",
+      "doctor_id": "DR-105"
+    },
+    {
+      "id": "VST-000034",
+      "visit_no": "VST-2026-1034",
+      "patient_id": "UHID-1034",
+      "uhid": "UHID-1034",
+      "patient_name": "Ilaben Bachubhai Lathiya",
+      "doctor_name": "Dr. SHALINI REDDY",
+      "visit_date": "2026-10-27",
+      "visit_type": "Follow-up Visit",
+      "symptoms": "Right knee joint pain on prolonged standing and morning stiffness.",
+      "diagnosis": "Bilateral Osteoarthritis Knee (Grade 2)",
+      "bp": "110/70",
+      "pulse": "68",
+      "temperature": "99.1",
+      "spo2": "98",
+      "weight": "67",
+      "height": "168",
+      "bmi": "24.5",
+      "prescriptions": [
+        {
+          "medicine": "Paracetamol 650 (Dolo)",
+          "dosage": "650mg",
+          "frequency": "1-0-1",
+          "days": "5",
+          "instructions": "After food"
+        },
+        {
+          "medicine": "Pantocid 40",
+          "dosage": "40mg",
+          "frequency": "1-0-0",
+          "days": "10",
+          "instructions": "Before breakfast"
+        },
+        {
+          "medicine": "Becosules Z Capsules",
+          "dosage": "Forte",
+          "frequency": "0-1-0",
+          "days": "15",
+          "instructions": "After lunch"
+        }
+      ],
+      "advice": "Drink 2.5-3 liters of clean boiled water daily. Maintain light salt diet. Review in OPD after 1 week.",
+      "is_active": true,
+      "created_at": "2026-10-27T07:40:56.653138",
+      "doctor_id": "DR-106"
+    },
+    {
+      "id": "VST-000035",
+      "visit_no": "VST-2026-1035",
+      "patient_id": "UHID-1035",
+      "uhid": "UHID-1035",
+      "patient_name": "Girish Manilal Dudhat",
+      "doctor_name": "Dr. SNEHAL MAHALE",
+      "visit_date": "2026-10-29",
+      "visit_type": "OPD Consultation",
+      "symptoms": "General weakness, loss of appetite, occasional giddiness.",
+      "diagnosis": "Iron Deficiency Anemia with Nutritional Deficiency",
+      "bp": "138/88",
+      "pulse": "74",
+      "temperature": "98.0",
+      "spo2": "96",
+      "weight": "72",
+      "height": "168",
+      "bmi": "24.5",
+      "prescriptions": [
+        {
+          "medicine": "Paracetamol 650 (Dolo)",
+          "dosage": "650mg",
+          "frequency": "1-0-1",
+          "days": "5",
+          "instructions": "After food"
+        },
+        {
+          "medicine": "Pantocid 40",
+          "dosage": "40mg",
+          "frequency": "1-0-0",
+          "days": "10",
+          "instructions": "Before breakfast"
+        },
+        {
+          "medicine": "Becosules Z Capsules",
+          "dosage": "Forte",
+          "frequency": "0-1-0",
+          "days": "15",
+          "instructions": "After lunch"
+        }
+      ],
+      "advice": "Drink 2.5-3 liters of clean boiled water daily. Maintain light salt diet. Review in OPD after 1 week.",
+      "is_active": true,
+      "created_at": "2026-10-29T09:40:56.653138",
+      "doctor_id": "DR-102"
+    },
+    {
+      "patient_id": "UHID-1023",
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "visit_no": 2,
+      "visit_date": "2026-11-16T14:41:19+05:30",
+      "visit_type": "Follow-up Consultation",
+      "consulting_doctor": "Dr. Nilesh Mahale",
+      "chief_complaint": "Follow-up post fever, no active symptoms",
+      "vitals": {
+        "bp": "120/80",
+        "pulse": "72",
+        "temp": "98.2"
+      },
+      "status": "Completed",
+      "is_active": true,
+      "id": "VST-000036",
+      "created_at": "2026-11-16T14:41:19+05:30",
+      "updated_at": "2026-11-16T14:41:19+05:30",
+      "doctor_id": null
+    },
+    {
+      "patient_id": "UHID-1023",
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "visit_no": 3,
+      "visit_date": "2026-11-16T16:21:25+05:30",
+      "visit_type": "Follow-up Consultation",
+      "consulting_doctor": "Dr. Nilesh Mahale",
+      "chief_complaint": "Follow-up post fever, no active symptoms",
+      "vitals": {
+        "bp": "120/80",
+        "pulse": "72",
+        "temp": "98.2"
+      },
+      "status": "Completed",
+      "is_active": true,
+      "id": "VST-000037",
+      "created_at": "2026-11-16T16:21:25+05:30",
+      "updated_at": "2026-11-16T16:21:25+05:30",
+      "doctor_id": null
+    },
+    {
+      "patient_id": "UHID-1023",
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "visit_no": 4,
+      "visit_date": "2026-11-16T19:44:20+05:30",
+      "visit_type": "Follow-up Consultation",
+      "consulting_doctor": "Dr. Nilesh Mahale",
+      "chief_complaint": "Follow-up post fever, no active symptoms",
+      "vitals": {
+        "bp": "120/80",
+        "pulse": "72",
+        "temp": "98.2"
+      },
+      "status": "Completed",
+      "is_active": true,
+      "id": "VST-000038",
+      "created_at": "2026-11-16T19:44:20+05:30",
+      "updated_at": "2026-11-16T19:44:20+05:30",
+      "doctor_id": null
+    },
+    {
+      "patient_id": "UHID-1023",
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "visit_no": 5,
+      "visit_date": "2026-11-16T19:56:00+05:30",
+      "visit_type": "Follow-up Consultation",
+      "consulting_doctor": "Dr. Nilesh Mahale",
+      "chief_complaint": "Follow-up post fever, no active symptoms",
+      "vitals": {
+        "bp": "120/80",
+        "pulse": "72",
+        "temp": "98.2"
+      },
+      "status": "Completed",
+      "is_active": true,
+      "id": "VST-000039",
+      "created_at": "2026-11-16T19:56:00+05:30",
+      "updated_at": "2026-11-16T19:56:00+05:30",
+      "doctor_id": null
+    },
+    {
+      "patient_id": "UHID-1023",
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "visit_no": 6,
+      "visit_date": "2026-11-16T20:03:13+05:30",
+      "visit_type": "Follow-up Consultation",
+      "consulting_doctor": "Dr. Nilesh Mahale",
+      "chief_complaint": "Follow-up post fever, no active symptoms",
+      "vitals": {
+        "bp": "120/80",
+        "pulse": "72",
+        "temp": "98.2"
+      },
+      "status": "Completed",
+      "is_active": true,
+      "id": "VST-000040",
+      "created_at": "2026-11-16T20:03:13+05:30",
+      "updated_at": "2026-11-16T20:03:13+05:30"
+    },
+    {
+      "patient_id": "UHID-1023",
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "visit_no": 7,
+      "visit_date": "2026-11-16T20:06:40+05:30",
+      "visit_type": "Follow-up Consultation",
+      "consulting_doctor": "Dr. Nilesh Mahale",
+      "chief_complaint": "Follow-up post fever, no active symptoms",
+      "vitals": {
+        "bp": "120/80",
+        "pulse": "72",
+        "temp": "98.2"
+      },
+      "status": "Completed",
+      "is_active": true,
+      "id": "VST-000041",
+      "created_at": "2026-11-16T20:06:40+05:30",
+      "updated_at": "2026-11-16T20:06:40+05:30"
+    },
+    {
+      "patient_id": "UHID-1023",
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "visit_no": 8,
+      "visit_date": "2026-11-16T20:07:28+05:30",
+      "visit_type": "Follow-up Consultation",
+      "consulting_doctor": "Dr. Nilesh Mahale",
+      "chief_complaint": "Follow-up post fever, no active symptoms",
+      "vitals": {
+        "bp": "120/80",
+        "pulse": "72",
+        "temp": "98.2"
+      },
+      "status": "Completed",
+      "is_active": true,
+      "id": "VST-000042",
+      "created_at": "2026-11-16T20:07:28+05:30",
+      "updated_at": "2026-11-16T20:07:28+05:30"
+    },
+    {
+      "patient_id": "UHID-1023",
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "visit_no": 9,
+      "visit_date": "2026-11-16T20:15:28+05:30",
+      "visit_type": "Follow-up Consultation",
+      "consulting_doctor": "Dr. Nilesh Mahale",
+      "chief_complaint": "Follow-up post fever, no active symptoms",
+      "vitals": {
+        "bp": "120/80",
+        "pulse": "72",
+        "temp": "98.2"
+      },
+      "status": "Completed",
+      "is_active": true,
+      "id": "VST-000043",
+      "created_at": "2026-11-16T20:15:28+05:30",
+      "updated_at": "2026-11-16T20:15:28+05:30"
+    },
+    {
+      "patient_id": "UHID-1023",
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "visit_no": 10,
+      "visit_date": "2026-11-16T20:16:01+05:30",
+      "visit_type": "Follow-up Consultation",
+      "consulting_doctor": "Dr. Nilesh Mahale",
+      "chief_complaint": "Follow-up post fever, no active symptoms",
+      "vitals": {
+        "bp": "120/80",
+        "pulse": "72",
+        "temp": "98.2"
+      },
+      "status": "Completed",
+      "is_active": true,
+      "id": "VST-000044",
+      "created_at": "2026-11-16T20:16:01+05:30",
+      "updated_at": "2026-11-16T20:16:01+05:30"
+    },
+    {
+      "patient_id": "UHID-1023",
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "visit_no": 11,
+      "visit_date": "2026-11-16T20:23:34+05:30",
+      "visit_type": "Follow-up Consultation",
+      "consulting_doctor": "Dr. Nilesh Mahale",
+      "chief_complaint": "Follow-up post fever, no active symptoms",
+      "vitals": {
+        "bp": "120/80",
+        "pulse": "72",
+        "temp": "98.2"
+      },
+      "status": "Completed",
+      "is_active": true,
+      "id": "VST-000045",
+      "created_at": "2026-11-16T20:23:34+05:30",
+      "updated_at": "2026-11-16T20:23:34+05:30"
+    },
+    {
+      "patient_id": "UHID-1023",
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "visit_no": 12,
+      "visit_date": "2026-11-16T20:24:50+05:30",
+      "visit_type": "Follow-up Consultation",
+      "consulting_doctor": "Dr. Nilesh Mahale",
+      "chief_complaint": "Follow-up post fever, no active symptoms",
+      "vitals": {
+        "bp": "120/80",
+        "pulse": "72",
+        "temp": "98.2"
+      },
+      "status": "Completed",
+      "is_active": true,
+      "id": "VST-000046",
+      "created_at": "2026-11-16T20:24:50+05:30",
+      "updated_at": "2026-11-16T20:24:50+05:30"
+    },
+    {
+      "patient_id": "UHID-1023",
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "visit_no": 13,
+      "visit_date": "2026-11-16T20:27:45+05:30",
+      "visit_type": "Follow-up Consultation",
+      "consulting_doctor": "Dr. Nilesh Mahale",
+      "chief_complaint": "Follow-up post fever, no active symptoms",
+      "vitals": {
+        "bp": "120/80",
+        "pulse": "72",
+        "temp": "98.2"
+      },
+      "status": "Completed",
+      "is_active": true,
+      "id": "VST-000047",
+      "created_at": "2026-11-16T20:27:45+05:30",
+      "updated_at": "2026-11-16T20:27:45+05:30"
+    },
+    {
+      "patient_id": "UHID-1023",
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "visit_no": 14,
+      "visit_date": "2026-11-16T20:34:56+05:30",
+      "visit_type": "Follow-up Consultation",
+      "consulting_doctor": "Dr. Nilesh Mahale",
+      "chief_complaint": "Follow-up post fever, no active symptoms",
+      "vitals": {
+        "bp": "120/80",
+        "pulse": "72",
+        "temp": "98.2"
+      },
+      "status": "Completed",
+      "is_active": true,
+      "id": "VST-000048",
+      "created_at": "2026-11-16T20:34:56+05:30",
+      "updated_at": "2026-11-16T20:34:56+05:30"
+    },
+    {
+      "patient_id": "UHID-1023",
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "visit_no": 15,
+      "visit_date": "2026-11-16T20:39:24+05:30",
+      "visit_type": "Follow-up Consultation",
+      "consulting_doctor": "Dr. Nilesh Mahale",
+      "chief_complaint": "Follow-up post fever, no active symptoms",
+      "vitals": {
+        "bp": "120/80",
+        "pulse": "72",
+        "temp": "98.2"
+      },
+      "status": "Completed",
+      "is_active": true,
+      "id": "VST-000049",
+      "created_at": "2026-11-16T20:39:24+05:30",
+      "updated_at": "2026-11-16T20:39:24+05:30"
+    },
+    {
+      "patient_id": "UHID-1023",
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "visit_no": 16,
+      "visit_date": "2026-11-16T20:56:19+05:30",
+      "visit_type": "Follow-up Consultation",
+      "consulting_doctor": "Dr. Nilesh Mahale",
+      "chief_complaint": "Follow-up post fever, no active symptoms",
+      "vitals": {
+        "bp": "120/80",
+        "pulse": "72",
+        "temp": "98.2"
+      },
+      "status": "Completed",
+      "is_active": true,
+      "id": "VST-000050",
+      "created_at": "2026-11-16T20:56:19+05:30",
+      "updated_at": "2026-11-16T20:56:19+05:30"
+    },
+    {
+      "patient_id": "UHID-1023",
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "visit_no": 17,
+      "visit_date": "2026-11-16T21:36:29+05:30",
+      "visit_type": "Follow-up Consultation",
+      "consulting_doctor": "Dr. Nilesh Mahale",
+      "chief_complaint": "Follow-up post fever, no active symptoms",
+      "vitals": {
+        "bp": "120/80",
+        "pulse": "72",
+        "temp": "98.2"
+      },
+      "status": "Completed",
+      "is_active": true,
+      "id": "VST-000051",
+      "created_at": "2026-11-16T21:36:29+05:30",
+      "updated_at": "2026-11-16T21:36:29+05:30"
+    },
+    {
+      "patient_id": "UHID-1023",
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "visit_no": 18,
+      "visit_date": "2026-11-27T01:32:18+05:30",
+      "visit_type": "Follow-up Consultation",
+      "consulting_doctor": "Dr. Nilesh Mahale",
+      "chief_complaint": "Follow-up post fever, no active symptoms",
+      "vitals": {
+        "bp": "120/80",
+        "pulse": "72",
+        "temp": "98.2"
+      },
+      "status": "Completed",
+      "is_active": true,
+      "id": "VST-000052",
+      "created_at": "2026-11-27T01:32:18+05:30",
+      "updated_at": "2026-11-27T01:32:18+05:30"
+    },
+    {
+      "patient_id": "UHID-1023",
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "visit_no": 19,
+      "visit_date": "2026-11-27T01:52:07+05:30",
+      "visit_type": "Follow-up Consultation",
+      "consulting_doctor": "Dr. Nilesh Mahale",
+      "chief_complaint": "Follow-up post fever, no active symptoms",
+      "vitals": {
+        "bp": "120/80",
+        "pulse": "72",
+        "temp": "98.2"
+      },
+      "status": "Completed",
+      "is_active": true,
+      "id": "VST-000053",
+      "created_at": "2026-11-27T01:52:07+05:30",
+      "updated_at": "2026-11-27T01:52:07+05:30"
+    },
+    {
+      "patient_id": "UHID-1023",
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "visit_no": 20,
+      "visit_date": "2026-11-27T02:06:56+05:30",
+      "visit_type": "Follow-up Consultation",
+      "consulting_doctor": "Dr. Nilesh Mahale",
+      "chief_complaint": "Follow-up post fever, no active symptoms",
+      "vitals": {
+        "bp": "120/80",
+        "pulse": "72",
+        "temp": "98.2"
+      },
+      "status": "Completed",
+      "is_active": true,
+      "id": "VST-000054",
+      "created_at": "2026-11-27T02:06:56+05:30",
+      "updated_at": "2026-11-27T02:06:56+05:30"
+    }
+  ]
+}

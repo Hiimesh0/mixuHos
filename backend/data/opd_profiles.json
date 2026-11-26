@@ -1,0 +1,105 @@
+{
+  "entity": "opd_profiles",
+  "last_sequence": 5,
+  "created_at": "2026-11-16T20:00:00+05:30",
+  "updated_at": "2026-11-16T20:00:00+05:30",
+  "profiles": [
+    {
+      "id": "PRF-001",
+      "profileName": "Lipid Profile Comprehensive",
+      "group": "OPD-BCH",
+      "shortName": "LIPID",
+      "priority": 1,
+      "rate": 900,
+      "active": true,
+      "isBio": true,
+      "concernDr": false,
+      "testFor": "Both",
+      "subTests": [
+        { "id": "1", "group": "OPD-BCH", "testName": "Serum Total Cholesterol", "priority": 1 },
+        { "id": "2", "group": "OPD-BCH", "testName": "Serum Triglycerides", "priority": 2 },
+        { "id": "3", "group": "OPD-BCH", "testName": "Serum HDL Cholesterol (Good)", "priority": 3 },
+        { "id": "4", "group": "OPD-BCH", "testName": "Serum LDL Cholesterol (Bad)", "priority": 4 },
+        { "id": "5", "group": "OPD-BCH", "testName": "Serum VLDL Cholesterol", "priority": 5 },
+        { "id": "6", "group": "OPD-BCH", "testName": "Total Cholesterol / HDL Ratio", "priority": 6 }
+      ]
+    },
+    {
+      "id": "PRF-002",
+      "profileName": "Complete Blood Count (CBC) Profile",
+      "group": "OPD-HEM",
+      "shortName": "CBC",
+      "priority": 1,
+      "rate": 350,
+      "active": true,
+      "isBio": true,
+      "concernDr": false,
+      "testFor": "Both",
+      "subTests": [
+        { "id": "1", "group": "OPD-HEM", "testName": "Hemoglobin (Hb)", "priority": 1 },
+        { "id": "2", "group": "OPD-HEM", "testName": "Total RBC Count", "priority": 2 },
+        { "id": "3", "group": "OPD-HEM", "testName": "Total Leukocyte Count (TLC/WBC)", "priority": 3 },
+        { "id": "4", "group": "OPD-HEM", "testName": "Platelet Count", "priority": 4 },
+        { "id": "5", "group": "OPD-HEM", "testName": "Hematocrit (PCV)", "priority": 5 },
+        { "id": "6", "group": "OPD-HEM", "testName": "Erythrocyte Sedimentation Rate (ESR)", "priority": 6 }
+      ]
+    },
+    {
+      "id": "PRF-003",
+      "profileName": "Liver Function Test (LFT) Profile",
+      "group": "OPD-BCH",
+      "shortName": "LFT",
+      "priority": 2,
+      "rate": 800,
+      "active": true,
+      "isBio": true,
+      "concernDr": false,
+      "testFor": "Both",
+      "subTests": [
+        { "id": "1", "group": "OPD-BCH", "testName": "Serum Bilirubin Total", "priority": 1 },
+        { "id": "2", "group": "OPD-BCH", "testName": "Serum Bilirubin Direct", "priority": 2 },
+        { "id": "3", "group": "OPD-BCH", "testName": "Serum SGOT / AST", "priority": 3 },
+        { "id": "4", "group": "OPD-BCH", "testName": "Serum SGPT / ALT", "priority": 4 },
+        { "id": "5", "group": "OPD-BCH", "testName": "Serum Alkaline Phosphatase (ALP)", "priority": 5 },
+        { "id": "6", "group": "OPD-BCH", "testName": "Serum Total Proteins & Albumin", "priority": 6 }
+      ]
+    },
+    {
+      "id": "PRF-004",
+      "profileName": "Renal Function Profile (KFT)",
+      "group": "OPD-BCH",
+      "shortName": "KFT",
+      "priority": 2,
+      "rate": 750,
+      "active": true,
+      "isBio": true,
+      "concernDr": false,
+      "testFor": "Both",
+      "subTests": [
+        { "id": "1", "group": "OPD-BCH", "testName": "Blood Urea Nitrogen (BUN)", "priority": 1 },
+        { "id": "2", "group": "OPD-BCH", "testName": "Serum Creatinine", "priority": 2 },
+        { "id": "3", "group": "OPD-BCH", "testName": "Serum Uric Acid", "priority": 3 },
+        { "id": "4", "group": "OPD-BCH", "testName": "Serum Sodium & Potassium (Electrolytes)", "priority": 4 }
+      ]
+    },
+    {
+      "id": "PRF-005",
+      "profileName": "Comprehensive Diabetic Evaluation Panel",
+      "group": "OPD-BCH",
+      "shortName": "DIAB",
+      "priority": 3,
+      "rate": 1100,
+      "active": true,
+      "isBio": true,
+      "concernDr": false,
+      "testFor": "Both",
+      "subTests": [
+        { "id": "1", "group": "OPD-BCH", "testName": "Fasting Blood Sugar (FBS)", "priority": 1 },
+        { "id": "2", "group": "OPD-BCH", "testName": "Post Prandial Blood Sugar (PPBS)", "priority": 2 },
+        { "id": "3", "group": "OPD-BCH", "testName": "Glycated Hemoglobin (HbA1c)", "priority": 3 },
+        { "id": "4", "group": "OPD-BCH", "testName": "Urine Microalbumin / Creatinine Ratio", "priority": 4 }
+      ]
+    }
+  ]
+}
+

@@ -1,0 +1,147 @@
+{
+  "timestamp": "2026-11-16T14:42:32Z",
+  "scaling": {
+    "50": {
+      "file_size_kb": 16.5615234375,
+      "write_ms": 0.9711999446153641,
+      "avg_read_ms": 1.0505700134672225,
+      "search_ms": 0.0013349996879696846,
+      "avg_update_ms": 8.996860007755458
+    },
+    "500": {
+      "file_size_kb": 165.048828125,
+      "write_ms": 5.920000025071204,
+      "avg_read_ms": 1.762250007595867,
+      "search_ms": 0.009389000479131937,
+      "avg_update_ms": 20.9937599953264
+    },
+    "1000": {
+      "file_size_kb": 330.0888671875,
+      "write_ms": 10.92519995290786,
+      "avg_read_ms": 2.9918199870735407,
+      "search_ms": 0.019214999629184604,
+      "avg_update_ms": 30.025239987298846
+    },
+    "5000": {
+      "file_size_kb": 1654.3076171875,
+      "write_ms": 67.71339999977499,
+      "avg_read_ms": 12.88014001911506,
+      "search_ms": 0.10793900000862777,
+      "avg_update_ms": 113.28213999513537
+    }
+  },
+  "concurrency": {
+    "5": {
+      "workers": 5,
+      "total_ops": 25,
+      "success": 25,
+      "failures": 0,
+      "file_valid": true,
+      "total_items": 25,
+      "total_time_ms": 295.7606000127271,
+      "avg_lat_ms": 53.11420798767358,
+      "p95_lat_ms": 65.35829999484122
+    },
+    "10": {
+      "workers": 10,
+      "total_ops": 50,
+      "success": 50,
+      "failures": 0,
+      "file_valid": true,
+      "total_items": 40,
+      "total_time_ms": 657.6354000717402,
+      "avg_lat_ms": 119.98001399450004,
+      "p95_lat_ms": 145.65680001396686
+    },
+    "20": {
+      "workers": 20,
+      "total_ops": 100,
+      "success": 100,
+      "failures": 0,
+      "file_valid": true,
+      "total_items": 70,
+      "total_time_ms": 1279.2151999892667,
+      "avg_lat_ms": 230.47959099756554,
+      "p95_lat_ms": 288.60520001035184
+    }
+  },
+  "api": [
+    {
+      "name": "Patients List",
+      "url": "http://127.0.0.1:8000/api/patients/",
+      "avg_ms": 23.27977998647839,
+      "size_kb": 38.8984375,
+      "status": "200 OK"
+    },
+    {
+      "name": "Doctors List",
+      "url": "http://127.0.0.1:8000/api/doctors/",
+      "avg_ms": 21.035499963909388,
+      "size_kb": 6.3115234375,
+      "status": "200 OK"
+    },
+    {
+      "name": "Medicines List",
+      "url": "http://127.0.0.1:8000/api/medicines/",
+      "avg_ms": 18.892819993197918,
+      "size_kb": 10.234375,
+      "status": "200 OK"
+    },
+    {
+      "name": "Admissions List",
+      "url": "http://127.0.0.1:8000/api/admissions/",
+      "avg_ms": 18.4430000372231,
+      "size_kb": 11.376953125,
+      "status": "200 OK"
+    },
+    {
+      "name": "Beds Occupancy",
+      "url": "http://127.0.0.1:8000/api/beds/",
+      "avg_ms": 18.54859997984022,
+      "size_kb": 6.9150390625,
+      "status": "200 OK"
+    },
+    {
+      "name": "Discharge Cards",
+      "url": "http://127.0.0.1:8000/api/discharges/",
+      "avg_ms": 18.592279963195324,
+      "size_kb": 11.25390625,
+      "status": "200 OK"
+    },
+    {
+      "name": "Deposits & Ledger",
+      "url": "http://127.0.0.1:8000/api/deposits/",
+      "avg_ms": 18.80281998310238,
+      "size_kb": 6.9541015625,
+      "status": "200 OK"
+    },
+    {
+      "name": "OT Entries",
+      "url": "http://127.0.0.1:8000/api/ot-entries/",
+      "avg_ms": 18.73736004345119,
+      "size_kb": 7.75390625,
+      "status": "200 OK"
+    },
+    {
+      "name": "Investigations",
+      "url": "http://127.0.0.1:8000/api/investigations/",
+      "avg_ms": 18.744959984906018,
+      "size_kb": 22.7265625,
+      "status": "200 OK"
+    },
+    {
+      "name": "Echo Reports",
+      "url": "http://127.0.0.1:8000/api/echo-reports/",
+      "avg_ms": 15.588960004970431,
+      "size_kb": 14.3662109375,
+      "status": "200 OK"
+    },
+    {
+      "name": "Certificates",
+      "url": "http://127.0.0.1:8000/api/certificates/",
+      "avg_ms": 18.96187998354435,
+      "size_kb": 10.517578125,
+      "status": "200 OK"
+    }
+  ]
+}

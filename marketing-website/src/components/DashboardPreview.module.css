@@ -1,0 +1,304 @@
+.mockupShell {
+  background: #061024;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), var(--shadow-glow);
+}
+
+.mockupTitlebar {
+  background: #091733;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.windowControls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dotRed {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #ef4444;
+}
+
+.dotYellow {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #f59e0b;
+}
+
+.dotGreen {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #10b981;
+}
+
+.urlBar {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-full);
+  padding: 4px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--color-slate-400);
+  font-family: monospace;
+}
+
+.openLiveBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-teal-light);
+  background: rgba(13, 148, 136, 0.12);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(13, 148, 136, 0.3);
+  text-decoration: none;
+}
+
+.openLiveBadge:hover {
+  background: rgba(13, 148, 136, 0.25);
+}
+
+.mockupContent {
+  padding: 28px 24px;
+}
+
+.gaugeGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.gaugeCard {
+  background: rgba(17, 37, 78, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.gaugeIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.gaugeInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.gaugeVal {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.gaugeLabel {
+  font-size: 12px;
+  color: var(--color-slate-400);
+}
+
+.matrixSection {
+  background: rgba(11, 27, 61, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+}
+
+.matrixHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.matrixTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.matrixTitle h4 {
+  font-size: 16px;
+  color: #ffffff;
+}
+
+.wardFilterRow {
+  display: flex;
+  gap: 6px;
+}
+
+.wardFilterBtn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--color-slate-300);
+  padding: 5px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.wardActive {
+  background: var(--color-teal);
+  color: #ffffff;
+  border-color: var(--color-teal);
+}
+
+.bedGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.bedCard {
+  border-radius: var(--radius-md);
+  padding: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bedOccupied {
+  background: rgba(239, 68, 68, 0.08);
+  border-color: rgba(239, 68, 68, 0.25);
+}
+
+.bedVacant {
+  background: rgba(16, 185, 129, 0.08);
+  border-color: rgba(16, 185, 129, 0.25);
+}
+
+.bedCleaning {
+  background: rgba(245, 158, 11, 0.08);
+  border-color: rgba(245, 158, 11, 0.25);
+}
+
+.bedTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bedNumber {
+  font-weight: 700;
+  font-size: 14px;
+  color: #ffffff;
+}
+
+.bedStatusBadge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+}
+
+.bedOccupied .bedStatusBadge {
+  background: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+}
+
+.bedVacant .bedStatusBadge {
+  background: rgba(16, 185, 129, 0.2);
+  color: #6ee7b7;
+}
+
+.bedCleaning .bedStatusBadge {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fcd34d;
+}
+
+.bedPatient {
+  display: flex;
+  flex-direction: column;
+}
+
+.patientName {
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.patientUhid {
+  font-size: 11px;
+  color: var(--color-slate-400);
+}
+
+.bedEmpty {
+  font-size: 12px;
+  color: var(--color-slate-400);
+  font-style: italic;
+}
+
+.mockupFooter {
+  background: #091733;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 14px;
+  color: var(--color-slate-300);
+}
+
+.fullDemoBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+  color: #ffffff;
+  padding: 8px 18px;
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+@media (max-width: 992px) {
+  .gaugeGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .bedGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .gaugeGrid {
+    grid-template-columns: 1fr;
+  }
+  .bedGrid {
+    grid-template-columns: 1fr;
+  }
+  .mockupFooter {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+}

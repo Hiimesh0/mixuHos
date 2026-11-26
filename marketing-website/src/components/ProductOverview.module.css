@@ -1,0 +1,123 @@
+.pillarGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px;
+  margin-bottom: 48px;
+}
+
+.pillarCard {
+  padding: 36px 32px;
+  display: flex;
+  flex-direction: column;
+}
+
+.iconCircle {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-md);
+  background: rgba(13, 148, 136, 0.14);
+  border: 1px solid rgba(13, 148, 136, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 22px;
+}
+
+.pillarTitle {
+  font-size: 22px;
+  margin-bottom: 12px;
+  color: #ffffff;
+}
+
+.pillarDesc {
+  font-size: 15px;
+  color: var(--color-slate-300);
+  line-height: 1.6;
+  margin-bottom: 22px;
+}
+
+.pointList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 18px;
+}
+
+.pointItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--color-slate-200);
+}
+
+.checkIcon {
+  color: var(--color-mint);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.reliabilityBanner {
+  background: linear-gradient(135deg, rgba(13, 148, 136, 0.15) 0%, rgba(11, 27, 61, 0.7) 100%);
+  border: 1px solid rgba(13, 148, 136, 0.35);
+  border-radius: var(--radius-xl);
+  padding: 32px 40px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.bannerIcon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(16, 185, 129, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.bannerText {
+  flex: 1;
+}
+
+.bannerText h4 {
+  font-size: 18px;
+  color: #ffffff;
+  margin-bottom: 6px;
+}
+
+.bannerText p {
+  font-size: 14px;
+  color: var(--color-slate-300);
+  line-height: 1.5;
+}
+
+.bannerBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  font-size: 13px;
+  font-weight: 600;
+  color: #34d399;
+  white-space: nowrap;
+}
+
+@media (max-width: 992px) {
+  .pillarGrid {
+    grid-template-columns: 1fr;
+  }
+  .reliabilityBanner {
+    flex-direction: column;
+    text-align: center;
+    padding: 28px 20px;
+  }
+}
