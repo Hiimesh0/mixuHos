@@ -1,8 +1,8 @@
 {
   "entity": "Admission",
-  "last_sequence": 16,
+  "last_sequence": 32,
   "created_at": "2026-10-01T00:00:00+05:30",
-  "updated_at": "2026-11-16T14:40:56.653138",
+  "updated_at": "2026-11-16T21:36:28+05:30",
   "admissions": [
     {
       "id": "ADM-000001",
@@ -28,7 +28,10 @@
       "discharge_id": null,
       "discharge_date": null,
       "created_at": "2026-11-13T09:40:56.653138",
-      "updated_at": "2026-11-15T12:40:56.653138"
+      "updated_at": "2026-11-15T12:40:56.653138",
+      "admitting_doctor_id": "DR-101",
+      "doctor_id": "DR-101",
+      "reference_doctor_id": "DR-103"
     },
     {
       "id": "ADM-000002",
@@ -54,7 +57,10 @@
       "discharge_id": null,
       "discharge_date": null,
       "created_at": "2026-11-13T09:40:56.653138",
-      "updated_at": "2026-11-15T12:40:56.653138"
+      "updated_at": "2026-11-15T12:40:56.653138",
+      "admitting_doctor_id": "DR-101",
+      "doctor_id": "DR-101",
+      "reference_doctor_id": "DR-103"
     },
     {
       "id": "ADM-000003",
@@ -80,7 +86,10 @@
       "discharge_id": null,
       "discharge_date": null,
       "created_at": "2026-11-10T09:40:56.653138",
-      "updated_at": "2026-11-15T12:40:56.653138"
+      "updated_at": "2026-11-15T12:40:56.653138",
+      "admitting_doctor_id": "DR-101",
+      "doctor_id": "DR-101",
+      "reference_doctor_id": "DR-103"
     },
     {
       "id": "ADM-000004",
@@ -106,7 +115,10 @@
       "discharge_id": null,
       "discharge_date": null,
       "created_at": "2026-11-12T09:40:56.653138",
-      "updated_at": "2026-11-15T12:40:56.653138"
+      "updated_at": "2026-11-15T12:40:56.653138",
+      "admitting_doctor_id": "DR-101",
+      "doctor_id": "DR-101",
+      "reference_doctor_id": "DR-103"
     },
     {
       "id": "ADM-000005",
@@ -132,7 +144,10 @@
       "discharge_id": null,
       "discharge_date": null,
       "created_at": "2026-11-14T09:40:56.653138",
-      "updated_at": "2026-11-15T12:40:56.653138"
+      "updated_at": "2026-11-15T12:40:56.653138",
+      "admitting_doctor_id": null,
+      "doctor_id": null,
+      "reference_doctor_id": "DR-103"
     },
     {
       "id": "ADM-000006",
@@ -158,7 +173,10 @@
       "discharge_id": null,
       "discharge_date": null,
       "created_at": "2026-11-11T09:40:56.653138",
-      "updated_at": "2026-11-15T12:40:56.653138"
+      "updated_at": "2026-11-15T12:40:56.653138",
+      "admitting_doctor_id": null,
+      "doctor_id": null,
+      "reference_doctor_id": null
     },
     {
       "id": "ADM-000007",
@@ -184,7 +202,10 @@
       "discharge_id": null,
       "discharge_date": null,
       "created_at": "2026-11-10T09:40:56.653138",
-      "updated_at": "2026-11-15T12:40:56.653138"
+      "updated_at": "2026-11-15T12:40:56.653138",
+      "admitting_doctor_id": "DR-101",
+      "doctor_id": "DR-101",
+      "reference_doctor_id": null
     },
     {
       "id": "ADM-000008",
@@ -210,7 +231,10 @@
       "discharge_id": null,
       "discharge_date": null,
       "created_at": "2026-11-13T09:40:56.653138",
-      "updated_at": "2026-11-15T12:40:56.653138"
+      "updated_at": "2026-11-15T12:40:56.653138",
+      "admitting_doctor_id": null,
+      "doctor_id": null,
+      "reference_doctor_id": "DR-103"
     },
     {
       "id": "ADM-000009",
@@ -236,7 +260,10 @@
       "discharge_id": "DIS-000009",
       "discharge_date": "2026-11-07",
       "created_at": "2026-11-04T09:40:56.653138",
-      "updated_at": "2026-11-15T12:40:56.653138"
+      "updated_at": "2026-11-15T12:40:56.653138",
+      "admitting_doctor_id": null,
+      "doctor_id": null,
+      "reference_doctor_id": null
     },
     {
       "id": "ADM-000010",
@@ -262,7 +289,10 @@
       "discharge_id": "DIS-000010",
       "discharge_date": "2026-10-31",
       "created_at": "2026-10-29T09:40:56.653138",
-      "updated_at": "2026-11-15T12:40:56.653138"
+      "updated_at": "2026-11-15T12:40:56.653138",
+      "admitting_doctor_id": null,
+      "doctor_id": null,
+      "reference_doctor_id": null
     },
     {
       "id": "ADM-000011",
@@ -288,7 +318,10 @@
       "discharge_id": "DIS-000011",
       "discharge_date": "2026-11-08",
       "created_at": "2026-11-06T09:40:56.653138",
-      "updated_at": "2026-11-15T12:40:56.653138"
+      "updated_at": "2026-11-15T12:40:56.653138",
+      "admitting_doctor_id": "DR-101",
+      "doctor_id": "DR-101",
+      "reference_doctor_id": "DR-103"
     },
     {
       "id": "ADM-000012",
@@ -314,7 +347,10 @@
       "discharge_id": "DIS-000012",
       "discharge_date": "2026-11-01",
       "created_at": "2026-10-28T09:40:56.653138",
-      "updated_at": "2026-11-15T12:40:56.653138"
+      "updated_at": "2026-11-15T12:40:56.653138",
+      "admitting_doctor_id": null,
+      "doctor_id": null,
+      "reference_doctor_id": null
     },
     {
       "id": "ADM-000013",
@@ -340,7 +376,10 @@
       "discharge_id": "DIS-000013",
       "discharge_date": "2026-11-04",
       "created_at": "2026-11-01T09:40:56.653138",
-      "updated_at": "2026-11-15T12:40:56.653138"
+      "updated_at": "2026-11-15T12:40:56.653138",
+      "admitting_doctor_id": null,
+      "doctor_id": null,
+      "reference_doctor_id": null
     },
     {
       "id": "ADM-000014",
@@ -366,7 +405,10 @@
       "discharge_id": "DIS-000014",
       "discharge_date": "2026-11-11",
       "created_at": "2026-11-07T09:40:56.653138",
-      "updated_at": "2026-11-15T12:40:56.653138"
+      "updated_at": "2026-11-15T12:40:56.653138",
+      "admitting_doctor_id": null,
+      "doctor_id": null,
+      "reference_doctor_id": "DR-103"
     },
     {
       "id": "ADM-000015",
@@ -392,7 +434,10 @@
       "discharge_id": "DIS-000015",
       "discharge_date": "2026-11-12",
       "created_at": "2026-11-08T09:40:56.653138",
-      "updated_at": "2026-11-15T12:40:56.653138"
+      "updated_at": "2026-11-15T12:40:56.653138",
+      "admitting_doctor_id": "DR-101",
+      "doctor_id": "DR-101",
+      "reference_doctor_id": null
     },
     {
       "id": "ADM-000016",
@@ -418,7 +463,217 @@
       "discharge_id": "DIS-000016",
       "discharge_date": "2026-11-03",
       "created_at": "2026-10-30T09:40:56.653138",
-      "updated_at": "2026-11-15T12:40:56.653138"
+      "updated_at": "2026-11-15T12:40:56.653138",
+      "admitting_doctor_id": null,
+      "doctor_id": null,
+      "reference_doctor_id": null
+    },
+    {
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "age": "33",
+      "gender": "Male",
+      "bed_number": "SEMI-101",
+      "ward_name": "1st Floor East",
+      "room_type": "Semi-Private Room",
+      "admitting_doctor": "Dr. Nilesh Mahale",
+      "provisional_diagnosis": "Dengue Fever with thrombocytopenia",
+      "initial_deposit": 10000.0,
+      "ipd_no": "IPD-2026-0017",
+      "status": "Discharged",
+      "admission_date": "2026-11-16",
+      "admission_time": "14:41",
+      "id": "ADM-000017",
+      "created_at": "2026-11-16T14:41:19+05:30",
+      "updated_at": "2026-11-16T14:41:19+05:30",
+      "is_active": true,
+      "discharge_id": "DIS-000017",
+      "discharge_date": "2026-11-16",
+      "admitting_doctor_id": "DR-101",
+      "doctor_id": "DR-101",
+      "reference_doctor_id": null
+    },
+    {
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "age": "33",
+      "gender": "Male",
+      "bed_number": "SEMI-101",
+      "ward_name": "1st Floor East",
+      "room_type": "Semi-Private Room",
+      "admitting_doctor": "Dr. Nilesh Mahale",
+      "provisional_diagnosis": "Dengue Fever with thrombocytopenia",
+      "initial_deposit": 10000.0,
+      "ipd_no": "IPD-2026-0018",
+      "status": "Discharged",
+      "admission_date": "2026-11-16",
+      "admission_time": "16:21",
+      "id": "ADM-000018",
+      "created_at": "2026-11-16T16:21:25+05:30",
+      "updated_at": "2026-11-16T16:21:25+05:30",
+      "is_active": true,
+      "discharge_id": "DIS-000018",
+      "discharge_date": "2026-11-16",
+      "admitting_doctor_id": "DR-101",
+      "doctor_id": "DR-101",
+      "reference_doctor_id": null
+    },
+    {
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "age": "33",
+      "gender": "Male",
+      "bed_number": "SEMI-101",
+      "ward_name": "1st Floor East",
+      "room_type": "Semi-Private Room",
+      "admitting_doctor": "Dr. Nilesh Mahale",
+      "provisional_diagnosis": "Dengue Fever with thrombocytopenia",
+      "initial_deposit": 10000.0,
+      "ipd_no": "IPD-2026-0019",
+      "status": "Discharged",
+      "admission_date": "2026-11-16",
+      "admission_time": "19:44",
+      "id": "ADM-000019",
+      "created_at": "2026-11-16T19:44:20+05:30",
+      "updated_at": "2026-11-16T19:44:20+05:30",
+      "is_active": true,
+      "discharge_id": "DIS-000019",
+      "discharge_date": "2026-11-16",
+      "admitting_doctor_id": "DR-101",
+      "doctor_id": "DR-101",
+      "reference_doctor_id": null
+    },
+    {
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "age": "33",
+      "gender": "Male",
+      "bed_number": "SEMI-102",
+      "ward_name": "1st Floor East",
+      "room_type": "Semi-Private Room",
+      "admitting_doctor": "Dr. Nilesh Mahale",
+      "provisional_diagnosis": "Dengue Fever with thrombocytopenia",
+      "initial_deposit": 10000.0,
+      "ipd_no": "IPD-2026-0020",
+      "status": "Discharged",
+      "admission_date": "2026-11-16",
+      "admission_time": "20:24",
+      "id": "ADM-000027",
+      "created_at": "2026-11-16T20:24:49+05:30",
+      "updated_at": "2026-11-16T20:24:49+05:30",
+      "is_active": true,
+      "discharge_id": "DIS-000026",
+      "discharge_date": "2026-11-16"
+    },
+    {
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "age": "33",
+      "gender": "Male",
+      "bed_number": "SEMI-102",
+      "ward_name": "1st Floor East",
+      "room_type": "Semi-Private Room",
+      "admitting_doctor": "Dr. Nilesh Mahale",
+      "provisional_diagnosis": "Dengue Fever with thrombocytopenia",
+      "initial_deposit": 10000.0,
+      "ipd_no": "IPD-2026-0021",
+      "status": "Discharged",
+      "admission_date": "2026-11-16",
+      "admission_time": "20:27",
+      "id": "ADM-000028",
+      "created_at": "2026-11-16T20:27:45+05:30",
+      "updated_at": "2026-11-16T20:27:45+05:30",
+      "is_active": true,
+      "discharge_id": "DIS-000027",
+      "discharge_date": "2026-11-16"
+    },
+    {
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "age": "33",
+      "gender": "Male",
+      "bed_number": "SEMI-102",
+      "ward_name": "1st Floor East",
+      "room_type": "Semi-Private Room",
+      "admitting_doctor": "Dr. Nilesh Mahale",
+      "provisional_diagnosis": "Dengue Fever with thrombocytopenia",
+      "initial_deposit": 10000.0,
+      "ipd_no": "IPD-2026-0022",
+      "status": "Discharged",
+      "admission_date": "2026-11-16",
+      "admission_time": "20:34",
+      "id": "ADM-000029",
+      "created_at": "2026-11-16T20:34:56+05:30",
+      "updated_at": "2026-11-16T20:34:56+05:30",
+      "is_active": true,
+      "discharge_id": "DIS-000028",
+      "discharge_date": "2026-11-16"
+    },
+    {
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "age": "33",
+      "gender": "Male",
+      "bed_number": "SEMI-102",
+      "ward_name": "1st Floor East",
+      "room_type": "Semi-Private Room",
+      "admitting_doctor": "Dr. Nilesh Mahale",
+      "provisional_diagnosis": "Dengue Fever with thrombocytopenia",
+      "initial_deposit": 10000.0,
+      "ipd_no": "IPD-2026-0023",
+      "status": "Discharged",
+      "admission_date": "2026-11-16",
+      "admission_time": "20:39",
+      "id": "ADM-000030",
+      "created_at": "2026-11-16T20:39:23+05:30",
+      "updated_at": "2026-11-16T20:39:23+05:30",
+      "is_active": true,
+      "discharge_id": "DIS-000029",
+      "discharge_date": "2026-11-16"
+    },
+    {
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "age": "33",
+      "gender": "Male",
+      "bed_number": "SEMI-102",
+      "ward_name": "1st Floor East",
+      "room_type": "Semi-Private Room",
+      "admitting_doctor": "Dr. Nilesh Mahale",
+      "provisional_diagnosis": "Dengue Fever with thrombocytopenia",
+      "initial_deposit": 10000.0,
+      "ipd_no": "IPD-2026-0024",
+      "status": "Discharged",
+      "admission_date": "2026-11-16",
+      "admission_time": "20:56",
+      "id": "ADM-000031",
+      "created_at": "2026-11-16T20:56:19+05:30",
+      "updated_at": "2026-11-16T20:56:19+05:30",
+      "is_active": true,
+      "discharge_id": "DIS-000030",
+      "discharge_date": "2026-11-16"
+    },
+    {
+      "uhid": "UHID-1023",
+      "patient_name": "TestBillPatient",
+      "age": "33",
+      "gender": "Male",
+      "bed_number": "SEMI-102",
+      "ward_name": "1st Floor East",
+      "room_type": "Semi-Private Room",
+      "admitting_doctor": "Dr. Nilesh Mahale",
+      "provisional_diagnosis": "Dengue Fever with thrombocytopenia",
+      "initial_deposit": 10000.0,
+      "ipd_no": "IPD-2026-0025",
+      "status": "Discharged",
+      "admission_date": "2026-11-16",
+      "admission_time": "21:36",
+      "id": "ADM-000032",
+      "created_at": "2026-11-16T21:36:28+05:30",
+      "updated_at": "2026-11-16T21:36:28+05:30",
+      "is_active": true,
+      "discharge_id": "DIS-000031",
+      "discharge_date": "2026-11-16"
     }
   ]
 }
