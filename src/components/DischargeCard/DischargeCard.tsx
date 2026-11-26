@@ -4,6 +4,7 @@ import styles from './DischargeCard.module.css';
 import { admissionApi, dischargeApi, type AdmissionRecord, type DischargeRecord } from '../../api/hospitalApi';
 import { openDischargePrint } from '../../utils/universalPrintGenerator';
 import { useAutoDismissNotification } from '../../hooks/useAutoDismissNotification';
+import GlobalBottomActionBar from '../common/GlobalBottomActionBar';
 
 interface DischargeFormData {
   id?: string;
@@ -223,7 +224,7 @@ const DischargeCard: React.FC = () => {
   };
 
   return (
-    <div className={styles.pageContainer}>
+    <div className={`${styles.pageContainer} hasBottomActionBar`}>
       {/* Toast Notification */}
       {notification && (
         <div
@@ -426,6 +427,23 @@ const DischargeCard: React.FC = () => {
           </button>
         </div>
       </div>
+
+      <GlobalBottomActionBar
+        onSave={handleSaveDischarge}
+        saveLabel={loading ? 'Processing...' : 'Complete & Process Discharge'}
+        isSaving={loading}
+        saveDisabled={!selectedAdmId || loading}
+        onPrint={handlePrint}
+        printLabel="Print Discharge Card"
+        printDisabled={!selectedAdmId}
+        onCancel={loadData}
+        cancelLabel="Reset / Refresh"
+        statusMessage={
+          selectedAdmission
+            ? `${selectedAdmission.patient_name} (${selectedAdmission.uhid}) | Bed: ${selectedAdmission.bed_number}`
+            : 'Select admitted patient to generate discharge card'
+        }
+      />
     </div>
   );
 };

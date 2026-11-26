@@ -6,6 +6,7 @@ import { drVisitProcedureApi, admissionApi, type DrVisitProcedureRecord, type Ad
 import { doctorApi, type DoctorRecord } from '../../api/masterApi';
 import { formatDoctorName } from '../../utils/doctorUtils';
 import { useAutoDismissNotification } from '../../hooks/useAutoDismissNotification';
+import GlobalBottomActionBar from '../common/GlobalBottomActionBar';
 
 const FALLBACK_DOCTORS = [
   { id: 'DOC-001', name: 'Dr. Nilesh Mahale', speciality: 'Physician' },
@@ -404,7 +405,7 @@ const DrVisitProcedure: React.FC = () => {
   };
 
   return (
-    <div className={styles.pageContainer}>
+    <div className={`${styles.pageContainer} hasBottomActionBar`}>
       {/* Toast Notification */}
       {notification && (
         <div
@@ -817,6 +818,22 @@ const DrVisitProcedure: React.FC = () => {
           </table>
         </div>
       </div>
+
+      <GlobalBottomActionBar
+        onSave={showForm ? handleSaveEntry : undefined}
+        saveLabel={editingEntryId ? 'Update Entry' : 'Save Entry'}
+        isSaving={loading}
+        saveDisabled={!selectedPatient || !serviceHead.trim()}
+        onPrint={() => window.print()}
+        printLabel="Print Log"
+        onCancel={editingEntryId ? handleCancelEdit : showForm ? () => setShowForm(false) : undefined}
+        cancelLabel={editingEntryId ? 'Cancel Edit' : 'Close Form'}
+        statusMessage={
+          selectedPatient
+            ? `${selectedPatient.name} (${selectedPatient.uhid}) | Total Charges: Rs. ${totalCharges.toFixed(2)}`
+            : 'Select an inpatient to view or log visits/procedures'
+        }
+      />
     </div>
   );
 };

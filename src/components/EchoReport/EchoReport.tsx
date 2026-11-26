@@ -32,6 +32,7 @@ import { useAutoDismissNotification } from '../../hooks/useAutoDismissNotificati
 import { useFormKeyboardNavigation, ECHO_REPORT_FIELD_ORDER } from '../../hooks/useFormKeyboardNavigation';
 import { HOSPITAL_CONFIG } from '../../config/hospitalConfig';
 import { openEchoReportPrintView, generateEchoReportPdfBlob } from '../../utils/echoReportPrintGenerator';
+import GlobalBottomActionBar from '../common/GlobalBottomActionBar';
 import styles from './EchoReport.module.css';
 
 const DEFAULT_FORM: Omit<EchoReportRecord, 'id'> = {
@@ -502,7 +503,7 @@ export const EchoReport: React.FC = () => {
   }, [reports, historyStatusFilter, historyDoctorFilter, historySearchTerm]);
 
   return (
-    <div className={styles.pageContainer}>
+    <div className={`${styles.pageContainer} hasBottomActionBar`}>
       {/* Header */}
       <header className={styles.header}>
         <div className={styles.titleArea}>
@@ -1884,6 +1885,24 @@ export const EchoReport: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Global Fixed Bottom Action Bar */}
+      <GlobalBottomActionBar
+        onSave={handleSaveDraft}
+        saveLabel={isSaving ? 'Saving...' : currentId ? 'Update Report' : 'Save Draft'}
+        isSaving={isSaving}
+        saveDisabled={!formData.uhid || (isFinalized && !isEditingFinalized)}
+        onPrint={handlePrintReport}
+        printLabel="Print Echo Report"
+        printDisabled={!formData.uhid}
+        onCancel={handleExit}
+        cancelLabel="Exit"
+        statusMessage={
+          formData.uhid
+            ? `Echo Report: ${formData.patientName} (${formData.uhid}) | Status: ${formData.status}`
+            : '2D Echocardiography & Color Doppler Study'
+        }
+      />
     </div>
   );
 };

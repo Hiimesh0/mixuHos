@@ -37,6 +37,7 @@ import { useFormKeyboardNavigation } from '../../hooks/useFormKeyboardNavigation
 import { openPatientStickerPdf } from '../../utils/patientStickerGenerator';
 import { openPatientBillPdf } from '../../utils/patientBillGenerator';
 import { formatDoctorName } from '../../utils/doctorUtils';
+import GlobalBottomActionBar from '../common/GlobalBottomActionBar';
 import styles from './PatientRegistration.module.css';
 
 const BarcodeCameraModal = React.lazy(() => import('./BarcodeCameraModal').then(m => ({ default: m.BarcodeCameraModal })));
@@ -1281,7 +1282,7 @@ const PatientRegistration: React.FC = () => {
   });
 
   return (
-    <div className={`${styles.container} ${styles.pageContainer}`}>
+    <div className={`${styles.container} ${styles.pageContainer} hasBottomActionBar`}>
       {/* PART 7: Compact Header without bulky status banner */}
       <header className={styles.compactHeader}>
         <div className={styles.compactTitleGroup}>
@@ -3264,6 +3265,25 @@ const PatientRegistration: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Global Fixed Bottom Action Bar */}
+      <GlobalBottomActionBar
+        onSave={!isLocked ? () => handleSubmit() : undefined}
+        saveLabel={isSubmitting ? 'Saving...' : isEditMode ? 'Update Patient' : 'Save Registration'}
+        isSaving={isSubmitting}
+        saveDisabled={isLocked}
+        onEdit={isLocked ? handleUnlockForEdit : undefined}
+        editLabel="Edit Record"
+        onPrint={handlePrintBillCard}
+        printLabel="Print Bill Card"
+        onCancel={!isLocked ? (isEditMode ? handleCancelEdit : handleResetForm) : undefined}
+        cancelLabel={isEditMode ? 'Cancel Edit' : 'Reset Form'}
+        statusMessage={
+          formData.uhid
+            ? `UHID: ${formData.uhid} | ${formData.title} ${formData.firstName} ${formData.lastName}`
+            : 'New Patient Registration'
+        }
+      />
     </div>
   );
 };

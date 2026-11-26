@@ -4,6 +4,7 @@ import styles from './DepositEntry.module.css';
 import { depositApi, admissionApi, type DepositRecord, type AdmissionRecord } from '../../api/hospitalApi';
 import { openDepositReceiptPrint } from '../../utils/universalPrintGenerator';
 import { useAutoDismissNotification } from '../../hooks/useAutoDismissNotification';
+import GlobalBottomActionBar from '../common/GlobalBottomActionBar';
 
 const DepositEntry: React.FC = () => {
   const [deposits, setDeposits] = useState<DepositRecord[]>([]);
@@ -96,7 +97,7 @@ const DepositEntry: React.FC = () => {
     .reduce((sum, d) => sum + Number(d.amount || 0), 0);
 
   return (
-    <div className={styles.pageContainer}>
+    <div className={`${styles.pageContainer} hasBottomActionBar`}>
       {/* Toast Notification */}
       {notification && (
         <div
@@ -289,6 +290,21 @@ const DepositEntry: React.FC = () => {
           </table>
         </div>
       </div>
+
+      <GlobalBottomActionBar
+        onSave={handleAddDeposit}
+        saveLabel={loading ? 'Saving...' : 'Add Deposit'}
+        isSaving={loading}
+        saveDisabled={!selectedAdmissionId || amount <= 0}
+        onPrint={() => handlePrint()}
+        printLabel="Print Receipt"
+        printDisabled={deposits.length === 0}
+        statusMessage={
+          selectedAdmission
+            ? `Advance Deposit | ${selectedAdmission.patient_name} (${selectedAdmission.uhid}) | Amount: Rs. ${amount.toFixed(2)}`
+            : 'Select inpatient admission to record advance deposit'
+        }
+      />
     </div>
   );
 };

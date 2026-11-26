@@ -20,6 +20,7 @@ import { doctorApi } from '../../api/masterApi';
 import { openPatientBillPdf } from '../../utils/patientBillGenerator';
 import { HOSPITAL_CONFIG } from '../../config/hospitalConfig';
 import { formatDoctorName } from '../../utils/doctorUtils';
+import GlobalBottomActionBar from '../common/GlobalBottomActionBar';
 import styles from './Billing.module.css';
 
 interface BillChargeRow {
@@ -379,7 +380,7 @@ const Billing: React.FC = () => {
   };
 
   return (
-    <div className={styles.pageContainer} style={{ paddingBottom: '100px' }}>
+    <div className={`${styles.pageContainer} hasBottomActionBar`} style={{ paddingBottom: '100px' }}>
       
       {/* Toast Notification */}
       {notification && (
@@ -960,6 +961,24 @@ const Billing: React.FC = () => {
         </div>
       )}
 
+      {/* Global Bottom Action Bar */}
+      <GlobalBottomActionBar
+        onSave={handleSave}
+        saveLabel={isSaving ? 'Saving...' : 'Save Bill'}
+        isSaving={isSaving}
+        saveDisabled={!selectedPatient || items.length === 0}
+        onPrint={handlePrint}
+        printLabel={isPrinting ? 'Printing...' : 'Print Bill'}
+        isPrinting={isPrinting}
+        printDisabled={!selectedPatient}
+        onCancel={handleCancel}
+        cancelLabel="Reset Bill"
+        statusMessage={
+          selectedPatient
+            ? `${selectedPatient.name} (${selectedPatient.uhid}) | Net: ₹${financials.netPayable.toFixed(2)} | Balance Due: ₹${financials.balanceDue.toFixed(2)}`
+            : 'Select patient to manage billing'
+        }
+      />
     </div>
   );
 };

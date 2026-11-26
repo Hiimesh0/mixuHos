@@ -103,6 +103,7 @@ const DeathCertificate = lazy(() => import('./components/DeathCertificate/DeathC
 const MedicalCertificate = lazy(() => import('./components/MedicalCertificate/MedicalCertificate'));
 const MlcCertificate = lazy(() => import('./components/MlcCertificate/MlcCertificate'));
 const CertificateTemplate = lazy(() => import('./components/CertificateTemplate/CertificateTemplate'));
+const AccountsDashboard = lazy(() => import('./components/Accounts/AccountsDashboard'));
 
 // Configuration interface for recursive navigation items supporting arbitrary nesting levels
 interface NavItemConfig {
@@ -146,6 +147,7 @@ const OTHER_NAV_ITEMS: NavItemConfig[] = [
   { id: 'discharge-card', title: 'Discharge Card', icon: LogOut, to: '/discharge-card' },
 
   // Billing & Finance
+  { id: 'accounts', title: 'Accounts & Finance', icon: BarChart3, to: '/accounts' },
   { id: 'billing', title: 'Billing', icon: Calculator, to: '/billing' },
   { id: 'inpatient-bill', title: 'Inpatient Bill', icon: FileText, to: '/inpatient-bill' },
   { id: 'inpatient-receipt', title: 'Inpatient Receipt', icon: Receipt, to: '/inpatient-receipt' },
@@ -1281,6 +1283,7 @@ function App() {
                     <Route path="/discharge-card" element={<DischargeCard />} />
                     <Route path="/deposit-entry" element={<DepositEntry />} />
                     <Route path="/billing" element={<Billing />} />
+                    <Route path="/accounts" element={<AccountsDashboard />} />
                     <Route path="/dr-visit-procedure" element={<DrVisitProcedure />} />
                     <Route path="/investigation-ordered" element={<InvestigationOrdered />} />
                     <Route path="/indoor-register" element={<IndoorRegister />} />

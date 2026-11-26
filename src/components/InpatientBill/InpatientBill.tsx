@@ -5,6 +5,7 @@ import styles from './InpatientBill.module.css';
 import { admissionApi, type AdmissionRecord, depositApi, type DepositRecord } from '../../api/hospitalApi';
 import { patientApi, type PatientBillRecord, type BillItem } from '../../api/patientApi';
 import { openPatientBillPdf } from '../../utils/patientBillGenerator';
+import GlobalBottomActionBar from '../common/GlobalBottomActionBar';
 
 const InpatientBill: React.FC = () => {
   const navigate = useNavigate();
@@ -225,7 +226,7 @@ const InpatientBill: React.FC = () => {
   };
 
   return (
-    <div className={styles.pageContainer}>
+    <div className={`${styles.pageContainer} hasBottomActionBar`}>
       {/* Top Header Card */}
       <div className={styles.headerCard}>
         <div className={styles.topHeader}>
@@ -543,6 +544,23 @@ const InpatientBill: React.FC = () => {
           </button>
         </div>
       </div>
+
+      <GlobalBottomActionBar
+        onSave={handleSaveBill}
+        saveLabel={loading ? 'Saving...' : 'Save Inpatient Bill'}
+        isSaving={loading}
+        saveDisabled={!activeAdmission}
+        onPrint={handlePrint}
+        printLabel="Print Bill (PDF)"
+        printDisabled={!activeAdmission}
+        onCancel={() => navigate('/indoor-summary')}
+        cancelLabel="Return to Chart"
+        statusMessage={
+          activeAdmission
+            ? `${activeAdmission.patient_name} (${activeAdmission.uhid}) | Net Payable: ₹${netPayable.toFixed(2)}`
+            : 'Select an admitted inpatient to prepare bill'
+        }
+      />
     </div>
   );
 };

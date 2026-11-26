@@ -513,6 +513,11 @@ button {
    DYNAMIC FULL-WIDTH FORMS & CONTAINERS WHEN DESKTOP SIDEBAR IS COLLAPSED
    ========================================================================== */
 @media (min-width: 1025px) {
+  /* Dynamic sidebar actual width when collapsed on desktop */
+  .appLayout.sidebarCollapsed {
+    --sidebar-actual-width: var(--sidebar-collapsed-width, 72px);
+  }
+
   /* Expand main content container when sidebar is collapsed */
   .appLayout.sidebarCollapsed .appMainContent {
     flex: 1 1 0%;
@@ -808,4 +813,10 @@ button {
     padding: 10px !important;
   }
 }
+
+/* Page clearance for views with fixed GlobalBottomActionBar */
+.hasBottomActionBar {
+  padding-bottom: 76px !important;
+}
+
 
