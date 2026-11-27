@@ -1,0 +1,1487 @@
+[
+  {
+    "id": "super_admin",
+    "name": "Super Admin",
+    "description": "Full institutional authority across all clinical, billing, and system configurations.",
+    "is_system": true,
+    "is_active": true,
+    "permissions": {
+      "dashboard": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "patient_registration": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "patient_history": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "patient_registration_list": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "patient_past_info": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "indoor_register": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "indoor_summary": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "indoor_option": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "dr_visit_procedure": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "inpatient_bill": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "billing": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "bill_preview": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "deposit_entry": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "inpatient_receipt": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "part_payment": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "discharge_card": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "room_charges": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "room_status": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "ot_entry": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "operation_charges": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "accounts": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "investigation_ordered": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "echo_report": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "bed_master": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "doctor_master": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "medicine_master": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "department_master": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "room_type_master": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "report_template": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "roles_permissions": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "user_management": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "demo_requests": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      }
+    }
+  },
+  {
+    "id": "hospital_admin",
+    "name": "Hospital Administrator",
+    "description": "General administrator with access to all clinical, master, and financial reporting.",
+    "is_system": false,
+    "is_active": true,
+    "permissions": {
+      "dashboard": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "patient_registration": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "patient_history": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "patient_registration_list": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "patient_past_info": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "indoor_register": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "indoor_summary": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "indoor_option": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "dr_visit_procedure": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "inpatient_bill": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "billing": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "bill_preview": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "deposit_entry": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "inpatient_receipt": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "part_payment": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "discharge_card": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "room_charges": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "room_status": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "ot_entry": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "operation_charges": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "accounts": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "investigation_ordered": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "echo_report": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "bed_master": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "doctor_master": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "medicine_master": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "department_master": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "room_type_master": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "report_template": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      },
+      "roles_permissions": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": false,
+        "print": true,
+        "export": true
+      },
+      "user_management": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": false,
+        "print": true,
+        "export": true
+      },
+      "demo_requests": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": true,
+        "print": true,
+        "export": true
+      }
+    }
+  },
+  {
+    "id": "doctor",
+    "name": "Consultant Doctor",
+    "description": "Clinical staff managing patient rounds, prescriptions, Echo, investigations, and discharge.",
+    "is_system": false,
+    "is_active": true,
+    "permissions": {
+      "dashboard": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "patient_registration": {
+        "access": true,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "patient_history": {
+        "access": true,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "patient_registration_list": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "patient_past_info": {
+        "access": true,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "indoor_register": {
+        "access": true,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "indoor_summary": {
+        "access": true,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "indoor_option": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "dr_visit_procedure": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "inpatient_bill": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "billing": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "bill_preview": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "deposit_entry": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "inpatient_receipt": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "part_payment": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "discharge_card": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "room_charges": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "room_status": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "ot_entry": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "operation_charges": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "accounts": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "investigation_ordered": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "echo_report": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "bed_master": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "doctor_master": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "medicine_master": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "department_master": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "room_type_master": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "report_template": {
+        "access": true,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "roles_permissions": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "user_management": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "demo_requests": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      }
+    }
+  },
+  {
+    "id": "receptionist",
+    "name": "Receptionist / Front Desk",
+    "description": "Front-desk personnel handling patient registration, UHID stickers, and indoor lookup.",
+    "is_system": false,
+    "is_active": true,
+    "permissions": {
+      "dashboard": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "patient_registration": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "patient_history": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "patient_registration_list": {
+        "access": true,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "patient_past_info": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "indoor_register": {
+        "access": true,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "indoor_summary": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "indoor_option": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "dr_visit_procedure": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "inpatient_bill": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "billing": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "bill_preview": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "deposit_entry": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "inpatient_receipt": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "part_payment": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "discharge_card": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "room_charges": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "room_status": {
+        "access": true,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "ot_entry": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "operation_charges": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "accounts": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "investigation_ordered": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "echo_report": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "bed_master": {
+        "access": true,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "doctor_master": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "medicine_master": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "department_master": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "room_type_master": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "report_template": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "roles_permissions": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "user_management": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      },
+      "demo_requests": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": false
+      }
+    }
+  },
+  {
+    "id": "accountant",
+    "name": "Hospital Accountant",
+    "description": "Financial personnel overseeing Billing, Inpatient Invoices, Accounts Dashboard, and Reports.",
+    "is_system": false,
+    "is_active": true,
+    "permissions": {
+      "dashboard": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": true
+      },
+      "patient_registration": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": true
+      },
+      "patient_history": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": true
+      },
+      "patient_registration_list": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": true
+      },
+      "patient_past_info": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": true
+      },
+      "indoor_register": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": true
+      },
+      "indoor_summary": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": true
+      },
+      "indoor_option": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": true
+      },
+      "dr_visit_procedure": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": true
+      },
+      "inpatient_bill": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": false,
+        "print": true,
+        "export": true
+      },
+      "billing": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": true,
+        "delete": false,
+        "print": true,
+        "export": true
+      },
+      "bill_preview": {
+        "access": true,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": true
+      },
+      "deposit_entry": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": true
+      },
+      "inpatient_receipt": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": true
+      },
+      "part_payment": {
+        "access": true,
+        "view": true,
+        "create": true,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": true
+      },
+      "discharge_card": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": true
+      },
+      "room_charges": {
+        "access": true,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": true
+      },
+      "room_status": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": true
+      },
+      "ot_entry": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": true
+      },
+      "operation_charges": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": true
+      },
+      "accounts": {
+        "access": true,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": true
+      },
+      "investigation_ordered": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": true
+      },
+      "echo_report": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": true
+      },
+      "bed_master": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": true
+      },
+      "doctor_master": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": true
+      },
+      "medicine_master": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": true
+      },
+      "department_master": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": true
+      },
+      "room_type_master": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": true
+      },
+      "report_template": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": true
+      },
+      "roles_permissions": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": true
+      },
+      "user_management": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": true
+      },
+      "demo_requests": {
+        "access": false,
+        "view": true,
+        "create": false,
+        "edit": false,
+        "delete": false,
+        "print": true,
+        "export": true
+      }
+    }
+  }
+]
