@@ -1892,6 +1892,8 @@ export const EchoReport: React.FC = () => {
         saveLabel={isSaving ? 'Saving...' : currentId ? 'Update Report' : 'Save Draft'}
         isSaving={isSaving}
         saveDisabled={!formData.uhid || (isFinalized && !isEditingFinalized)}
+        isDirty={Boolean(formData.uhid && (!isFinalized || isEditingFinalized))}
+        dirtyMessage="Draft in Progress"
         onPrint={handlePrintReport}
         printLabel="Print Echo Report"
         printDisabled={!formData.uhid}

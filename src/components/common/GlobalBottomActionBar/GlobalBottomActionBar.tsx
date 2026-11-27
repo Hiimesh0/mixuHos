@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import { Save, Printer, Edit3, X, Trash2, CheckCircle2 } from 'lucide-react';
 import styles from './GlobalBottomActionBar.module.css';
 
@@ -40,6 +40,11 @@ export interface GlobalBottomActionBarProps {
   /** Status message or indicator displayed on the left */
   statusMessage?: React.ReactNode;
 
+  /** Whether the current form has unsaved modifications */
+  isDirty?: boolean;
+  /** Custom dirty badge label (defaults to 'Unsaved Changes') */
+  dirtyMessage?: string;
+
   /** Additional actions slot (e.g. module-specific buttons) */
   extraActions?: React.ReactNode;
 
@@ -72,17 +77,26 @@ export const GlobalBottomActionBar: React.FC<GlobalBottomActionBarProps> = ({
   deleteDisabled = false,
   enableShortcuts = true,
   statusMessage,
+  isDirty = false,
+  dirtyMessage = 'Unsaved Changes',
   extraActions,
   leftSlot,
   className = ''
 }) => {
+  const [isMac, setIsMac] = useState(false);
+
+  useEffect(() => {
+    const platform = typeof navigator !== 'undefined'
+      ? (navigator.platform || (navigator as unknown as { userAgentData?: { platform?: string } }).userAgentData?.platform || navigator.userAgent || '')
+      : '';
+    setIsMac(platform.toUpperCase().indexOf('MAC') >= 0);
+  }, []);
+
   // Global Keyboard Shortcuts
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       if (!enableShortcuts) return;
 
-      const platform = typeof navigator !== 'undefined' ? (navigator.platform || (navigator as any).userAgentData?.platform || navigator.userAgent || '') : '';
-      const isMac = platform.toUpperCase().indexOf('MAC') >= 0;
       const cmdOrCtrl = isMac ? e.metaKey : e.ctrlKey;
 
       // Ctrl+S / Cmd+S: Save
@@ -111,7 +125,7 @@ export const GlobalBottomActionBar: React.FC<GlobalBottomActionBarProps> = ({
         }
       }
     },
-    [enableShortcuts, onSave, saveDisabled, isSaving, onPrint, printDisabled, isPrinting, onCancel, cancelDisabled]
+    [enableShortcuts, isMac, onSave, saveDisabled, isSaving, onPrint, printDisabled, isPrinting, onCancel, cancelDisabled]
   );
 
   useEffect(() => {
@@ -123,28 +137,44 @@ export const GlobalBottomActionBar: React.FC<GlobalBottomActionBarProps> = ({
   }, [enableShortcuts, handleKeyDown]);
 
   return (
-    <footer className={`${styles.bottomBarWrapper} ${className}`} role="toolbar" aria-label="Action Toolbar">
-      {/* Left Slot: Status & Shortcuts */}
+    <footer
+      className={`${styles.bottomBarWrapper} ${className}`}
+      role="region"
+      aria-label="Action Toolbar"
+    >
+      {/* Left Slot: Status, Dirty Badge & Shortcuts */}
       <div className={styles.leftSlot}>
         {leftSlot}
 
+        {isDirty && (
+          <div
+            className={styles.dirtyIndicator}
+            title="You have unsaved changes in this record"
+            role="status"
+            aria-live="polite"
+          >
+            <span className={styles.dirtyDot} />
+            <span>{dirtyMessage}</span>
+          </div>
+        )}
+
         {statusMessage && (
-          <div className={styles.statusMessage}>
+          <div className={styles.statusMessage} role="status" aria-live="polite">
             <CheckCircle2 size={15} color="#10b981" />
             <span>{statusMessage}</span>
           </div>
         )}
 
         {enableShortcuts && (
-          <div className={styles.shortcutHints}>
+          <div className={styles.shortcutHints} aria-label="Keyboard Shortcuts">
             {onSave && (
               <span>
-                <kbd className={styles.shortcutBadge}>Ctrl+S</kbd> Save
+                <kbd className={styles.shortcutBadge}>{isMac ? '⌘S' : 'Ctrl+S'}</kbd> Save
               </span>
             )}
             {onPrint && (
               <span>
-                <kbd className={styles.shortcutBadge}>Ctrl+P</kbd> Print
+                <kbd className={styles.shortcutBadge}>{isMac ? '⌘P' : 'Ctrl+P'}</kbd> Print
               </span>
             )}
             {onCancel && (
@@ -156,7 +186,7 @@ export const GlobalBottomActionBar: React.FC<GlobalBottomActionBarProps> = ({
         )}
       </div>
 
-      {/* Right Slot: Extra Actions + Standard Buttons */}
+      {/* Right Slot: Extra Actions + Standard Action Buttons */}
       <div className={styles.actionsGroup}>
         {extraActions}
 
@@ -166,6 +196,7 @@ export const GlobalBottomActionBar: React.FC<GlobalBottomActionBarProps> = ({
             className={`${styles.btn} ${styles.btnCancel}`}
             onClick={onCancel}
             disabled={cancelDisabled}
+            title={`${cancelLabel} (Esc)`}
           >
             <X size={15} />
             <span>{cancelLabel}</span>
@@ -178,6 +209,7 @@ export const GlobalBottomActionBar: React.FC<GlobalBottomActionBarProps> = ({
             className={`${styles.btn} ${styles.btnDelete}`}
             onClick={onDelete}
             disabled={deleteDisabled || isDeleting}
+            title={deleteLabel}
           >
             {isDeleting ? <span className={`${styles.spinner} ${styles.spinnerDark}`} /> : <Trash2 size={15} />}
             <span>{isDeleting ? 'Deleting...' : deleteLabel}</span>
@@ -190,6 +222,7 @@ export const GlobalBottomActionBar: React.FC<GlobalBottomActionBarProps> = ({
             className={`${styles.btn} ${styles.btnEdit}`}
             onClick={onEdit}
             disabled={editDisabled || isEditing}
+            title={editLabel}
           >
             <Edit3 size={15} />
             <span>{editLabel}</span>
@@ -202,6 +235,7 @@ export const GlobalBottomActionBar: React.FC<GlobalBottomActionBarProps> = ({
             className={`${styles.btn} ${styles.btnPrint}`}
             onClick={onPrint}
             disabled={printDisabled || isPrinting}
+            title={`${printLabel} (${isMac ? '⌘P' : 'Ctrl+P'})`}
           >
             {isPrinting ? <span className={`${styles.spinner} ${styles.spinnerDark}`} /> : <Printer size={15} />}
             <span>{isPrinting ? 'Printing...' : printLabel}</span>
@@ -214,6 +248,7 @@ export const GlobalBottomActionBar: React.FC<GlobalBottomActionBarProps> = ({
             className={`${styles.btn} ${styles.btnSave}`}
             onClick={onSave}
             disabled={saveDisabled || isSaving}
+            title={`${saveLabel} (${isMac ? '⌘S' : 'Ctrl+S'})`}
           >
             {isSaving ? <span className={styles.spinner} /> : <Save size={15} />}
             <span>{isSaving ? 'Saving...' : saveLabel}</span>

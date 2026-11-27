@@ -3,8 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { 
   ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, 
   Search, Printer, Save, Edit2, Trash2, LogOut, 
-  X, AlertCircle, CheckCircle2, ShieldAlert
+  X, AlertCircle, CheckCircle2, ShieldAlert, Plus
 } from 'lucide-react';
+import GlobalBottomActionBar from '../common/GlobalBottomActionBar';
 import { medicineApi, type MedicineRecord } from '../../api/masterApi';
 import { useAutoDismissNotification } from '../../hooks/useAutoDismissNotification';
 import { useFormKeyboardNavigation } from '../../hooks/useFormKeyboardNavigation';
@@ -300,7 +301,7 @@ const MedicineMaster: React.FC = () => {
   }, [medicines, searchQuery, searchGroup, searchStatus]);
 
   return (
-    <div className={styles.pageContainer}>
+    <div className={`${styles.pageContainer} hasBottomActionBar`}>
       {/* Header */}
       <div className={styles.header}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
@@ -927,6 +928,43 @@ const MedicineMaster: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Global Bottom Action Bar */}
+      <GlobalBottomActionBar
+        onSave={isCreateMode ? handleAddClick : handleUpdateClick}
+        saveLabel={isSaving ? 'Saving...' : isCreateMode ? 'Save Medicine' : 'Update Medicine'}
+        isSaving={isSaving}
+        isDirty={isCreateMode && Boolean(formData.brandName)}
+        dirtyMessage="New Entry Unsaved"
+        onEdit={!isCreateMode ? handleUpdateClick : undefined}
+        editLabel="Update Medicine"
+        onPrint={() => openMedicinePrintView(formData)}
+        printLabel="Print Formulary"
+        onDelete={!isCreateMode ? () => setIsDeleteModalOpen(true) : undefined}
+        deleteLabel="Delete / Deactivate"
+        onCancel={isCreateMode && medicines.length > 0 ? () => { setIsCreateMode(false); setFormData(medicines[currentIndex] || DEFAULT_MEDICINE); } : undefined}
+        cancelLabel="Cancel Add"
+        statusMessage={
+          formData.brandName
+            ? `${formData.brandName} (${formData.id || 'New'}) | ${formData.genericName}`
+            : 'Pharmacy Formulary Master'
+        }
+        extraActions={
+          !isCreateMode ? (
+            <button
+              type="button"
+              className={styles.secondaryBtn}
+              onClick={() => {
+                setFormData(DEFAULT_MEDICINE);
+                setIsCreateMode(true);
+              }}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '8px 14px' }}
+            >
+              <Plus size={15} /> Add New
+            </button>
+          ) : null
+        }
+      />
     </div>
   );
 };

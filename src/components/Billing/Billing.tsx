@@ -967,6 +967,8 @@ const Billing: React.FC = () => {
         saveLabel={isSaving ? 'Saving...' : 'Save Bill'}
         isSaving={isSaving}
         saveDisabled={!selectedPatient || items.length === 0}
+        isDirty={items.length > 0}
+        dirtyMessage={`${items.length} Pending Item${items.length > 1 ? 's' : ''}`}
         onPrint={handlePrint}
         printLabel={isPrinting ? 'Printing...' : 'Print Bill'}
         isPrinting={isPrinting}

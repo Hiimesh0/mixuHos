@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { ChevronFirst, ChevronLeft, ChevronRight, ChevronLast, Save, Printer, Plus, CheckCircle2, AlertCircle } from 'lucide-react';
+import GlobalBottomActionBar from '../common/GlobalBottomActionBar';
 import styles from './OtEntry.module.css';
 import { otApi, admissionApi, type OtEntryRecord, type AdmissionRecord } from '../../api/hospitalApi';
 import { doctorApi, type DoctorRecord } from '../../api/masterApi';
@@ -250,7 +251,7 @@ const OtEntry: React.FC = () => {
   };
 
   return (
-    <div className={styles.pageContainer}>
+    <div className={`${styles.pageContainer} hasBottomActionBar`}>
       {/* Toast Notification */}
       {notification && (
         <div
@@ -415,6 +416,34 @@ const OtEntry: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Global Bottom Action Bar */}
+      <GlobalBottomActionBar
+        onSave={handleSave}
+        saveLabel={loading ? 'Saving...' : 'Save OT Record'}
+        isSaving={loading}
+        isDirty={Boolean(formData.procedure_name || formData.lead_surgeon)}
+        dirtyMessage="Unsaved OT Entry"
+        onPrint={handlePrint}
+        printLabel="Print Surgery Note"
+        onCancel={handleNew}
+        cancelLabel="New OT Entry"
+        statusMessage={
+          formData.ot_no
+            ? `OT: ${formData.ot_no} | ${formData.patient_name} (${formData.uhid}) | ${formData.procedure_name}`
+            : 'Operation Theatre Surgery Register'
+        }
+        extraActions={
+          entries.length > 0 ? (
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', marginRight: '6px' }}>
+              <button type="button" className={styles.navBtn} onClick={() => handleNav(0)} title="First Record"><ChevronFirst size={16} /></button>
+              <button type="button" className={styles.navBtn} onClick={() => handleNav(currentIndex - 1)} title="Previous Record"><ChevronLeft size={16} /></button>
+              <button type="button" className={styles.navBtn} onClick={() => handleNav(currentIndex + 1)} title="Next Record"><ChevronRight size={16} /></button>
+              <button type="button" className={styles.navBtn} onClick={() => handleNav(entries.length - 1)} title="Last Record"><ChevronLast size={16} /></button>
+            </div>
+          ) : null
+        }
+      />
     </div>
   );
 };

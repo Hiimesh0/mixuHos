@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowDown, LogOut, Save, Trash2, CheckCircle2 } from 'lucide-react';
+import GlobalBottomActionBar from '../common/GlobalBottomActionBar';
 import styles from './RoomCharges.module.css';
 import { admissionApi, type AdmissionRecord, bedApi, type BedRecord } from '../../api/hospitalApi';
 
@@ -123,7 +124,7 @@ const RoomCharges: React.FC = () => {
   };
 
   return (
-    <div className={styles.pageContainer}>
+    <div className={`${styles.pageContainer} hasBottomActionBar`}>
       <div className={styles.header}>
         <h1 className={styles.pageTitle}>Room Charges Entry</h1>
         <p style={{ margin: '4px 0 0', fontSize: '12px', color: '#64748b' }}>
@@ -306,6 +307,23 @@ const RoomCharges: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Global Bottom Action Bar */}
+      <GlobalBottomActionBar
+        onSave={handleSave}
+        saveLabel="Save Room Charges"
+        saveDisabled={entries.length === 0}
+        statusMessage={
+          activeAdmission
+            ? `${activeAdmission.patient_name} (${activeAdmission.ipd_no}) | Bed: ${bedNo} | Total: ₹${(totalNetRoom + totalNetGst).toLocaleString()}`
+            : 'Room Charges Entry'
+        }
+        extraActions={
+          <span style={{ fontSize: '13.5px', fontWeight: 700, color: '#166534', marginRight: '6px' }}>
+            Total: ₹{(totalNetRoom + totalNetGst).toLocaleString()}
+          </span>
+        }
+      />
     </div>
   );
 };

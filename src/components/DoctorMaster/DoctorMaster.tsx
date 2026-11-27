@@ -3,8 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { 
   ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, 
   Search, Save, LogOut, Edit2, CheckSquare, Square, 
-  Trash2, Printer, X, AlertCircle, CheckCircle2, ShieldAlert
+  Trash2, Printer, X, AlertCircle, CheckCircle2, ShieldAlert, Plus
 } from 'lucide-react';
+import GlobalBottomActionBar from '../common/GlobalBottomActionBar';
 import { doctorApi, type DoctorRecord } from '../../api/masterApi';
 import { useAutoDismissNotification } from '../../hooks/useAutoDismissNotification';
 import { useFormKeyboardNavigation } from '../../hooks/useFormKeyboardNavigation';
@@ -288,7 +289,7 @@ const DoctorMaster: React.FC = () => {
   }, [doctors, searchQuery, searchSpeciality, searchStatus]);
 
   return (
-    <div className={styles.pageContainer}>
+    <div className={`${styles.pageContainer} hasBottomActionBar`}>
       {/* Header */}
       <div className={styles.header}>
         <div className={styles.headerLeft}>
@@ -1054,6 +1055,43 @@ const DoctorMaster: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Global Bottom Action Bar */}
+      <GlobalBottomActionBar
+        onSave={isCreateMode ? handleAddClick : handleUpdateClick}
+        saveLabel={isSaving ? 'Saving...' : isCreateMode ? 'Save Doctor' : 'Update Doctor'}
+        isSaving={isSaving}
+        isDirty={isCreateMode && Boolean(formData.drName)}
+        dirtyMessage="New Entry Unsaved"
+        onEdit={!isCreateMode ? handleUpdateClick : undefined}
+        editLabel="Update Doctor"
+        onPrint={() => setIsPrintModalOpen(true)}
+        printLabel="Print Profile"
+        onDelete={!isCreateMode ? () => setIsDeleteModalOpen(true) : undefined}
+        deleteLabel="Delete / Deactivate"
+        onCancel={isCreateMode && doctors.length > 0 ? () => { setIsCreateMode(false); setFormData(doctors[currentIndex] || DEFAULT_DOCTOR); } : undefined}
+        cancelLabel="Cancel Add"
+        statusMessage={
+          formData.drName
+            ? `Dr. ${formData.drName} (${formData.id || 'New'}) | ${formData.speciality || 'General'}`
+            : 'Doctor Master Directory'
+        }
+        extraActions={
+          !isCreateMode ? (
+            <button
+              type="button"
+              className={styles.secondaryBtn}
+              onClick={() => {
+                setFormData(DEFAULT_DOCTOR);
+                setIsCreateMode(true);
+              }}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '8px 14px' }}
+            >
+              <Plus size={15} /> Add New
+            </button>
+          ) : null
+        }
+      />
     </div>
   );
 };

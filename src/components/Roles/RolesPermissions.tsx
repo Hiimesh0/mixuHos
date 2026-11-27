@@ -162,7 +162,7 @@ export const RolesPermissions: React.FC = () => {
   );
 
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} hasBottomActionBar`}>
       {/* Page Header */}
       <div className={styles.header}>
         <div>

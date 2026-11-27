@@ -180,7 +180,7 @@ export const UserManagement: React.FC = () => {
   });
 
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} hasBottomActionBar`}>
       {/* Header */}
       <div className={styles.header}>
         <div>
