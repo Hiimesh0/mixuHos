@@ -1094,4 +1094,50 @@ class DomainRepositoriesAndWorkflowsTestCase(SimpleTestCase):
         self.assertEqual(cert_res.status_code, status.HTTP_201_CREATED)
         self.assertTrue(cert_res.data["item"]["id"].startswith("CERT-"))
 
+    def test_accounts_kpi_and_transaction_endpoints(self):
+        """Test accounts financial summary, KPI calculations, and transaction ledgers."""
+        # 1. Accounts Summary
+        res = self.client.get("/api/accounts/summary/?period=all")
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(res.data["success"])
+        self.assertIn("financial_totals", res.data)
+        self.assertIn("bed_metrics", res.data)
+        self.assertIn("patient_metrics", res.data)
+        self.assertIn("total_billed", res.data["financial_totals"])
+        self.assertIn("occupancy_rate_percent", res.data["bed_metrics"])
+
+        # 2. Accounts Transactions Ledger
+        ledger_res = self.client.get("/api/accounts/transactions/?period=all&page=1&page_size=10")
+        self.assertEqual(ledger_res.status_code, status.HTTP_200_OK)
+        self.assertTrue(ledger_res.data["success"])
+        self.assertIn("transactions", ledger_res.data)
+        self.assertIn("total_count", ledger_res.data)
+        self.assertIn("total_pages", ledger_res.data)
+
+    def test_rbac_auth_and_demo_requests(self):
+        """Test authentication, roles listing, and demo requests lead submission."""
+        # 1. Roles list
+        roles_res = self.client.get("/api/roles/")
+        self.assertEqual(roles_res.status_code, status.HTTP_200_OK)
+        self.assertTrue(roles_res.data["success"])
+        self.assertGreaterEqual(len(roles_res.data["roles"]), 1)
+
+        # 2. Demo request lead submission
+        demo_payload = {
+            "hospital_name": "Apex Heart & Multispecialty Hospital",
+            "contact_person": "Dr. Rajesh Shah",
+            "email": "dr.rajesh@apexheart.org",
+            "phone": "9825123456",
+            "institution_type": "Multispecialty Hospital",
+            "bed_capacity": "150-300 Beds",
+            "preferred_date": "2026-12-05",
+            "notes": "Interested in Cath Lab & IPD Billing integration"
+        }
+        demo_res = self.client.post("/api/demo-requests/", demo_payload, format="json")
+        self.assertEqual(demo_res.status_code, status.HTTP_201_CREATED)
+        self.assertTrue(demo_res.data["success"])
+        self.assertTrue(demo_res.data["enquiry_id"].startswith("ENQ-"))
+        self.assertIn("message", demo_res.data)
+
+
 
