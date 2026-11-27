@@ -1895,7 +1895,7 @@ export const EchoReport: React.FC = () => {
         onPrint={handlePrintReport}
         printLabel="Print Echo Report"
         printDisabled={!formData.uhid}
-        onCancel={handleExit}
+        onCancel={() => navigate('/patient-registration')}
         cancelLabel="Exit"
         statusMessage={
           formData.uhid

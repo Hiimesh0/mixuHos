@@ -975,7 +975,7 @@ const Billing: React.FC = () => {
         cancelLabel="Reset Bill"
         statusMessage={
           selectedPatient
-            ? `${selectedPatient.name} (${selectedPatient.uhid}) | Net: ₹${financials.netPayable.toFixed(2)} | Balance Due: ₹${financials.balanceDue.toFixed(2)}`
+            ? `${selectedPatient.name} (${selectedPatient.uhid}) | Net: ₹${netAmt.toFixed(2)} | Balance Due: ₹${balanceAmt.toFixed(2)}`
             : 'Select patient to manage billing'
         }
       />

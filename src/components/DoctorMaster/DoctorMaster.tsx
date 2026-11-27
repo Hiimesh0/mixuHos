@@ -332,7 +332,11 @@ const DoctorMaster: React.FC = () => {
         onKeyDown={handleFormKeyDown}
         onSubmit={e => {
           e.preventDefault();
-          handleSave();
+          if (isCreateMode) {
+            handleAddClick();
+          } else {
+            handleUpdateClick();
+          }
         }}
         className={styles.formContainer}
       >

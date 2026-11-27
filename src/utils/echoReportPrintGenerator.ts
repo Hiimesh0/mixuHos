@@ -666,6 +666,15 @@ export function generateEchoReportPdfBlob(report: EchoReportRecord): Blob {
   doc.text(title, titleX, 38);
   doc.line(titleX, 39, titleX + titleWidth, 39);
 
+  let lvefDisplay = report.lvef != null && report.lvef !== '' ? `${report.lvef}` : '40 %';
+  if (lvefDisplay && !lvefDisplay.includes('%')) {
+    lvefDisplay = `${lvefDisplay} %`;
+  }
+  let paspDisplay = report.rvsp != null && report.rvsp !== '' ? `${report.rvsp}` : '45 mmHg';
+  if (paspDisplay && !paspDisplay.toLowerCase().includes('mmhg')) {
+    paspDisplay = `${paspDisplay} mmHg`;
+  }
+
   // Valve findings (Left)
   doc.setFontSize(9.5);
   let y = 48;

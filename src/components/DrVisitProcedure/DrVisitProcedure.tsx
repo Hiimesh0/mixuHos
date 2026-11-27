@@ -823,14 +823,14 @@ const DrVisitProcedure: React.FC = () => {
         onSave={handleSaveEntry}
         saveLabel={editingEntryId ? 'Update Entry' : 'Save Entry'}
         isSaving={loading}
-        saveDisabled={!selectedPatient || !serviceHead.trim()}
+        saveDisabled={!selectedAdmission || !description.trim()}
         onPrint={() => window.print()}
         printLabel="Print Log"
         onCancel={editingEntryId ? handleCancelEdit : undefined}
         cancelLabel={editingEntryId ? 'Cancel Edit' : 'Cancel'}
         statusMessage={
-          selectedPatient
-            ? `${selectedPatient.name} (${selectedPatient.uhid}) | Total Charges: Rs. ${totalCharges.toFixed(2)}`
+          selectedAdmission
+            ? `${selectedAdmission.patient_name} (${selectedAdmission.uhid || selectedAdmission.ipd_no}) | Total Charges: Rs. ${totalCharges.toFixed(2)}`
             : 'Select an inpatient to view or log visits/procedures'
         }
       />

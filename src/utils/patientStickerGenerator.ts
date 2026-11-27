@@ -7,6 +7,7 @@
  */
 
 import JsBarcode from 'jsbarcode';
+import type { jsPDF } from 'jspdf';
 import type { PatientRecord } from '../api/patientApi';
 import { HOSPITAL_CONFIG } from '../config/hospitalConfig';
 

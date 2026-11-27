@@ -2082,7 +2082,7 @@ const PatientRegistration: React.FC = () => {
                     type="button"
                     className={`${styles.btn} ${styles.btnSecondary}`}
                     onClick={() => {
-                      const uhid = loadedRecord?.uhid || formData.uhid;
+                      const uhid = formData.uhid;
                       if (uhid) {
                         navigate(`/patient-past-info?id=${encodeURIComponent(uhid)}`);
                       } else {

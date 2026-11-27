@@ -81,7 +81,8 @@ export const GlobalBottomActionBar: React.FC<GlobalBottomActionBarProps> = ({
     (e: KeyboardEvent) => {
       if (!enableShortcuts) return;
 
-      const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+      const platform = typeof navigator !== 'undefined' ? (navigator.platform || (navigator as any).userAgentData?.platform || navigator.userAgent || '') : '';
+      const isMac = platform.toUpperCase().indexOf('MAC') >= 0;
       const cmdOrCtrl = isMac ? e.metaKey : e.ctrlKey;
 
       // Ctrl+S / Cmd+S: Save
