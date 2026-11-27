@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Activity, ExternalLink, Menu, X, ShieldCheck } from 'lucide-react';
+import { Activity, Lock, Menu, X, CalendarCheck2 } from 'lucide-react';
 import styles from './Navbar.module.css';
 import { HOSPITAL_APP_URL } from '../config';
 
@@ -23,9 +23,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenDemo }) => {
     { label: 'Overview', href: '#overview' },
     { label: 'Features', href: '#features' },
     { label: 'Modules', href: '#modules' },
-    { label: 'Live Preview', href: '#preview' },
-    { label: 'Benefits', href: '#benefits' },
+    { label: 'Accounts & Reports', href: '#accounts' },
     { label: 'Workflow', href: '#workflow' },
+    { label: 'Benefits', href: '#benefits' },
     { label: 'FAQ', href: '#faq' },
   ];
 
@@ -35,11 +35,11 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenDemo }) => {
         {/* Brand Logo */}
         <a href="#" className={styles.brand}>
           <div className={styles.logoIcon}>
-            <Activity size={22} color="#0D9488" />
+            <Activity size={22} color="#14B8A6" />
           </div>
           <div className={styles.brandText}>
             <span className={styles.brandName}>MIXU INFOSYSTEM</span>
-            <span className={styles.brandSub}>Hospital Intelligence & EMR</span>
+            <span className={styles.brandSub}>Hospital Intelligence &amp; EMR</span>
           </div>
         </a>
 
@@ -59,16 +59,18 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenDemo }) => {
             className={styles.scheduleBtn}
             onClick={onOpenDemo}
           >
-            Request Demo
+            <CalendarCheck2 size={16} />
+            <span>Book a Demo</span>
           </button>
           <a
-            href={HOSPITAL_APP_URL}
+            href={`${HOSPITAL_APP_URL}#/login`}
             target="_blank"
             rel="noopener noreferrer"
             className={styles.launchBtn}
+            title="Authorized staff and hospital personnel login"
           >
-            <span>Launch Live App</span>
-            <ExternalLink size={15} />
+            <Lock size={14} />
+            <span>Staff Login</span>
           </a>
 
           {/* Mobile Menu Toggle */}
@@ -83,48 +85,45 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenDemo }) => {
         </div>
       </div>
 
-      {/* Mobile Drawer */}
+      {/* Mobile Dropdown Menu */}
       {mobileMenuOpen && (
-        <div className={styles.mobileDrawer}>
-          <nav className={styles.mobileNav}>
-            {navLinks.map(link => (
-              <a
-                key={link.href}
-                href={link.href}
-                className={styles.mobileNavLink}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {link.label}
-              </a>
-            ))}
-            <div className={styles.mobileDrawerActions}>
-              <button
-                type="button"
-                className={styles.mobileScheduleBtn}
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onOpenDemo();
-                }}
-              >
-                Request Custom Walkthrough
-              </button>
-              <a
-                href={HOSPITAL_APP_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.mobileLaunchBtn}
-              >
-                <span>Launch Live App</span>
-                <ExternalLink size={16} />
-              </a>
-            </div>
-            <div className={styles.badgeRow}>
-              <ShieldCheck size={16} color="#10B981" />
-              <span>NABH Aligned • Flat-JSON Persistence Engine</span>
-            </div>
-          </nav>
+        <div className={styles.mobileNav}>
+          {navLinks.map(link => (
+            <a
+              key={link.href}
+              href={link.href}
+              className={styles.mobileNavLink}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              {link.label}
+            </a>
+          ))}
+          <div className={styles.mobileNavActions}>
+            <button
+              type="button"
+              className={styles.mobileScheduleBtn}
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onOpenDemo();
+              }}
+            >
+              <CalendarCheck2 size={16} />
+              <span>Book a Demo</span>
+            </button>
+            <a
+              href={`${HOSPITAL_APP_URL}#/login`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.mobileLaunchBtn}
+            >
+              <Lock size={15} />
+              <span>Staff Login</span>
+            </a>
+          </div>
         </div>
       )}
     </header>
   );
 };
+
+export default Navbar;

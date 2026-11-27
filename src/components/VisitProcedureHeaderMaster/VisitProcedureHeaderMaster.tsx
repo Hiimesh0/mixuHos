@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight,
-  Search, Save, LogOut, CheckSquare, Square, Edit2, Trash2, CheckCircle2, AlertCircle
+  Save, LogOut, CheckSquare, Square, Edit2, Trash2, CheckCircle2, AlertCircle
 } from 'lucide-react';
 import styles from './VisitProcedureHeaderMaster.module.css';
 import { visitProcedureHeaderApi, type VisitProcedureHeaderRecord } from '../../api/masterApi';
@@ -31,7 +31,7 @@ const VisitProcedureHeaderMaster: React.FC = () => {
   const loadHeaders = useCallback(async () => {
     try {
       setLoading(true);
-      const res = await visitProcedureHeaderApi.getAll();
+      const res: any = await visitProcedureHeaderApi.getAll();
       const list = res.headers || (Array.isArray(res) ? res : []);
       if (list && list.length > 0) {
         setHeaders(list);

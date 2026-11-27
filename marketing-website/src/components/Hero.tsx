@@ -1,104 +1,114 @@
 import React from 'react';
-import { ExternalLink, ArrowRight, ShieldCheck, Bed, Layers, Stethoscope } from 'lucide-react';
+import { ArrowRight, ShieldCheck, Bed, Layers, CalendarCheck2, Users, FileSpreadsheet, Lock } from 'lucide-react';
+import { WorldMapBackground } from './WorldMapBackground';
 import styles from './Hero.module.css';
-import { HOSPITAL_APP_URL } from '../config';
 
 interface HeroProps {
   onOpenDemo: () => void;
 }
 
 export const Hero: React.FC<HeroProps> = ({ onOpenDemo }) => {
+  const scrollToFeatures = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const el = document.getElementById('modules') || document.getElementById('features');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section className={styles.heroSection}>
-      {/* Background ambient lighting */}
-      <div className={styles.glowTop} />
-      <div className={styles.glowRight} />
+      {/* World Map Inspired Background Theme */}
+      <WorldMapBackground />
 
       <div className={`container ${styles.heroContainer}`}>
         {/* Top Tag Pill */}
         <div className={styles.tagWrapper}>
           <div className={styles.pulsePill}>
             <span className={styles.pulseDot} />
-            <span className={styles.pulseText}>Mixu 2.0 Production Ready • NABH Aligned</span>
+            <span className={styles.pulseText}>Mixu Enterprise Hospital Operations Platform</span>
           </div>
         </div>
 
         {/* Hero Title */}
         <h1 className={styles.title}>
-          Next-Generation <span className={styles.gradientText}>Hospital Management</span> &amp; Clinical Intelligence
+          Smarter Hospital Management.{' '}
+          <span className={styles.gradientText}>One Connected Platform.</span>
         </h1>
 
         {/* Hero Subtitle */}
         <p className={styles.subtitle}>
-          The unified operations platform purpose-built for modern hospitals and healthcare centers. 
-          Seamlessly orchestrate patient registration, real-time bed allocations, consultant rounds, 
-          OT logging, diagnostic reports, and audit-ready financial invoicing with zero-data-loss architecture.
+          Bring patient management, admissions, clinical workflows, billing and hospital operations together in one organized system.
         </p>
 
-        {/* CTA Group */}
+        {/* CTA Group: Book a Demo + Explore Features */}
         <div className={styles.ctaGroup}>
-          <a
-            href={HOSPITAL_APP_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.primaryCta}
-          >
-            <span>Experience Live Hospital Demo</span>
-            <ExternalLink size={18} />
-          </a>
           <button
             type="button"
-            className={styles.secondaryCta}
+            className={styles.primaryCta}
             onClick={onOpenDemo}
           >
-            <span>Schedule Executive Walkthrough</span>
-            <ArrowRight size={18} />
+            <CalendarCheck2 size={19} />
+            <span>Book a Demo</span>
           </button>
+          <a
+            href="#modules"
+            className={styles.secondaryCta}
+            onClick={scrollToFeatures}
+          >
+            <span>Explore Features</span>
+            <ArrowRight size={18} />
+          </a>
         </div>
 
-        {/* Core Metric Highlights */}
+        <div className={styles.securityNotice}>
+          <Lock size={14} color="#14b8a6" />
+          <span>Controlled Demo Access with Administrator Approval • Zero Public Exposure of Patient Data</span>
+        </div>
+
+        {/* Core Operational Pillar Highlights */}
         <div className={styles.metricGrid}>
           <div className={styles.metricCard}>
             <div className={styles.metricIconWrap}>
-              <Layers size={22} color="#0D9488" />
+              <Layers size={22} color="#14B8A6" />
             </div>
             <div className={styles.metricContent}>
-              <span className={styles.metricValue}>50+</span>
-              <span className={styles.metricLabel}>Dedicated Modules</span>
-              <span className={styles.metricDesc}>OPD, IPD, OT, Diagnostics &amp; Billing</span>
+              <span className={styles.metricValue}>25+</span>
+              <span className={styles.metricLabel}>Integrated Modules</span>
+              <span className={styles.metricDesc}>OPD, IPD, OT, Diagnostics, Accounts &amp; Masters</span>
             </div>
           </div>
 
           <div className={styles.metricCard}>
             <div className={styles.metricIconWrap}>
-              <Bed size={22} color="#0D9488" />
+              <Bed size={22} color="#06B6D4" />
             </div>
             <div className={styles.metricContent}>
               <span className={styles.metricValue}>100%</span>
-              <span className={styles.metricLabel}>Live Bed Occupancy</span>
-              <span className={styles.metricDesc}>ICU, Deluxe, Special &amp; General Wards</span>
+              <span className={styles.metricLabel}>Bed Occupancy Sync</span>
+              <span className={styles.metricDesc}>ICU, Deluxe, Special &amp; General Ward Allocation</span>
             </div>
           </div>
 
           <div className={styles.metricCard}>
             <div className={styles.metricIconWrap}>
-              <Stethoscope size={22} color="#0D9488" />
+              <FileSpreadsheet size={22} color="#38BDF8" />
             </div>
             <div className={styles.metricContent}>
-              <span className={styles.metricValue}>&lt; 30 sec</span>
-              <span className={styles.metricLabel}>Bedside Round Entry</span>
-              <span className={styles.metricDesc}>Quick doctor visit &amp; procedure logging</span>
+              <span className={styles.metricValue}>Multi-Format</span>
+              <span className={styles.metricLabel}>Payment Wise Reports</span>
+              <span className={styles.metricDesc}>Payment-Wise, Patient-Wise, PDF, Excel &amp; CSV</span>
             </div>
           </div>
 
           <div className={styles.metricCard}>
             <div className={styles.metricIconWrap}>
-              <ShieldCheck size={22} color="#0D9488" />
+              <ShieldCheck size={22} color="#10B981" />
             </div>
             <div className={styles.metricContent}>
-              <span className={styles.metricValue}>Zero-Orphan</span>
-              <span className={styles.metricLabel}>Data Integrity</span>
-              <span className={styles.metricDesc}>Reconciled UHID, IPD &amp; Invoice linking</span>
+              <span className={styles.metricValue}>Granular</span>
+              <span className={styles.metricLabel}>RBAC &amp; Security</span>
+              <span className={styles.metricDesc}>Page-Level &amp; Operation-Level Checkbox Permissions</span>
             </div>
           </div>
         </div>
@@ -106,3 +116,5 @@ export const Hero: React.FC<HeroProps> = ({ onOpenDemo }) => {
     </section>
   );
 };
+
+export default Hero;

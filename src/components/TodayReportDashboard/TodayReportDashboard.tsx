@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { RefreshCw, Search, Printer, CheckCircle2 } from 'lucide-react';
+import { RefreshCw, Search, Printer } from 'lucide-react';
 import styles from './TodayReportDashboard.module.css';
 import { investigationApi, type InvestigationRecord } from '../../api/clinicalApi';
 import { openInvestigationPrint } from '../../utils/universalPrintGenerator';

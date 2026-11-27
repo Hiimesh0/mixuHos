@@ -4,8 +4,8 @@
  * with pure client-side calculation fallback for GitHub Pages hosting using localStorage and seed JSON.
  */
 
-import { admissionApi, depositApi, bedApi, type AdmissionRecord, type DepositRecord, type BedRecord } from './hospitalApi';
-import { patientApi, type Patient } from './patientApi';
+import { admissionApi, depositApi, bedApi } from './hospitalApi';
+import { patientApi } from './patientApi';
 
 export interface AccountsSummaryData {
   success: boolean;

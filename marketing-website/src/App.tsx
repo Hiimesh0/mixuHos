@@ -38,7 +38,7 @@ export const App: React.FC = () => {
         <FeatureHighlights />
 
         {/* 5. Module Showcase (Interactive Tabs) */}
-        <ModuleShowcase />
+        <ModuleShowcase onOpenDemo={handleOpenDemo} />
 
         {/* 6. Dashboard Preview (Interactive Simulation) */}
         <DashboardPreview />

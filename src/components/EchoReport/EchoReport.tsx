@@ -719,14 +719,14 @@ export const EchoReport: React.FC = () => {
             </div>
 
             <div className={styles.fieldGroup} style={{ flex: '2.5 1 300px' }}>
-              <label className={`${styles.label} ${styles.labelRight}`}>C/O :</label>
+              <label className={`${styles.label} ${styles.labelRight}`}>Indication :</label>
               <input
                 type="text"
                 name="c_o"
                 className={`${styles.input} ${styles.wFull} ${isFinalized ? styles.inputLocked : ''}`}
                 value={formData.c_o}
                 onChange={e => handleInputChange('c_o', e.target.value)}
-                placeholder="Clinical symptoms / Indications (e.g. Chest pain, Dyspnea on exertion)"
+                placeholder="Clinical Indication (e.g. Chest pain, Dyspnea on exertion, Cardiac evaluation)"
                 readOnly={isFinalized}
               />
             </div>
@@ -1648,7 +1648,7 @@ export const EchoReport: React.FC = () => {
                   </div>
                   {formData.c_o && (
                     <div className={styles.printPatientRow} style={{ gridColumn: 'span 2' }}>
-                      <span className={styles.printPatientLabel}>Clinical Indication (C/O):</span>
+                      <span className={styles.printPatientLabel}>Indication:</span>
                       <span className={styles.printPatientVal}>{formData.c_o}</span>
                     </div>
                   )}

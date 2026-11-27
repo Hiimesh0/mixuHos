@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowDown, LogOut, Save, Trash2, CheckCircle2, Bed } from 'lucide-react';
+import { ArrowDown, LogOut, Save, Trash2, CheckCircle2 } from 'lucide-react';
 import styles from './RoomCharges.module.css';
 import { admissionApi, type AdmissionRecord, bedApi, type BedRecord } from '../../api/hospitalApi';
 
@@ -126,6 +126,9 @@ const RoomCharges: React.FC = () => {
     <div className={styles.pageContainer}>
       <div className={styles.header}>
         <h1 className={styles.pageTitle}>Room Charges Entry</h1>
+        <p style={{ margin: '4px 0 0', fontSize: '12px', color: '#64748b' }}>
+          Active Inpatients: {admissions.length} | Configured Beds: {beds.length}
+        </p>
       </div>
 
       <div className={styles.content}>

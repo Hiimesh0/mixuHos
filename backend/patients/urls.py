@@ -23,6 +23,17 @@ from .accounts_views import (
     AccountsTransactionsView,
     AccountsExportView,
 )
+from .auth_views import (
+    AuthLoginView,
+    AuthMeView,
+    RolesListView,
+    RoleDetailView,
+    UsersListView,
+    UserDetailView,
+    DemoRequestsView,
+    DemoRequestActionView,
+    AuditLogsListView,
+)
 from .domain_views import (
     DepartmentListCreateView,
     DepartmentDetailView,
@@ -231,4 +242,24 @@ urlpatterns = [
     path("accounts/transactions", AccountsTransactionsView.as_view(), name="accounts-transactions-noslash"),
     path("accounts/export/", AccountsExportView.as_view(), name="accounts-export"),
     path("accounts/export", AccountsExportView.as_view(), name="accounts-export-noslash"),
+
+    # Role-Based Access Control (RBAC), Authentication, and Security Audit Logs
+    path("auth/login/", AuthLoginView.as_view(), name="auth-login"),
+    path("auth/login", AuthLoginView.as_view(), name="auth-login-noslash"),
+    path("auth/me/", AuthMeView.as_view(), name="auth-me"),
+    path("auth/me", AuthMeView.as_view(), name="auth-me-noslash"),
+    path("roles/", RolesListView.as_view(), name="roles-list-create"),
+    path("roles", RolesListView.as_view(), name="roles-list-create-noslash"),
+    path("roles/<str:role_id>/", RoleDetailView.as_view(), name="role-detail"),
+    path("roles/<str:role_id>", RoleDetailView.as_view(), name="role-detail-noslash"),
+    path("users/", UsersListView.as_view(), name="users-list-create"),
+    path("users", UsersListView.as_view(), name="users-list-create-noslash"),
+    path("users/<str:user_id>/", UserDetailView.as_view(), name="user-detail"),
+    path("users/<str:user_id>", UserDetailView.as_view(), name="user-detail-noslash"),
+    path("demo-requests/", DemoRequestsView.as_view(), name="demo-requests"),
+    path("demo-requests", DemoRequestsView.as_view(), name="demo-requests-noslash"),
+    path("demo-requests/<str:enquiry_id>/<str:action>/", DemoRequestActionView.as_view(), name="demo-request-action"),
+    path("demo-requests/<str:enquiry_id>/<str:action>", DemoRequestActionView.as_view(), name="demo-request-action-noslash"),
+    path("audit-logs/", AuditLogsListView.as_view(), name="audit-logs"),
+    path("audit-logs", AuditLogsListView.as_view(), name="audit-logs-noslash"),
 ]

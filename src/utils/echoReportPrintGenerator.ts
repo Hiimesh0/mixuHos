@@ -401,6 +401,15 @@ export function generateEchoReportHtml(report: EchoReportRecord): string {
           <span class="header-val" style="font-weight: 600;">${reportDateFormatted}</span>
         </td>
       </tr>
+      ${(report.c_o || (report as any).indication) ? `
+      <tr>
+        <td colspan="2" style="padding-top: 2px;">
+          <span class="header-label">Indication</span>
+          <span class="header-label" style="margin-left: 45px;">:</span>
+          <span class="header-val" style="font-weight: 500;">${report.c_o || (report as any).indication}</span>
+        </td>
+      </tr>
+      ` : ''}
     </table>
 
     <!-- Underlined Centered Title -->
@@ -656,6 +665,15 @@ export function generateEchoReportPdfBlob(report: EchoReportRecord): Blob {
   doc.text(':', 155, 26);
   doc.setFont('helvetica', 'normal');
   doc.text(reportDate, 160, 26);
+
+  const indication = report.c_o || (report as any).indication || '';
+  if (indication) {
+    doc.setFont('helvetica', 'bold');
+    doc.text('Indication', 16, 31.5);
+    doc.text(':', 55, 31.5);
+    doc.setFont('helvetica', 'normal');
+    doc.text(doc.splitTextToSize(indication, 135), 60, 31.5);
+  }
 
   // Title: 2D Echo Report (underlined & centered)
   doc.setFont('helvetica', 'bold');

@@ -104,6 +104,9 @@ const MedicalCertificate = lazy(() => import('./components/MedicalCertificate/Me
 const MlcCertificate = lazy(() => import('./components/MlcCertificate/MlcCertificate'));
 const CertificateTemplate = lazy(() => import('./components/CertificateTemplate/CertificateTemplate'));
 const AccountsDashboard = lazy(() => import('./components/Accounts/AccountsDashboard'));
+const RolesPermissions = lazy(() => import('./components/Roles/RolesPermissions'));
+const UserManagement = lazy(() => import('./components/Users/UserManagement'));
+const DemoRequestAdmin = lazy(() => import('./components/Admin/DemoRequestAdmin'));
 
 // Configuration interface for recursive navigation items supporting arbitrary nesting levels
 interface NavItemConfig {
@@ -222,6 +225,18 @@ const OTHER_NAV_ITEMS: NavItemConfig[] = [
     children: [
       { id: 'contact-list', title: 'Contact List', icon: Contact, to: '/contact-list' },
       { id: 'intercomm-display', title: 'Intercomm Display', icon: Radio, to: '/intercomm-display' },
+    ]
+  },
+
+  // Administration & Security (RBAC)
+  {
+    id: 'administration',
+    title: 'Administration',
+    icon: ShieldCheck,
+    children: [
+      { id: 'roles-permissions', title: 'Roles & Permissions', icon: ShieldCheck, to: '/roles' },
+      { id: 'user-management', title: 'User Management', icon: Users, to: '/users' },
+      { id: 'demo-requests', title: 'Demo Leads & Approvals', icon: UserCheck, to: '/demo-requests' },
     ]
   }
 ];
@@ -1284,6 +1299,9 @@ function App() {
                     <Route path="/deposit-entry" element={<DepositEntry />} />
                     <Route path="/billing" element={<Billing />} />
                     <Route path="/accounts" element={<AccountsDashboard />} />
+                    <Route path="/roles" element={<RolesPermissions />} />
+                    <Route path="/users" element={<UserManagement />} />
+                    <Route path="/demo-requests" element={<DemoRequestAdmin />} />
                     <Route path="/dr-visit-procedure" element={<DrVisitProcedure />} />
                     <Route path="/investigation-ordered" element={<InvestigationOrdered />} />
                     <Route path="/indoor-register" element={<IndoorRegister />} />

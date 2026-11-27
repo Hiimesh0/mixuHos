@@ -33,6 +33,8 @@ export interface DoctorRecord {
   country?: string;
   clinicPhNo?: string;
   status: 'active' | 'inactive';
+  isActive?: boolean;
+  name?: string;
 }
 
 export interface MedicineRecord {

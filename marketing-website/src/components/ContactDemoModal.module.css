@@ -15,15 +15,15 @@
 
 .modalCard {
   background: #091733;
-  border: 1px solid rgba(13, 148, 136, 0.35);
-  border-radius: var(--radius-xl);
+  border: 1px solid rgba(20, 184, 166, 0.35);
+  border-radius: 16px;
   width: 100%;
-  max-width: 680px;
+  max-width: 660px;
   max-height: 90vh;
   overflow-y: auto;
   position: relative;
   box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 30px rgba(13, 148, 136, 0.2);
-  padding: 36px;
+  padding: 32px;
 }
 
 .closeBtn {
@@ -34,10 +34,12 @@
   height: 36px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.08);
-  color: var(--color-slate-300);
+  border: none;
+  color: #94a3b8;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
   transition: all 0.2s ease;
 }
 
@@ -46,144 +48,154 @@
   color: #ffffff;
 }
 
-.formHeader {
-  margin-bottom: 24px;
+.modalHeader {
+  margin-bottom: 20px;
 }
 
-.formTag {
+.badgeWrap {
+  margin-bottom: 8px;
+}
+
+.badge {
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--color-teal-light);
-  display: block;
-  margin-bottom: 6px;
+  color: #2dd4bf;
+  background: rgba(20, 184, 166, 0.15);
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 1px solid rgba(20, 184, 166, 0.3);
 }
 
-.formTitle {
+.modalTitle {
   font-size: 24px;
+  font-weight: 800;
   color: #ffffff;
-  margin-bottom: 8px;
+  margin: 6px 0 6px;
 }
 
-.formSubtitle {
-  font-size: 14px;
-  color: var(--color-slate-400);
+.modalSubtitle {
+  font-size: 13.5px;
+  color: #94a3b8;
   line-height: 1.5;
 }
 
 .errorAlert {
   background: rgba(239, 68, 68, 0.15);
   border: 1px solid rgba(239, 68, 68, 0.35);
-  border-radius: var(--radius-md);
-  padding: 12px 16px;
+  border-radius: 8px;
+  padding: 10px 14px;
   color: #fca5a5;
   font-size: 13px;
   font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .formGrid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.fullWidth {
-  grid-column: span 2;
-}
-
-.fieldGroup {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 14px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .label {
   font-size: 12px;
   font-weight: 600;
-  color: var(--color-slate-300);
+  color: #cbd5e1;
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
 .input, .select, .textarea {
-  background: rgba(17, 37, 78, 0.6);
+  background: rgba(15, 23, 42, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: var(--radius-md);
-  padding: 10px 14px;
+  border-radius: 8px;
+  padding: 9px 12px;
   color: #ffffff;
-  font-size: 14px;
+  font-size: 13.5px;
   transition: all 0.2s ease;
+  font-family: inherit;
 }
 
 .input:focus, .select:focus, .textarea:focus {
-  border-color: var(--color-teal-light);
-  background: rgba(17, 37, 78, 0.95);
-  box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.2);
+  border-color: #0ea5e9;
+  background: rgba(15, 23, 42, 0.95);
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2);
+  outline: none;
 }
 
 .select option {
-  background: #0b1b3d;
+  background: #0f172a;
   color: #ffffff;
 }
 
-.pillGroup {
+.securityFooterNote {
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
   gap: 8px;
-  margin-top: 4px;
+  font-size: 11.5px;
+  color: #64748b;
+  padding: 8px 12px;
+  background: rgba(15, 23, 42, 0.5);
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.pillBtn {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--color-slate-300);
-  padding: 6px 12px;
-  border-radius: var(--radius-full);
-  font-size: 12px;
-  font-weight: 500;
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.cancelBtn {
+  background: transparent;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  color: #94a3b8;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
   transition: all 0.2s ease;
 }
 
-.pillBtn:hover {
-  background: rgba(255, 255, 255, 0.1);
+.cancelBtn:hover {
+  background: rgba(255, 255, 255, 0.05);
   color: #ffffff;
-}
-
-.pillSelected {
-  background: rgba(13, 148, 136, 0.2);
-  border-color: var(--color-teal);
-  color: var(--color-teal-light);
-  font-weight: 600;
-}
-
-.formActions {
-  display: flex;
-  justify-content: flex-end;
 }
 
 .submitBtn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+  background: linear-gradient(135deg, #0284c7 0%, #0d9488 100%);
   color: #ffffff;
-  padding: 12px 28px;
-  border-radius: var(--radius-full);
-  font-size: 15px;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-size: 14px;
   font-weight: 700;
-  box-shadow: 0 4px 14px rgba(13, 148, 136, 0.4);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
   transition: all 0.25s ease;
 }
 
 .submitBtn:hover:not(:disabled) {
-  box-shadow: 0 8px 20px rgba(13, 148, 136, 0.6);
+  box-shadow: 0 6px 18px rgba(2, 132, 199, 0.5);
   transform: translateY(-1px);
 }
 
@@ -195,69 +207,92 @@
 /* Success state */
 .successState {
   text-align: center;
-  padding: 24px 12px;
+  padding: 20px 10px;
 }
 
 .successIconWrap {
-  width: 72px;
-  height: 72px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   background: rgba(16, 185, 129, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 20px;
+  margin: 0 auto 16px;
 }
 
 .successTitle {
-  font-size: 24px;
+  font-size: 22px;
+  font-weight: 800;
   color: #ffffff;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
 .successDesc {
-  font-size: 15px;
-  color: var(--color-slate-300);
+  font-size: 14px;
+  color: #cbd5e1;
   line-height: 1.6;
   max-width: 500px;
-  margin: 0 auto 24px;
+  margin: 0 auto 20px;
 }
 
 .confirmedSummary {
-  background: rgba(17, 37, 78, 0.5);
+  background: rgba(15, 23, 42, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--radius-md);
-  padding: 16px;
-  font-size: 13px;
-  color: var(--color-slate-300);
+  border-radius: 8px;
+  padding: 14px;
+  font-size: 12.5px;
+  color: #94a3b8;
   text-align: left;
   max-width: 500px;
-  margin: 0 auto 28px;
+  margin: 0 auto 20px;
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
+.approvalNote {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  color: #2dd4bf;
+  padding: 8px 12px;
+  background: rgba(20, 184, 166, 0.1);
+  border-radius: 6px;
+  border: 1px solid rgba(20, 184, 166, 0.2);
+  max-width: 500px;
+  margin: 0 auto 20px;
+  text-align: left;
+}
+
 .doneBtn {
-  background: var(--color-teal);
+  background: #0d9488;
   color: #ffffff;
-  padding: 12px 28px;
-  border-radius: var(--radius-full);
+  padding: 10px 26px;
+  border-radius: 8px;
   font-size: 14px;
   font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.doneBtn:hover {
+  background: #0f766e;
 }
 
 @media (max-width: 640px) {
   .modalCard {
-    padding: 24px 18px;
+    padding: 20px 14px;
   }
-  .formGrid {
+  .row {
     grid-template-columns: 1fr;
   }
-  .fullWidth {
-    grid-column: span 1;
+  .modalActions {
+    flex-direction: column;
   }
-  .submitBtn {
+  .cancelBtn, .submitBtn {
     width: 100%;
     justify-content: center;
   }

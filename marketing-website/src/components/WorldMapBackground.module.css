@@ -1,0 +1,80 @@
+.mapContainer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+  background-color: #060b19;
+}
+
+.mapSvg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  min-width: 1100px;
+  object-fit: cover;
+  opacity: 0.9;
+}
+
+/* Ambient lighting radial gradients */
+.ambientTopGlow {
+  position: absolute;
+  top: -150px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 450px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.18) 0%, rgba(20, 184, 166, 0.08) 45%, transparent 70%);
+  filter: blur(60px);
+}
+
+.ambientCenterGlow {
+  position: absolute;
+  top: 40%;
+  right: 15%;
+  width: 500px;
+  height: 350px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.14) 0%, rgba(13, 148, 136, 0.06) 50%, transparent 75%);
+  filter: blur(70px);
+}
+
+/* Vignette overlay ensuring typography readability */
+.vignetteOverlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 30%, rgba(6, 11, 25, 0.75) 85%, #060b19 100%),
+              linear-gradient(180deg, rgba(6, 11, 25, 0.2) 0%, rgba(6, 11, 25, 0.6) 70%, #060b19 100%);
+}
+
+/* Pulsing node animations */
+.pingNode {
+  animation: pulseScale 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  transform-origin: center;
+}
+
+.pingNodeSlow {
+  animation: pulseScale 4.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  transform-origin: center;
+}
+
+@keyframes pulseScale {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 0.2;
+  }
+  100% {
+    transform: scale(0.85);
+    opacity: 0.8;
+  }
+}

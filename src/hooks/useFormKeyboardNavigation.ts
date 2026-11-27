@@ -200,8 +200,8 @@ export interface UseFormKeyboardNavigationOptions {
  * - Never submits form accidentally when Enter is pressed in normal inputs.
  * - At the last field, moves focus to the primary action button without auto-submitting.
  */
-export function useFormKeyboardNavigation(options?: UseFormKeyboardNavigationOptions) {
-  const formRef = useRef<HTMLElement | null>(null);
+export function useFormKeyboardNavigation<T extends HTMLElement = HTMLFormElement>(options?: UseFormKeyboardNavigationOptions) {
+  const formRef = useRef<T | null>(null);
   const explicitFieldOrder = options?.fieldOrder;
   const submitButtonSelector = options?.submitButtonSelector ?? 'button[type="submit"], .btnPrimaryAction, button.btnPrimary';
 

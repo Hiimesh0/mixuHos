@@ -490,10 +490,10 @@ const DrVisitProcedure: React.FC = () => {
           </select>
 
           <button className={styles.primaryBtn} onClick={handleQuickAddVisit}>
-            <Plus size={16} /> + Dr. Visit
+            <Plus size={16} /> Dr. Visit
           </button>
           <button className={styles.primaryBtn} onClick={handleQuickAddProcedure}>
-            <Plus size={16} /> + Procedure
+            <Plus size={16} /> Procedure
           </button>
           <button className={styles.secondaryBtn} onClick={loadData} disabled={loading}>
             <RefreshCw size={16} className={loading ? styles.spin : ''} /> Refresh

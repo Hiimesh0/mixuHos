@@ -88,6 +88,10 @@ export interface BedRecord {
   bed_number: string;
   ward_name: string;
   room_type_id: string;
+  room_type?: string;
+  floor?: string;
+  wing?: string;
+  notes?: string;
   status: 'Vacant' | 'Occupied' | 'Maintenance' | 'Cleaning';
   current_admission_id?: string | null;
   current_patient_id?: string | null;
@@ -657,6 +661,7 @@ const normalizeDrVisitProcedure = (e: any): DrVisitProcedureRecord => {
     return {
       id: `DVP-AUTO-${Date.now()}`,
       uhid: '',
+      patient_name: '',
       entry_type: 'Doctor Visit',
       entry_date: new Date().toISOString().split('T')[0],
       doctor_name: 'Dr. Nilesh Mahale',

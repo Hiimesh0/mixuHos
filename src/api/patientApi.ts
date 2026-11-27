@@ -39,7 +39,7 @@ export interface PatientRecord {
   updatedAt?: string;
 }
 
-export type PatientFormData = Omit<PatientRecord, 'id' | 'createdAt' | 'updatedAt'>;
+export type PatientFormData = Omit<PatientRecord, 'id' | 'createdAt' | 'updatedAt' | 'uhid'> & { uhid?: string };
 
 export interface PatientListResponse {
   success: boolean;
@@ -73,6 +73,10 @@ export interface PatientBillRecord {
   id: string;
   patientId: string;
   uhid: string;
+  admission_id?: string;
+  ipd_no?: string;
+  billNo?: string;
+  billType?: string;
   invoiceNo: string;
   billDate: string;
   patientName: string;
@@ -91,12 +95,19 @@ export interface PatientBillRecord {
   discountAmount?: number;
   discountDoctor?: string;
   discountRemark?: string;
+  netAmount?: number;
   netPayable?: number;
   totalAmount: number;
+  totalReceived?: number;
   amountReceived: number;
+  balanceDue?: number;
+  balanceAmount?: number;
+  paymentMode?: string;
   paymentType: string;
   receiptNo: string;
   dueAmount: number;
+  status?: string;
+  remarks?: string;
   entryBy?: string;
   pcName?: string;
   createdAt?: string;
@@ -117,6 +128,7 @@ export interface BillCreatePayload {
   items?: Array<{ details: string; rate: number; amount?: number; chargeId?: string }>;
   paymentType?: string;
   amountReceived?: number;
+  totalReceived?: number;
   discountType?: 'percentage' | 'fixed';
   discountValue?: number;
   discountDoctor?: string;
