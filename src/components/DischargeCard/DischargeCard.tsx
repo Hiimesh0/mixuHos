@@ -432,15 +432,15 @@ const DischargeCard: React.FC = () => {
         onSave={handleSaveDischarge}
         saveLabel={loading ? 'Processing...' : 'Complete & Process Discharge'}
         isSaving={loading}
-        saveDisabled={!selectedAdmId || loading}
+        saveDisabled={!selectedAdmissionId || loading}
         onPrint={handlePrint}
         printLabel="Print Discharge Card"
-        printDisabled={!selectedAdmId}
+        printDisabled={!selectedAdmissionId}
         onCancel={loadData}
         cancelLabel="Reset / Refresh"
         statusMessage={
-          selectedAdmission
-            ? `${selectedAdmission.patient_name} (${selectedAdmission.uhid}) | Bed: ${selectedAdmission.bed_number}`
+          selectedAdmissionId && formData.patient_name
+            ? `${formData.patient_name} (${formData.uhid || formData.ipd_no}) | Bed: ${formData.bed_number}`
             : 'Select admitted patient to generate discharge card'
         }
       />

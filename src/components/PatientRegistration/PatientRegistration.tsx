@@ -3280,7 +3280,7 @@ const PatientRegistration: React.FC = () => {
         cancelLabel={isEditMode ? 'Cancel Edit' : 'Reset Form'}
         statusMessage={
           formData.uhid
-            ? `UHID: ${formData.uhid} | ${formData.title} ${formData.firstName} ${formData.lastName}`
+            ? `UHID: ${formData.uhid} | ${formData.firstName} ${formData.lastName}`
             : 'New Patient Registration'
         }
       />

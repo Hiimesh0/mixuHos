@@ -820,14 +820,14 @@ const DrVisitProcedure: React.FC = () => {
       </div>
 
       <GlobalBottomActionBar
-        onSave={showForm ? handleSaveEntry : undefined}
+        onSave={handleSaveEntry}
         saveLabel={editingEntryId ? 'Update Entry' : 'Save Entry'}
         isSaving={loading}
         saveDisabled={!selectedPatient || !serviceHead.trim()}
         onPrint={() => window.print()}
         printLabel="Print Log"
-        onCancel={editingEntryId ? handleCancelEdit : showForm ? () => setShowForm(false) : undefined}
-        cancelLabel={editingEntryId ? 'Cancel Edit' : 'Close Form'}
+        onCancel={editingEntryId ? handleCancelEdit : undefined}
+        cancelLabel={editingEntryId ? 'Cancel Edit' : 'Cancel'}
         statusMessage={
           selectedPatient
             ? `${selectedPatient.name} (${selectedPatient.uhid}) | Total Charges: Rs. ${totalCharges.toFixed(2)}`
