@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ShieldCheck, Plus, CheckSquare, Square, Search, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { ShieldCheck, Plus, Save, Trash2, CheckSquare, Square, Search, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { authApi, type RoleRecord, type PagePermission, REGISTERED_PAGES } from '../../api/authApi';
 import GlobalBottomActionBar from '../common/GlobalBottomActionBar';
 import styles from './RolesPermissions.module.css';
@@ -18,40 +18,36 @@ export const RolesPermissions: React.FC = () => {
   const [newRoleName, setNewRoleName] = useState('');
   const [newRoleDesc, setNewRoleDesc] = useState('');
 
+  useEffect(() => {
+    loadRoles();
+  }, []);
+
   const loadRoles = async () => {
     try {
       setLoading(true);
       const list = await authApi.getRoles();
       setRoles(list);
-      const found = list.find(r => r.id === selectedRoleId) || list[0];
-      if (found) {
-        setSelectedRoleId(found.id);
-        setActiveRole(found);
+      if (list.length > 0) {
+        const current = list.find(r => r.id === selectedRoleId) || list[0];
+        setActiveRole(JSON.parse(JSON.stringify(current)));
+        setSelectedRoleId(current.id);
       }
     } catch {
-      setNotification({ type: 'error', message: 'Failed to load institutional security roles.' });
+      setNotification({ type: 'error', message: 'Failed to load roles from server.' });
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    loadRoles();
-  }, []);
-
-  const handleSelectRole = (roleId: string) => {
-    setSelectedRoleId(roleId);
-    const found = roles.find(r => r.id === roleId);
+  const handleSelectRole = (rId: string) => {
+    setSelectedRoleId(rId);
+    const found = roles.find(r => r.id === rId);
     if (found) {
       setActiveRole(JSON.parse(JSON.stringify(found)));
     }
   };
 
-  const handlePermissionChange = (
-    pageId: string,
-    action: keyof PagePermission,
-    value: boolean
-  ) => {
+  const handlePermissionChange = (pageId: string, op: keyof PagePermission, checked: boolean) => {
     if (!activeRole) return;
     const permissions = { ...activeRole.permissions };
     const current = permissions[pageId] || {
@@ -64,9 +60,9 @@ export const RolesPermissions: React.FC = () => {
       export: false
     };
 
-    const updated = { ...current, [action]: value };
-    // If access is toggled off, disable all operations
-    if (action === 'access' && !value) {
+    const updated = { ...current, [op]: checked };
+    // If access is unchecked, disable all child operations
+    if (op === 'access' && !checked) {
       updated.view = false;
       updated.create = false;
       updated.edit = false;
@@ -74,9 +70,10 @@ export const RolesPermissions: React.FC = () => {
       updated.print = false;
       updated.export = false;
     }
-    // If any operation is enabled, auto-enable page access
-    if (action !== 'access' && value) {
+    // If an operation is checked, ensure page access is on
+    if (op !== 'access' && checked) {
       updated.access = true;
+      updated.view = true;
     }
 
     permissions[pageId] = updated;
@@ -101,8 +98,8 @@ export const RolesPermissions: React.FC = () => {
   const handleSelectAllPages = (enable: boolean) => {
     if (!activeRole) return;
     const permissions: Record<string, PagePermission> = {};
-    for (const page of REGISTERED_PAGES) {
-      permissions[page.id] = {
+    REGISTERED_PAGES.forEach(p => {
+      permissions[p.id] = {
         access: enable,
         view: enable,
         create: enable,
@@ -111,7 +108,7 @@ export const RolesPermissions: React.FC = () => {
         print: enable,
         export: enable
       };
-    }
+    });
     setActiveRole({ ...activeRole, permissions });
   };
 
@@ -119,12 +116,12 @@ export const RolesPermissions: React.FC = () => {
     if (!activeRole) return;
     try {
       setSaving(true);
-      await authApi.updateRole(activeRole.id, activeRole);
+      await authApi.saveRole(activeRole);
       setNotification({ type: 'success', message: `Permissions for role '${activeRole.name}' saved successfully.` });
-      // Update role in local array
-      setRoles(prev => prev.map(r => r.id === activeRole.id ? activeRole : r));
+      await loadRoles();
+      setTimeout(() => setNotification(null), 3500);
     } catch {
-      setNotification({ type: 'error', message: 'Failed to persist role permissions to server.' });
+      setNotification({ type: 'error', message: 'Failed to save role permissions.' });
     } finally {
       setSaving(false);
     }
@@ -133,24 +130,21 @@ export const RolesPermissions: React.FC = () => {
   const handleCreateNewRole = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newRoleName.trim()) return;
+
+    const id = newRoleName.toLowerCase().replace(/[^a-z0-9]/g, '_');
+    const newRole: RoleRecord = {
+      id,
+      name: newRoleName.trim(),
+      description: newRoleDesc.trim() || 'Custom hospital staff role',
+      is_active: true,
+      permissions: REGISTERED_PAGES.reduce((acc, p) => {
+        acc[p.id] = { access: false, view: false, create: false, edit: false, delete: false, print: false, export: false };
+        return acc;
+      }, {} as Record<string, PagePermission>)
+    };
+
     try {
-      const defaultPerms: Record<string, PagePermission> = {};
-      for (const p of REGISTERED_PAGES) {
-        defaultPerms[p.id] = {
-          access: false,
-          view: false,
-          create: false,
-          edit: false,
-          delete: false,
-          print: false,
-          export: false
-        };
-      }
-      const newRole = await authApi.createRole({
-        name: newRoleName.trim(),
-        description: newRoleDesc.trim() || 'Custom department staff role',
-        permissions: defaultPerms
-      });
+      await authApi.saveRole(newRole);
       setIsNewRoleModalOpen(false);
       setNewRoleName('');
       setNewRoleDesc('');
@@ -252,116 +246,104 @@ export const RolesPermissions: React.FC = () => {
           </div>
 
           {/* Permission Matrix Table */}
-          {loading ? (
-            <div style={{ padding: '40px', textAlign: 'center', color: '#64748b' }}>Loading permission matrices...</div>
-          ) : (
-            <div className={styles.tableWrap}>
-              <table className={styles.table}>
-                <thead>
-                  <tr>
-                    <th style={{ width: '28%' }}>Hospital Module / Page</th>
-                    <th style={{ width: '12%' }}>Category</th>
-                    <th style={{ width: '10%' }}>Page Access</th>
-                    <th style={{ width: '8%' }}>View</th>
-                    <th style={{ width: '8%' }}>Add / Create</th>
-                    <th style={{ width: '8%' }}>Edit / Save</th>
-                    <th style={{ width: '8%' }}>Delete</th>
-                    <th style={{ width: '9%' }}>Print</th>
-                    <th style={{ width: '9%' }}>Export</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredPages.map(page => {
-                    const perm = activeRole.permissions[page.id] || {
-                      access: false,
-                      view: false,
-                      create: false,
-                      edit: false,
-                      delete: false,
-                      print: false,
-                      export: false
-                    };
-
-                    return (
-                      <tr key={page.id} className={!perm.access ? styles.disabledRow : ''}>
-                        <td className={styles.pageTitleCell}>
-                          <div className={styles.pageName}>{page.name}</div>
-                          <div className={styles.pagePath}>{page.path}</div>
-                          <button
-                            type="button"
-                            onClick={() => handleSelectAllForPage(page.id, !perm.access)}
-                            style={{ fontSize: '11px', color: '#0284c7', background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginTop: '2px' }}
-                          >
-                            {perm.access ? 'Revoke full module' : 'Grant full access'}
-                          </button>
-                        </td>
-                        <td>
-                          <span className={styles.catBadge}>{page.category}</span>
-                        </td>
-                        <td style={{ textAlign: 'center' }}>
-                          <input
-                            type="checkbox"
-                            className={styles.checkboxPrimary}
-                            checked={perm.access}
-                            onChange={e => handlePermissionChange(page.id, 'access', e.target.checked)}
-                            title="Toggle whole page visibility in sidebar and routing"
-                          />
-                        </td>
-                        <td style={{ textAlign: 'center' }}>
-                          <input
-                            type="checkbox"
-                            checked={perm.view}
-                            disabled={!perm.access}
-                            onChange={e => handlePermissionChange(page.id, 'view', e.target.checked)}
-                          />
-                        </td>
-                        <td style={{ textAlign: 'center' }}>
-                          <input
-                            type="checkbox"
-                            checked={perm.create}
-                            disabled={!perm.access}
-                            onChange={e => handlePermissionChange(page.id, 'create', e.target.checked)}
-                          />
-                        </td>
-                        <td style={{ textAlign: 'center' }}>
-                          <input
-                            type="checkbox"
-                            checked={perm.edit}
-                            disabled={!perm.access}
-                            onChange={e => handlePermissionChange(page.id, 'edit', e.target.checked)}
-                          />
-                        </td>
-                        <td style={{ textAlign: 'center' }}>
-                          <input
-                            type="checkbox"
-                            checked={perm.delete}
-                            disabled={!perm.access}
-                            onChange={e => handlePermissionChange(page.id, 'delete', e.target.checked)}
-                          />
-                        </td>
-                        <td style={{ textAlign: 'center' }}>
-                          <input
-                            type="checkbox"
-                            checked={perm.print}
-                            disabled={!perm.access}
-                            onChange={e => handlePermissionChange(page.id, 'print', e.target.checked)}
-                          />
-                        </td>
-                        <td style={{ textAlign: 'center' }}>
-                          <input
-                            type="checkbox"
-                            checked={perm.export}
-                            disabled={!perm.access}
-                            onChange={e => handlePermissionChange(page.id, 'export', e.target.checked)}
-                          />
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          )}
+          <div className={styles.tableWrap}>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th style={{ width: '28%' }}>Hospital Module / Page</th>
+                  <th style={{ width: '12%' }}>Category</th>
+                  <th style={{ width: '10%' }}>Page Access</th>
+                  <th style={{ width: '8%' }}>View</th>
+                  <th style={{ width: '8%' }}>Add / Create</th>
+                  <th style={{ width: '8%' }}>Edit / Save</th>
+                  <th style={{ width: '8%' }}>Delete</th>
+                  <th style={{ width: '9%' }}>Print</th>
+                  <th style={{ width: '9%' }}>Export</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredPages.map(page => {
+                  const perm = activeRole.permissions?.[page.id] || {
+                    access: false,
+                    view: false,
+                    create: false,
+                    edit: false,
+                    delete: false,
+                    print: false,
+                    export: false
+                  };
+                  return (
+                    <tr key={page.id} className={perm.access ? styles.rowActive : styles.rowDisabled}>
+                      <td>
+                        <div style={{ fontWeight: 600, color: '#0f172a' }}>{page.name}</div>
+                        <div style={{ fontSize: '11px', color: '#64748b' }}>Route: {page.route}</div>
+                      </td>
+                      <td>
+                        <span className={styles.categoryBadge}>{page.category}</span>
+                      </td>
+                      <td style={{ textAlign: 'center' }}>
+                        <input
+                          type="checkbox"
+                          className={styles.checkboxPrimary}
+                          checked={perm.access}
+                          onChange={e => handlePermissionChange(page.id, 'access', e.target.checked)}
+                          title="Toggle whole page visibility in sidebar and routing"
+                        />
+                      </td>
+                      <td style={{ textAlign: 'center' }}>
+                        <input
+                          type="checkbox"
+                          checked={perm.view}
+                          disabled={!perm.access}
+                          onChange={e => handlePermissionChange(page.id, 'view', e.target.checked)}
+                        />
+                      </td>
+                      <td style={{ textAlign: 'center' }}>
+                        <input
+                          type="checkbox"
+                          checked={perm.create}
+                          disabled={!perm.access}
+                          onChange={e => handlePermissionChange(page.id, 'create', e.target.checked)}
+                        />
+                      </td>
+                      <td style={{ textAlign: 'center' }}>
+                        <input
+                          type="checkbox"
+                          checked={perm.edit}
+                          disabled={!perm.access}
+                          onChange={e => handlePermissionChange(page.id, 'edit', e.target.checked)}
+                        />
+                      </td>
+                      <td style={{ textAlign: 'center' }}>
+                        <input
+                          type="checkbox"
+                          checked={perm.delete}
+                          disabled={!perm.access}
+                          onChange={e => handlePermissionChange(page.id, 'delete', e.target.checked)}
+                        />
+                      </td>
+                      <td style={{ textAlign: 'center' }}>
+                        <input
+                          type="checkbox"
+                          checked={perm.print}
+                          disabled={!perm.access}
+                          onChange={e => handlePermissionChange(page.id, 'print', e.target.checked)}
+                        />
+                      </td>
+                      <td style={{ textAlign: 'center' }}>
+                        <input
+                          type="checkbox"
+                          checked={perm.export}
+                          disabled={!perm.access}
+                          onChange={e => handlePermissionChange(page.id, 'export', e.target.checked)}
+                        />
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 
@@ -432,3 +414,4 @@ export const RolesPermissions: React.FC = () => {
 };
 
 export default RolesPermissions;
+

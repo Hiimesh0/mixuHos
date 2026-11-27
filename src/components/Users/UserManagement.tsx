@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Users, UserPlus, Search, ShieldCheck, Key, Edit2, Trash2, CheckCircle2, AlertCircle, X } from 'lucide-react';
+import { Users, UserPlus, Search, ShieldCheck, Key, Edit2, Trash2, CheckCircle2, AlertCircle, X, Lock } from 'lucide-react';
 import { authApi, type UserRecord, type RoleRecord } from '../../api/authApi';
 import GlobalBottomActionBar from '../common/GlobalBottomActionBar';
 import styles from './UserManagement.module.css';
@@ -255,13 +255,7 @@ export const UserManagement: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {loading ? (
-              <tr>
-                <td colSpan={8} style={{ textAlign: 'center', padding: '36px', color: '#64748b' }}>
-                  Loading staff users directory...
-                </td>
-              </tr>
-            ) : filteredUsers.length === 0 ? (
+            {filteredUsers.length === 0 ? (
               <tr>
                 <td colSpan={8} style={{ textAlign: 'center', padding: '36px', color: '#64748b' }}>
                   No staff accounts found matching filter criteria.
@@ -540,3 +534,4 @@ export const UserManagement: React.FC = () => {
 };
 
 export default UserManagement;
+

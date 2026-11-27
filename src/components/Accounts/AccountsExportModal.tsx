@@ -70,13 +70,13 @@ export const AccountsExportModal: React.FC<AccountsExportModalProps> = ({
   const prepareReportData = async (): Promise<UniversalReportData> => {
     const [ptsRes, billsRes, depsRes, bedsRes, admsRes] = await Promise.allSettled([
       patientApi.getPatients(),
-      patientApi.getAllBills(),
+      patientApi.getPatientBills(),
       depositApi.getDeposits(),
-      bedApi.getBeds(),
+      hospitalApi.getBeds(),
       admissionApi.getAdmissions()
     ]);
 
-    const patients = ptsRes.status === 'fulfilled' ? (Array.isArray(ptsRes.value) ? ptsRes.value : ((ptsRes.value as any)?.patients || [])) : [];
+    const patients = ptsRes.status === 'fulfilled' ? ptsRes.value : [];
     const bills = billsRes.status === 'fulfilled' ? billsRes.value : [];
     const deposits = depsRes.status === 'fulfilled' ? depsRes.value : [];
     const beds = bedsRes.status === 'fulfilled' ? bedsRes.value : [];
@@ -84,8 +84,8 @@ export const AccountsExportModal: React.FC<AccountsExportModalProps> = ({
 
     const options = {
       periodLabel: currentFilter.period ? currentFilter.period.toUpperCase().replace(/_/g, ' ') : 'ALL TIME RECORDS',
-      startDate: currentFilter.start_date,
-      endDate: currentFilter.end_date
+      startDate: currentFilter.startDate,
+      endDate: currentFilter.endDate
     };
 
     if (selectedReport === 'payment_wise') {
