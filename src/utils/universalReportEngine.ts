@@ -184,7 +184,7 @@ export const buildPaymentWiseReport = (
     subtitle: 'Categorized Revenue Matrix Across Payment Instruments & Service Heads',
     periodLabel: options.periodLabel,
     generatedAt: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
-    hospitalName: HOSPITAL_CONFIG.hospitalName || 'MIXU MULTISPECIALTY HOSPITAL',
+    hospitalName: HOSPITAL_CONFIG.name || 'MIXU MULTISPECIALTY HOSPITAL',
     columns,
     rows,
     grandTotal: grandTotalRow,
@@ -241,7 +241,7 @@ export const buildPatientWiseReport = (
     subtitle: 'Consolidated Inpatient and Outpatient Patient Financial Status',
     periodLabel: options.periodLabel,
     generatedAt: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
-    hospitalName: HOSPITAL_CONFIG.hospitalName || 'MIXU MULTISPECIALTY HOSPITAL',
+    hospitalName: HOSPITAL_CONFIG.name || 'MIXU MULTISPECIALTY HOSPITAL',
     columns,
     rows,
     grandTotal: ['Grand Total', `${rows.length} Patients`, '', '', '', formatRupee(totalBilled), formatRupee(totalReceived), formatRupee(totalBalance)],
@@ -283,7 +283,7 @@ export const buildDateWiseCollectionReport = (
     subtitle: 'Daily Cash Counter, Bank Transfers, and Digital Collections Log',
     periodLabel: options.periodLabel,
     generatedAt: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
-    hospitalName: HOSPITAL_CONFIG.hospitalName || 'MIXU MULTISPECIALTY HOSPITAL',
+    hospitalName: HOSPITAL_CONFIG.name || 'MIXU MULTISPECIALTY HOSPITAL',
     columns,
     rows,
     grandTotal: ['Grand Total', `${rows.length} Transactions`, '', '', '', '', formatRupee(totalCollected), 'Verified'],
@@ -330,7 +330,7 @@ export const buildBedOccupancyReport = (
     subtitle: 'Institutional Bed Matrix, Ward Utilization & Inpatient Allocation',
     periodLabel: options.periodLabel,
     generatedAt: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
-    hospitalName: HOSPITAL_CONFIG.hospitalName || 'MIXU MULTISPECIALTY HOSPITAL',
+    hospitalName: HOSPITAL_CONFIG.name || 'MIXU MULTISPECIALTY HOSPITAL',
     columns,
     rows,
     grandTotal: ['Total Beds: ' + beds.length, '', '', '', `Occupancy: ${occupancyPct}% (${occupiedCount}/${beds.length})`, '', '', ''],
@@ -372,7 +372,7 @@ export const downloadReportPdf = (report: UniversalReportData): void => {
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(8.5);
   doc.setTextColor(100, 116, 139);
-  doc.text(`${HOSPITAL_CONFIG.hospitalAddress || 'Civil Hospital Road, Healthcare Enclave'} | Tel: ${HOSPITAL_CONFIG.hospitalPhone || '+91 98765 43210'} | NABH Accredited`, 16, 21);
+  doc.text(`${HOSPITAL_CONFIG.address || 'Civil Hospital Road, Healthcare Enclave'} | Tel: ${HOSPITAL_CONFIG.phone || '+91 98765 43210'} | NABH Accredited`, 16, 21);
 
   // Report Title & Period
   doc.setFont('helvetica', 'bold');
@@ -590,7 +590,7 @@ export const printReportView = (report: UniversalReportData): void => {
 <body>
   <div class="header">
     <div class="hospital-title">${report.hospitalName}</div>
-    <div class="hospital-meta">${HOSPITAL_CONFIG.hospitalAddress} • Ph: ${HOSPITAL_CONFIG.hospitalPhone}</div>
+    <div class="hospital-meta">${HOSPITAL_CONFIG.address} • Ph: ${HOSPITAL_CONFIG.phone}</div>
     <div class="report-title">${report.title}</div>
     <div class="period">Period: <strong>${report.periodLabel}</strong> | Generated: ${report.generatedAt}</div>
   </div>

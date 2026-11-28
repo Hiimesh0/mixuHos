@@ -70,22 +70,23 @@ export const AccountsExportModal: React.FC<AccountsExportModalProps> = ({
   const prepareReportData = async (): Promise<UniversalReportData> => {
     const [ptsRes, billsRes, depsRes, bedsRes, admsRes] = await Promise.allSettled([
       patientApi.getPatients(),
-      patientApi.getPatientBills(),
+      patientApi.getAllBills(),
       depositApi.getDeposits(),
-      hospitalApi.getBeds(),
+      bedApi.getBeds(),
       admissionApi.getAdmissions()
     ]);
 
-    const patients = ptsRes.status === 'fulfilled' ? ptsRes.value : [];
-    const bills = billsRes.status === 'fulfilled' ? billsRes.value : [];
-    const deposits = depsRes.status === 'fulfilled' ? depsRes.value : [];
-    const beds = bedsRes.status === 'fulfilled' ? bedsRes.value : [];
-    const admissions = admsRes.status === 'fulfilled' ? admsRes.value : [];
+    const rawPatients = ptsRes.status === 'fulfilled' ? ptsRes.value : [];
+    const patients = Array.isArray(rawPatients) ? rawPatients : (rawPatients as any)?.patients || [];
+    const bills = billsRes.status === 'fulfilled' && Array.isArray(billsRes.value) ? billsRes.value : [];
+    const deposits = depsRes.status === 'fulfilled' && Array.isArray(depsRes.value) ? depsRes.value : [];
+    const beds = bedsRes.status === 'fulfilled' && Array.isArray(bedsRes.value) ? bedsRes.value : [];
+    const admissions = admsRes.status === 'fulfilled' && Array.isArray(admsRes.value) ? admsRes.value : [];
 
     const options = {
       periodLabel: currentFilter.period ? currentFilter.period.toUpperCase().replace(/_/g, ' ') : 'ALL TIME RECORDS',
-      startDate: currentFilter.startDate,
-      endDate: currentFilter.endDate
+      startDate: currentFilter.start_date,
+      endDate: currentFilter.end_date
     };
 
     if (selectedReport === 'payment_wise') {

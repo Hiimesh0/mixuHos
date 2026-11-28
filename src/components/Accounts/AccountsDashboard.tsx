@@ -23,6 +23,7 @@ import FinancialOverview from './FinancialOverview';
 import BedOccupancySection from './BedOccupancySection';
 import TransactionLedgerTable from './TransactionLedgerTable';
 import AccountsExportModal from './AccountsExportModal';
+import GlobalBottomActionBar from '../common/GlobalBottomActionBar';
 
 const PERIOD_PILLS: { id: AccountsFilterParams['period']; label: string }[] = [
   { id: 'today', label: 'Today' },
@@ -146,7 +147,7 @@ export const AccountsDashboard: React.FC = () => {
   };
 
   return (
-    <div className={styles.pageContainer}>
+    <div className={`${styles.pageContainer} hasBottomActionBar`}>
       {/* Top Header */}
       <header className={styles.header}>
         <div className={styles.titleArea}>
@@ -361,6 +362,40 @@ export const AccountsDashboard: React.FC = () => {
         isOpen={isExportModalOpen}
         onClose={() => setIsExportModalOpen(false)}
         currentFilter={buildFilterParams()}
+      />
+
+      {/* Global Bottom Action Bar */}
+      <GlobalBottomActionBar
+        onPrint={() => setIsExportModalOpen(true)}
+        printLabel="Export Reports"
+        statusMessage={
+          totals
+            ? `Billed: ₹${totals.total_billed.toLocaleString('en-IN')} | Realized: ₹${totals.total_collected.toLocaleString('en-IN')} | Due: ₹${totals.total_outstanding.toLocaleString('en-IN')}`
+            : 'Accounts & Financial Intelligence'
+        }
+        extraActions={
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+            <button
+              type="button"
+              className={styles.secondaryHeaderBtn}
+              onClick={handleRefresh}
+              title="Refresh Accounts Metrics"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '7px 12px', fontSize: '13px' }}
+            >
+              <RefreshCw size={14} className={loadingSummary || loadingTransactions ? styles.spinning : ''} />
+              <span>Refresh Data</span>
+            </button>
+            <button
+              type="button"
+              className={styles.primaryExportBtn}
+              onClick={() => setIsExportModalOpen(true)}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '7px 14px', fontSize: '13px' }}
+            >
+              <Download size={14} />
+              <span>PDF / Excel / CSV</span>
+            </button>
+          </div>
+        }
       />
     </div>
   );
