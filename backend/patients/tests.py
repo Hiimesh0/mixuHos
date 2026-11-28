@@ -2,6 +2,7 @@ import io
 import json
 import shutil
 import tempfile
+import uuid
 from pathlib import Path
 from django.test import TestCase, SimpleTestCase
 from rest_framework.test import APIClient
@@ -1138,6 +1139,101 @@ class DomainRepositoriesAndWorkflowsTestCase(SimpleTestCase):
         self.assertTrue(demo_res.data["success"])
         self.assertTrue(demo_res.data["enquiry_id"].startswith("ENQ-"))
         self.assertIn("message", demo_res.data)
+
+    def test_rbac_role_management_lifecycle(self):
+        """Test creating, reading, updating permissions matrix, and deleting custom roles."""
+        role_id = f"test_role_{uuid.uuid4().hex[:6]}"
+        payload = {
+            "id": role_id,
+            "name": "Quality Assurance Auditor",
+            "description": "Reviews clinical adherence and billing audits",
+            "permissions": {
+                "patient_registration": {"access": True, "view": True, "create": False, "edit": False, "delete": False, "print": True, "export": False},
+                "accounts": {"access": True, "view": True, "create": False, "edit": False, "delete": False, "print": True, "export": True}
+            }
+        }
+        # Create role
+        create_res = self.client.post("/api/roles/", payload, format="json")
+        self.assertEqual(create_res.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(create_res.data["role"]["id"], role_id)
+
+        # Get role details
+        get_res = self.client.get(f"/api/roles/{role_id}/")
+        self.assertEqual(get_res.status_code, status.HTTP_200_OK)
+        self.assertEqual(get_res.data["role"]["name"], "Quality Assurance Auditor")
+
+        # Update role permissions
+        update_payload = {
+            "description": "Updated auditor description",
+            "permissions": {
+                "patient_registration": {"access": True, "view": True, "create": True, "edit": False, "delete": False, "print": True, "export": True}
+            }
+        }
+        update_res = self.client.put(f"/api/roles/{role_id}/", update_payload, format="json")
+        self.assertEqual(update_res.status_code, status.HTTP_200_OK)
+        self.assertEqual(update_res.data["role"]["description"], "Updated auditor description")
+
+        # System role deletion protection check
+        sys_del_res = self.client.delete("/api/roles/super_admin/")
+        self.assertEqual(sys_del_res.status_code, status.HTTP_400_BAD_REQUEST)
+
+        # Delete custom role
+        del_res = self.client.delete(f"/api/roles/{role_id}/")
+        self.assertEqual(del_res.status_code, status.HTTP_200_OK)
+        self.assertTrue(del_res.data["success"])
+
+    def test_user_management_pbkdf2_security_and_auth(self):
+        """Test staff user creation with PBKDF2 hashing, authentication, status toggle, and audit logging."""
+        username = f"test_staff_{uuid.uuid4().hex[:6]}"
+        user_payload = {
+            "username": username,
+            "full_name": "Test Clinical Nurse",
+            "email": f"{username}@mixuhospital.com",
+            "phone": "+91 98765 99999",
+            "role_id": "doctor",
+            "password": "SecurePassword@123",
+            "department": "Intensive Care Unit"
+        }
+        create_res = self.client.post("/api/users/", user_payload, format="json")
+        self.assertEqual(create_res.status_code, status.HTTP_201_CREATED)
+        self.assertTrue(create_res.data["success"])
+        self.assertNotIn("password_hash", create_res.data["user"], "Password hash must never be returned in API response")
+        user_id = create_res.data["user"]["id"]
+
+        # Duplicate username prevention
+        dup_res = self.client.post("/api/users/", user_payload, format="json")
+        self.assertEqual(dup_res.status_code, status.HTTP_400_BAD_REQUEST)
+
+        # Authenticate with correct password
+        login_res = self.client.post("/api/auth/login/", {"username": username, "password": "SecurePassword@123"}, format="json")
+        self.assertEqual(login_res.status_code, status.HTTP_200_OK)
+        self.assertTrue(login_res.data["success"])
+        self.assertTrue(login_res.data["token"].startswith("MXU-"))
+        self.assertEqual(login_res.data["user"]["username"], username)
+
+        # Authenticate with wrong password -> 401
+        bad_login_res = self.client.post("/api/auth/login/", {"username": username, "password": "WrongPassword"}, format="json")
+        self.assertEqual(bad_login_res.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        # Deactivate user
+        deactivate_res = self.client.put(f"/api/users/{user_id}/", {"is_active": False}, format="json")
+        self.assertEqual(deactivate_res.status_code, status.HTTP_200_OK)
+        self.assertFalse(deactivate_res.data["user"]["is_active"])
+
+        # Deactivated user login blocked -> 403
+        blocked_login_res = self.client.post("/api/auth/login/", {"username": username, "password": "SecurePassword@123"}, format="json")
+        self.assertEqual(blocked_login_res.status_code, status.HTTP_403_FORBIDDEN)
+
+        # Verify audit logs captured events
+        audit_res = self.client.get("/api/audit-logs/")
+        self.assertEqual(audit_res.status_code, status.HTTP_200_OK)
+        self.assertTrue(audit_res.data["success"])
+        self.assertGreaterEqual(len(audit_res.data["logs"]), 1)
+
+        # Clean up test user
+        del_user_res = self.client.delete(f"/api/users/{user_id}/")
+        self.assertEqual(del_user_res.status_code, status.HTTP_200_OK)
+
 
 
 

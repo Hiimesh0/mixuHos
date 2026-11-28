@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { ShieldCheck, Plus, Save, Trash2, CheckSquare, Square, Search, AlertCircle, CheckCircle2 } from 'lucide-react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { ShieldCheck, Plus, CheckSquare, Square, Search, AlertCircle, CheckCircle2, RefreshCw } from 'lucide-react';
 import { authApi, type RoleRecord, type PagePermission, REGISTERED_PAGES } from '../../api/authApi';
 import GlobalBottomActionBar from '../common/GlobalBottomActionBar';
 import styles from './RolesPermissions.module.css';
@@ -8,7 +8,9 @@ export const RolesPermissions: React.FC = () => {
   const [roles, setRoles] = useState<RoleRecord[]>([]);
   const [selectedRoleId, setSelectedRoleId] = useState<string>('super_admin');
   const [activeRole, setActiveRole] = useState<RoleRecord | null>(null);
+  const [savedRoleSnapshot, setSavedRoleSnapshot] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [loading, setLoading] = useState<boolean>(true);
   const [saving, setSaving] = useState<boolean>(false);
   const [notification, setNotification] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
@@ -29,8 +31,10 @@ export const RolesPermissions: React.FC = () => {
       setRoles(list);
       if (list.length > 0) {
         const current = list.find(r => r.id === selectedRoleId) || list[0];
-        setActiveRole(JSON.parse(JSON.stringify(current)));
+        const cloned = JSON.parse(JSON.stringify(current));
+        setActiveRole(cloned);
         setSelectedRoleId(current.id);
+        setSavedRoleSnapshot(JSON.stringify(cloned));
       }
     } catch {
       setNotification({ type: 'error', message: 'Failed to load roles from server.' });
@@ -43,9 +47,16 @@ export const RolesPermissions: React.FC = () => {
     setSelectedRoleId(rId);
     const found = roles.find(r => r.id === rId);
     if (found) {
-      setActiveRole(JSON.parse(JSON.stringify(found)));
+      const cloned = JSON.parse(JSON.stringify(found));
+      setActiveRole(cloned);
+      setSavedRoleSnapshot(JSON.stringify(cloned));
     }
   };
+
+  const isDirty = useMemo(() => {
+    if (!activeRole || !savedRoleSnapshot) return false;
+    return JSON.stringify(activeRole) !== savedRoleSnapshot;
+  }, [activeRole, savedRoleSnapshot]);
 
   const handlePermissionChange = (pageId: string, op: keyof PagePermission, checked: boolean) => {
     if (!activeRole) return;
@@ -117,11 +128,33 @@ export const RolesPermissions: React.FC = () => {
     try {
       setSaving(true);
       await authApi.saveRole(activeRole);
+      setSavedRoleSnapshot(JSON.stringify(activeRole));
       setNotification({ type: 'success', message: `Permissions for role '${activeRole.name}' saved successfully.` });
       await loadRoles();
       setTimeout(() => setNotification(null), 3500);
     } catch {
       setNotification({ type: 'error', message: 'Failed to save role permissions.' });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDeleteRole = async () => {
+    if (!activeRole) return;
+    if (activeRole.is_system || activeRole.id === 'super_admin') {
+      setNotification({ type: 'error', message: 'System built-in roles cannot be deleted.' });
+      return;
+    }
+    if (!window.confirm(`Are you sure you want to permanently delete custom role '${activeRole.name}'?`)) return;
+
+    try {
+      setSaving(true);
+      await authApi.deleteRole(activeRole.id);
+      setNotification({ type: 'success', message: `Role '${activeRole.name}' deleted.` });
+      await loadRoles();
+      setTimeout(() => setNotification(null), 3500);
+    } catch (err: any) {
+      setNotification({ type: 'error', message: err.message || 'Failed to delete role.' });
     } finally {
       setSaving(false);
     }
@@ -156,10 +189,18 @@ export const RolesPermissions: React.FC = () => {
     }
   };
 
-  const filteredPages = REGISTERED_PAGES.filter(p =>
-    p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    p.category.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const categories = useMemo(() => {
+    const set = new Set(REGISTERED_PAGES.map(p => p.category));
+    return ['all', ...Array.from(set)];
+  }, []);
+
+  const filteredPages = REGISTERED_PAGES.filter(p => {
+    const matchSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.route.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchCat = selectedCategory === 'all' || p.category === selectedCategory;
+    return matchSearch && matchCat;
+  });
 
   return (
     <div className={`${styles.container} hasBottomActionBar`}>
@@ -221,12 +262,32 @@ export const RolesPermissions: React.FC = () => {
                 <Search size={14} color="#64748b" />
                 <input
                   type="text"
-                  placeholder="Filter pages or category..."
+                  placeholder="Filter pages or route..."
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
                   className={styles.searchInput}
                 />
               </div>
+
+              <select
+                value={selectedCategory}
+                onChange={e => setSelectedCategory(e.target.value)}
+                style={{
+                  padding: '6px 10px',
+                  borderRadius: '6px',
+                  border: '1px solid #cbd5e1',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  color: '#334155',
+                  backgroundColor: '#ffffff'
+                }}
+              >
+                {categories.map(cat => (
+                  <option key={cat} value={cat}>
+                    {cat === 'all' ? 'All Categories' : cat}
+                  </option>
+                ))}
+              </select>
 
               <button
                 type="button"
@@ -250,97 +311,151 @@ export const RolesPermissions: React.FC = () => {
             <table className={styles.table}>
               <thead>
                 <tr>
-                  <th style={{ width: '28%' }}>Hospital Module / Page</th>
-                  <th style={{ width: '12%' }}>Category</th>
-                  <th style={{ width: '10%' }}>Page Access</th>
-                  <th style={{ width: '8%' }}>View</th>
-                  <th style={{ width: '8%' }}>Add / Create</th>
-                  <th style={{ width: '8%' }}>Edit / Save</th>
-                  <th style={{ width: '8%' }}>Delete</th>
-                  <th style={{ width: '9%' }}>Print</th>
-                  <th style={{ width: '9%' }}>Export</th>
+                  <th style={{ width: '24%' }}>Hospital Module / Page</th>
+                  <th style={{ width: '10%' }}>Category</th>
+                  <th style={{ width: '9%' }}>Page Access</th>
+                  <th style={{ width: '7%' }}>View</th>
+                  <th style={{ width: '7%' }}>Create</th>
+                  <th style={{ width: '7%' }}>Edit</th>
+                  <th style={{ width: '7%' }}>Delete</th>
+                  <th style={{ width: '8%' }}>Print</th>
+                  <th style={{ width: '8%' }}>Export</th>
+                  <th style={{ width: '13%', textAlign: 'center' }}>Row Action</th>
                 </tr>
               </thead>
               <tbody>
-                {filteredPages.map(page => {
-                  const perm = activeRole.permissions?.[page.id] || {
-                    access: false,
-                    view: false,
-                    create: false,
-                    edit: false,
-                    delete: false,
-                    print: false,
-                    export: false
-                  };
-                  return (
-                    <tr key={page.id} className={perm.access ? styles.rowActive : styles.rowDisabled}>
-                      <td>
-                        <div style={{ fontWeight: 600, color: '#0f172a' }}>{page.name}</div>
-                        <div style={{ fontSize: '11px', color: '#64748b' }}>Route: {page.route}</div>
-                      </td>
-                      <td>
-                        <span className={styles.categoryBadge}>{page.category}</span>
-                      </td>
-                      <td style={{ textAlign: 'center' }}>
-                        <input
-                          type="checkbox"
-                          className={styles.checkboxPrimary}
-                          checked={perm.access}
-                          onChange={e => handlePermissionChange(page.id, 'access', e.target.checked)}
-                          title="Toggle whole page visibility in sidebar and routing"
-                        />
-                      </td>
-                      <td style={{ textAlign: 'center' }}>
-                        <input
-                          type="checkbox"
-                          checked={perm.view}
-                          disabled={!perm.access}
-                          onChange={e => handlePermissionChange(page.id, 'view', e.target.checked)}
-                        />
-                      </td>
-                      <td style={{ textAlign: 'center' }}>
-                        <input
-                          type="checkbox"
-                          checked={perm.create}
-                          disabled={!perm.access}
-                          onChange={e => handlePermissionChange(page.id, 'create', e.target.checked)}
-                        />
-                      </td>
-                      <td style={{ textAlign: 'center' }}>
-                        <input
-                          type="checkbox"
-                          checked={perm.edit}
-                          disabled={!perm.access}
-                          onChange={e => handlePermissionChange(page.id, 'edit', e.target.checked)}
-                        />
-                      </td>
-                      <td style={{ textAlign: 'center' }}>
-                        <input
-                          type="checkbox"
-                          checked={perm.delete}
-                          disabled={!perm.access}
-                          onChange={e => handlePermissionChange(page.id, 'delete', e.target.checked)}
-                        />
-                      </td>
-                      <td style={{ textAlign: 'center' }}>
-                        <input
-                          type="checkbox"
-                          checked={perm.print}
-                          disabled={!perm.access}
-                          onChange={e => handlePermissionChange(page.id, 'print', e.target.checked)}
-                        />
-                      </td>
-                      <td style={{ textAlign: 'center' }}>
-                        <input
-                          type="checkbox"
-                          checked={perm.export}
-                          disabled={!perm.access}
-                          onChange={e => handlePermissionChange(page.id, 'export', e.target.checked)}
-                        />
-                      </td>
-                    </tr>
-                  );
-                })}
+                {loading ? (
+                  <tr>
+                    <td colSpan={10} style={{ textAlign: 'center', padding: '32px', color: '#64748b' }}>
+                      <RefreshCw size={20} className="animate-spin" style={{ display: 'inline-block', marginBottom: '8px' }} />
+                      <div>Loading role permissions matrix...</div>
+                    </td>
+                  </tr>
+                ) : filteredPages.length === 0 ? (
+                  <tr>
+                    <td colSpan={10} style={{ textAlign: 'center', padding: '32px', color: '#64748b' }}>
+                      No hospital modules match the selected filter.
+                    </td>
+                  </tr>
+                ) : (
+                  filteredPages.map(page => {
+                    const perm = activeRole.permissions?.[page.id] || {
+                      access: false,
+                      view: false,
+                      create: false,
+                      edit: false,
+                      delete: false,
+                      print: false,
+                      export: false
+                    };
+                    return (
+                      <tr key={page.id} className={perm.access ? styles.rowActive : styles.rowDisabled}>
+                        <td>
+                          <div style={{ fontWeight: 600, color: '#0f172a' }}>{page.name}</div>
+                          <div style={{ fontSize: '11px', color: '#64748b' }}>Route: {page.route}</div>
+                        </td>
+                        <td>
+                          <span className={styles.categoryBadge}>{page.category}</span>
+                        </td>
+                        <td style={{ textAlign: 'center' }}>
+                          <input
+                            type="checkbox"
+                            className={styles.checkboxPrimary}
+                            checked={perm.access}
+                            onChange={e => handlePermissionChange(page.id, 'access', e.target.checked)}
+                            title="Toggle whole page visibility in sidebar and routing"
+                          />
+                        </td>
+                        <td style={{ textAlign: 'center' }}>
+                          <input
+                            type="checkbox"
+                            checked={perm.view}
+                            disabled={!perm.access}
+                            onChange={e => handlePermissionChange(page.id, 'view', e.target.checked)}
+                          />
+                        </td>
+                        <td style={{ textAlign: 'center' }}>
+                          <input
+                            type="checkbox"
+                            checked={perm.create}
+                            disabled={!perm.access}
+                            onChange={e => handlePermissionChange(page.id, 'create', e.target.checked)}
+                          />
+                        </td>
+                        <td style={{ textAlign: 'center' }}>
+                          <input
+                            type="checkbox"
+                            checked={perm.edit}
+                            disabled={!perm.access}
+                            onChange={e => handlePermissionChange(page.id, 'edit', e.target.checked)}
+                          />
+                        </td>
+                        <td style={{ textAlign: 'center' }}>
+                          <input
+                            type="checkbox"
+                            checked={perm.delete}
+                            disabled={!perm.access}
+                            onChange={e => handlePermissionChange(page.id, 'delete', e.target.checked)}
+                          />
+                        </td>
+                        <td style={{ textAlign: 'center' }}>
+                          <input
+                            type="checkbox"
+                            checked={perm.print}
+                            disabled={!perm.access}
+                            onChange={e => handlePermissionChange(page.id, 'print', e.target.checked)}
+                          />
+                        </td>
+                        <td style={{ textAlign: 'center' }}>
+                          <input
+                            type="checkbox"
+                            checked={perm.export}
+                            disabled={!perm.access}
+                            onChange={e => handlePermissionChange(page.id, 'export', e.target.checked)}
+                          />
+                        </td>
+                        <td style={{ textAlign: 'center' }}>
+                          <div style={{ display: 'inline-flex', gap: '4px' }}>
+                            <button
+                              type="button"
+                              title="Grant all permissions for this page"
+                              onClick={() => handleSelectAllForPage(page.id, true)}
+                              style={{
+                                padding: '2px 7px',
+                                fontSize: '11px',
+                                borderRadius: '4px',
+                                border: '1px solid #cbd5e1',
+                                background: '#f8fafc',
+                                cursor: 'pointer',
+                                fontWeight: 600,
+                                color: '#0369a1'
+                              }}
+                            >
+                              All
+                            </button>
+                            <button
+                              type="button"
+                              title="Clear permissions for this page"
+                              onClick={() => handleSelectAllForPage(page.id, false)}
+                              style={{
+                                padding: '2px 7px',
+                                fontSize: '11px',
+                                borderRadius: '4px',
+                                border: '1px solid #cbd5e1',
+                                background: '#f8fafc',
+                                cursor: 'pointer',
+                                fontWeight: 600,
+                                color: '#64748b'
+                              }}
+                            >
+                              Clear
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
               </tbody>
             </table>
           </div>
@@ -352,9 +467,13 @@ export const RolesPermissions: React.FC = () => {
         onSave={handleSaveRole}
         saveLabel={saving ? 'Saving Permissions...' : `Save ${activeRole?.name || 'Role'} Permissions`}
         isSaving={saving}
+        isDirty={isDirty}
+        dirtyMessage="Unsaved Permission Matrix Changes"
         onCancel={() => handleSelectRole(selectedRoleId)}
         cancelLabel="Reset Changes"
-        statusMessage={`Role: ${activeRole?.name} • ${Object.values(activeRole?.permissions || {}).filter(p => p.access).length} of ${REGISTERED_PAGES.length} pages enabled`}
+        onDelete={activeRole && !activeRole.is_system && activeRole.id !== 'super_admin' ? handleDeleteRole : undefined}
+        deleteLabel="Delete Role"
+        statusMessage={`Role: ${activeRole?.name || 'Loading'} • ${Object.values(activeRole?.permissions || {}).filter(p => p.access).length} of ${REGISTERED_PAGES.length} pages enabled`}
       />
 
       {/* Create Custom Role Modal */}

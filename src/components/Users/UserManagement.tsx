@@ -89,6 +89,10 @@ export const UserManagement: React.FC = () => {
 
   const handleSaveUser = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!selectedUser && (!formData.password || formData.password.length < 6)) {
+      setNotification({ type: 'error', message: 'Password must be at least 6 characters.' });
+      return;
+    }
     if (!selectedUser && formData.password !== formData.confirm_password) {
       setNotification({ type: 'error', message: 'Passwords do not match.' });
       return;
@@ -122,6 +126,10 @@ export const UserManagement: React.FC = () => {
   const handleResetPasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedUser || !newPassword.trim()) return;
+    if (newPassword.trim().length < 6) {
+      setNotification({ type: 'error', message: 'Password must be at least 6 characters.' });
+      return;
+    }
 
     try {
       await authApi.saveUser({
@@ -129,7 +137,7 @@ export const UserManagement: React.FC = () => {
         password: newPassword.trim()
       });
       setIsResetPwdModalOpen(false);
-      setNotification({ type: 'success', message: `Password for ${selectedUser.username} securely reset and hashed.` });
+      setNotification({ type: 'success', message: `Password for ${selectedUser.username} securely reset and hashed with PBKDF2.` });
       setTimeout(() => setNotification(null), 3500);
     } catch {
       setNotification({ type: 'error', message: 'Failed to reset password.' });
@@ -255,7 +263,13 @@ export const UserManagement: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredUsers.length === 0 ? (
+            {loading ? (
+              <tr>
+                <td colSpan={8} style={{ textAlign: 'center', padding: '36px', color: '#64748b' }}>
+                  Loading staff accounts directory...
+                </td>
+              </tr>
+            ) : filteredUsers.length === 0 ? (
               <tr>
                 <td colSpan={8} style={{ textAlign: 'center', padding: '36px', color: '#64748b' }}>
                   No staff accounts found matching filter criteria.
@@ -341,6 +355,8 @@ export const UserManagement: React.FC = () => {
       <GlobalBottomActionBar
         onSave={handleOpenAddModal}
         saveLabel="Provision User"
+        onCancel={loadData}
+        cancelLabel="Refresh Directory"
         onPrint={() => window.print()}
         printLabel="Print Directory"
         statusMessage={`Total Staff Accounts: ${users.length} • Active: ${users.filter(u => u.is_active).length}`}
@@ -490,9 +506,12 @@ export const UserManagement: React.FC = () => {
       {isResetPwdModalOpen && selectedUser && (
         <div className={styles.modalOverlay} onClick={() => setIsResetPwdModalOpen(false)}>
           <div className={styles.modalCard} onClick={e => e.stopPropagation()}>
-            <h3 style={{ margin: '0 0 12px', fontSize: '18px', color: '#0f172a' }}>
-              Reset Password: {selectedUser.username}
-            </h3>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+              <Lock size={20} color="#0284c7" />
+              <h3 style={{ margin: 0, fontSize: '18px', color: '#0f172a' }}>
+                Reset Password: {selectedUser.username}
+              </h3>
+            </div>
             <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '16px' }}>
               Enter a secure new password for <strong>{selectedUser.full_name}</strong>. The password will be hashed with PBKDF2 before storage.
             </p>
