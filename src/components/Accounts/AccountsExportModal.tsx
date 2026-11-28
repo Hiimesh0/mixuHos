@@ -9,6 +9,9 @@ import {
   buildPatientWiseReport,
   buildDateWiseCollectionReport,
   buildBedOccupancyReport,
+  buildOpdConsultationReport,
+  buildIpdBillingReport,
+  buildFinancialLedgerReport,
   downloadReportPdf,
   downloadReportExcel,
   downloadReportCsv,
@@ -46,12 +49,17 @@ const REPORT_OPTIONS = [
   {
     id: 'opd_consultation',
     title: 'OPD Consultation & Procedure Report',
-    description: 'Outpatient consultation revenue, doctor attributions, and procedure fee collections.'
+    description: 'Outpatient consultation revenue, doctor attributions, discount allowances, and procedure fee collections.'
   },
   {
     id: 'ipd_billing',
     title: 'Inpatient Billing & Deposit Report',
     description: 'Comprehensive inpatient bed charges, doctor visits, medicines, and advance deposit settlement ledger.'
+  },
+  {
+    id: 'financial_ledger',
+    title: 'General Ledger & Financial Statement',
+    description: 'Institutional double-entry summary: Billed revenue, advance deposits, cash counter vs digital bank assets, and receivable dues.'
   }
 ];
 
@@ -95,6 +103,12 @@ export const AccountsExportModal: React.FC<AccountsExportModalProps> = ({
       return buildPatientWiseReport(patients, bills, options);
     } else if (selectedReport === 'bed_occupancy') {
       return buildBedOccupancyReport(beds, admissions, options);
+    } else if (selectedReport === 'opd_consultation') {
+      return buildOpdConsultationReport(bills, options);
+    } else if (selectedReport === 'ipd_billing') {
+      return buildIpdBillingReport(admissions, bills, deposits, options);
+    } else if (selectedReport === 'financial_ledger') {
+      return buildFinancialLedgerReport(bills, deposits, options);
     } else {
       // date wise / transactions
       const transactions = [

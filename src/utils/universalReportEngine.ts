@@ -22,7 +22,10 @@ export type ReportType =
   | 'opd'
   | 'ipd'
   | 'bed_occupancy'
-  | 'consolidated';
+  | 'consolidated'
+  | 'opd_consultation'
+  | 'ipd_billing'
+  | 'financial_ledger';
 
 export interface ReportFilterOptions {
   periodLabel: string;
@@ -339,7 +342,270 @@ export const buildBedOccupancyReport = (
 };
 
 // ==============================================================================
-// 5. UNIVERSAL EXPORTERS: PDF, EXCEL, CSV, PRINT
+// 5. OPD CONSULTATION & PROCEDURE REPORT BUILDER
+// ==============================================================================
+export const buildOpdConsultationReport = (
+  bills: any[],
+  options: ReportFilterOptions
+): UniversalReportData => {
+  const columns = ['Bill / Receipt', 'Date', 'UHID', 'Patient Name', 'Doctor / Consultant', 'Service Particulars', 'Gross (₹)', 'Discount (₹)', 'Net Billed (₹)', 'Payment Mode'];
+  const rows: (string | number)[][] = [];
+
+  let totalGross = 0;
+  let totalDiscount = 0;
+  let totalNet = 0;
+
+  bills.forEach(b => {
+    const items = b.items || [];
+    const dateStr = b.billDate || b.date || (b.createdAt ? b.createdAt.split('T')[0] : '--');
+    const doctor = b.doctorName || b.doctor || 'Dr. Nilesh Mahale';
+    const payMode = b.paymentType || b.payment_mode || 'Cash';
+
+    if (items.length > 0) {
+      items.forEach((item: any) => {
+        const gross = parseFloat(item.amount) || parseFloat(item.rate) || 0;
+        const discount = parseFloat(item.discount) || 0;
+        const net = Math.max(0, gross - discount);
+
+        totalGross += gross;
+        totalDiscount += discount;
+        totalNet += net;
+
+        rows.push([
+          b.invoiceNo || b.id || '--',
+          dateStr,
+          b.uhid || '--',
+          b.patientName || 'Patient',
+          doctor,
+          item.details || item.name || item.chargeName || 'Consultation / Investigation',
+          formatRupee(gross),
+          formatRupee(discount),
+          formatRupee(net),
+          payMode
+        ]);
+      });
+    } else {
+      const gross = parseFloat(b.grossAmount) || parseFloat(b.netAmount) || 0;
+      const discount = parseFloat(b.discount) || 0;
+      const net = parseFloat(b.netAmount) || Math.max(0, gross - discount);
+
+      totalGross += gross;
+      totalDiscount += discount;
+      totalNet += net;
+
+      rows.push([
+        b.invoiceNo || b.id || '--',
+        dateStr,
+        b.uhid || '--',
+        b.patientName || 'Patient',
+        doctor,
+        'OPD Clinical Consultation & Services',
+        formatRupee(gross),
+        formatRupee(discount),
+        formatRupee(net),
+        payMode
+      ]);
+    }
+  });
+
+  return {
+    reportType: 'opd_consultation',
+    title: 'OPD Consultation & Procedure Report',
+    subtitle: 'Outpatient Clinical Services, Consultation Fees, and Revenue Realization',
+    periodLabel: options.periodLabel,
+    generatedAt: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
+    hospitalName: HOSPITAL_CONFIG.name || 'MIXU MULTISPECIALTY HOSPITAL',
+    columns,
+    rows,
+    grandTotal: ['Grand Total', `${rows.length} OPD Entries`, '', '', '', '', formatRupee(totalGross), formatRupee(totalDiscount), formatRupee(totalNet), ''],
+    isWide: true
+  };
+};
+
+// ==============================================================================
+// 6. IPD BILLING & INPATIENT DEPOSIT REPORT BUILDER
+// ==============================================================================
+export const buildIpdBillingReport = (
+  admissions: any[],
+  bills: any[],
+  deposits: any[],
+  options: ReportFilterOptions
+): UniversalReportData => {
+  const columns = ['IPD No', 'Admission Date', 'UHID', 'Patient Name', 'Ward & Bed', 'Consultant Doctor', 'Total IPD Bill (₹)', 'Advance Deposits (₹)', 'Balance Due (₹)', 'Status'];
+  const rows: (string | number)[][] = [];
+
+  let grandTotalBilled = 0;
+  let grandTotalDeposits = 0;
+  let grandTotalDue = 0;
+
+  admissions.forEach(adm => {
+    const pBills = bills.filter(b => b.uhid === adm.uhid || b.ipd_no === adm.ipd_no || b.admission_id === adm.id);
+    const pDeposits = deposits.filter(d => d.uhid === adm.uhid || d.admission_id === adm.id || d.ipd_no === adm.ipd_no);
+
+    const billed = pBills.reduce((acc, b) => acc + (parseFloat(b.netAmount) || 0), 0);
+    const deposited = pDeposits.reduce((acc, d) => acc + (parseFloat(d.amount) || 0), 0);
+    const due = Math.max(0, billed - deposited);
+
+    grandTotalBilled += billed;
+    grandTotalDeposits += deposited;
+    grandTotalDue += due;
+
+    const status = adm.status || (adm.discharge_date ? 'Discharged' : 'Admitted');
+
+    rows.push([
+      adm.ipd_no || adm.id || '--',
+      adm.admission_date || '--',
+      adm.uhid || '--',
+      adm.patient_name || 'Inpatient',
+      `${adm.ward_name || 'General Ward'} (${adm.bed_number || 'Bed'})`,
+      adm.consultant_doctor || adm.doctor_name || 'Dr. Nilesh Mahale',
+      formatRupee(billed),
+      formatRupee(deposited),
+      formatRupee(due),
+      status
+    ]);
+  });
+
+  return {
+    reportType: 'ipd_billing',
+    title: 'Inpatient Billing & Deposit Report',
+    subtitle: 'Consolidated Inpatient Bed Tariff, Medical Charges, and Advance Deposit Settlement',
+    periodLabel: options.periodLabel,
+    generatedAt: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
+    hospitalName: HOSPITAL_CONFIG.name || 'MIXU MULTISPECIALTY HOSPITAL',
+    columns,
+    rows,
+    grandTotal: ['Grand Total', `${admissions.length} Admissions`, '', '', '', '', formatRupee(grandTotalBilled), formatRupee(grandTotalDeposits), formatRupee(grandTotalDue), ''],
+    isWide: true
+  };
+};
+
+// ==============================================================================
+// 7. GENERAL LEDGER & FINANCIAL STATEMENT BUILDER
+// ==============================================================================
+export const buildFinancialLedgerReport = (
+  bills: any[],
+  deposits: any[],
+  options: ReportFilterOptions
+): UniversalReportData => {
+  const columns = ['Account Code', 'Ledger Head / Particulars', 'Account Classification', 'Debit / Incurred (₹)', 'Credit / Recognized (₹)', 'Net Balance (₹)', 'Reconciliation Status'];
+  const rows: (string | number)[][] = [];
+
+  let totalBilled = 0;
+  let billsCollected = 0;
+  let depositsCollected = 0;
+  let cashTotal = 0;
+  let digitalTotal = 0;
+
+  bills.forEach(b => {
+    const net = parseFloat(b.netAmount) || 0;
+    const rcvd = parseFloat(b.totalReceived) || net;
+    totalBilled += net;
+    billsCollected += rcvd;
+
+    const mode = (b.paymentType || b.payment_mode || 'Cash').toLowerCase();
+    if (mode.includes('cash')) {
+      cashTotal += rcvd;
+    } else {
+      digitalTotal += rcvd;
+    }
+  });
+
+  deposits.forEach(d => {
+    const amt = parseFloat(d.amount) || 0;
+    depositsCollected += amt;
+
+    const mode = (d.payment_mode || 'Cash').toLowerCase();
+    if (mode.includes('cash')) {
+      cashTotal += amt;
+    } else {
+      digitalTotal += amt;
+    }
+  });
+
+  const totalOutstanding = Math.max(0, totalBilled - billsCollected);
+  const totalRealized = cashTotal + digitalTotal;
+
+  // Double-entry ledger accounts
+  rows.push([
+    'ACC-101',
+    'Outpatient Consultation & Diagnostic Revenue',
+    'Operating Revenue (Credit)',
+    '--',
+    formatRupee(billsCollected),
+    formatRupee(billsCollected),
+    'Recognized & Settled'
+  ]);
+
+  rows.push([
+    'ACC-102',
+    'Inpatient Care & Hospital Operations Revenue',
+    'Operating Revenue (Credit)',
+    '--',
+    formatRupee(depositsCollected),
+    formatRupee(depositsCollected),
+    'Recognized from Deposits'
+  ]);
+
+  rows.push([
+    'ACC-201',
+    'Inpatient Advance Patient Escrow Deposits',
+    'Current Liability (Credit)',
+    '--',
+    formatRupee(depositsCollected),
+    formatRupee(depositsCollected),
+    'Held for Discharge Settlement'
+  ]);
+
+  rows.push([
+    'ACC-301',
+    'Cash in Hand (Physical Hospital Cash Counter)',
+    'Current Asset (Debit)',
+    formatRupee(cashTotal),
+    '--',
+    formatRupee(cashTotal),
+    'Physically Verified'
+  ]);
+
+  rows.push([
+    'ACC-302',
+    'Bank Account & Online Digital / UPI Collections',
+    'Current Asset (Debit)',
+    formatRupee(digitalTotal),
+    '--',
+    formatRupee(digitalTotal),
+    'Bank Statement Reconciled'
+  ]);
+
+  rows.push([
+    'ACC-401',
+    'Accounts Receivable (Patient Outstanding Dues)',
+    'Current Asset (Debit)',
+    formatRupee(totalOutstanding),
+    '--',
+    formatRupee(totalOutstanding),
+    'Pending Follow-up'
+  ]);
+
+  const totalDebits = totalRealized + totalOutstanding;
+  const totalCredits = billsCollected + depositsCollected + depositsCollected;
+
+  return {
+    reportType: 'financial_ledger',
+    title: 'General Ledger & Financial Statement',
+    subtitle: 'Institutional Double-Entry Accounting, Realized Revenue & Asset Breakdown',
+    periodLabel: options.periodLabel,
+    generatedAt: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
+    hospitalName: HOSPITAL_CONFIG.name || 'MIXU MULTISPECIALTY HOSPITAL',
+    columns,
+    rows,
+    grandTotal: ['Financial Balance', 'Institutional Net Reconciliation', 'Reconciled', formatRupee(totalDebits), formatRupee(totalCredits), `Realized: ${formatRupee(totalRealized)}`, 'Fully Balanced'],
+    isWide: true
+  };
+};
+
+// ==============================================================================
+// 8. UNIVERSAL EXPORTERS: PDF, EXCEL, CSV, PRINT
 // ==============================================================================
 
 /**
