@@ -6,6 +6,9 @@ Generates isolated test records across all operational domains:
 - Inpatient Bills (TEST-BILL-0001 ...)
 - Deposits & Receipts (TEST-REC-0001 ...)
 - Doctor Visits & Procedures (TEST-DVP-0001 ...)
+- 2D Echo Reports (TEST-ECHO-0001 ...)
+- Operation Theatre (OT) Entries (TEST-OT-0001 ...)
+- Discharge Summaries (TEST-DIS-0001 ...)
 
 Guarantees 100% isolation from authentic records with strict prefixing and synthetic flags.
 """
@@ -22,6 +25,8 @@ FIRST_NAMES = ['Aarav', 'Vivaan', 'Aditya', 'Vihaan', 'Arjun', 'Sai', 'Reyansh',
 LAST_NAMES = ['Patel', 'Shah', 'Mehta', 'Desai', 'Joshi', 'Sharma', 'Kulkarni', 'Dave', 'Panchal', 'Trivedi', 'Bhatt', 'Rathod', 'Chauhan', 'Solanki', 'Parmar']
 CITIES = ['Surat', 'Ahmedabad', 'Vadodara', 'Rajkot', 'Navsari', 'Bharuch', 'Valsad', 'Bhavnagar']
 DOCTORS = ['Dr. Nilesh Mahale', 'Dr. Suresh Patil', 'Dr. Rahul Sharma', 'Dr. Sneha Joshi', 'Dr. Anita Kulkarni']
+SURGEONS = ['Dr. Snehal Mahale', 'Dr. Nilesh Mahale', 'Dr. Amit Patel']
+ANESTHETISTS = ['Dr. Sanjay Bansal', 'Dr. R. K. Patel', 'Dr. Neha Varma']
 DEPARTMENTS = ['Cardiology', 'General Medicine', 'General Surgery', 'Pediatrics', 'Obstetrics & Gynecology']
 WARDS = [
     ('General Male Ward', 'GEN-01', 1000),
@@ -41,8 +46,7 @@ def load_json(filename):
             data = json.load(f)
             if isinstance(data, list):
                 return data
-            # Handle wrapper keys
-            for k in ['patients', 'admissions', 'bills', 'deposits', 'dr_visits_procedures', 'records']:
+            for k in ['patients', 'admissions', 'bills', 'deposits', 'dr_visits_procedures', 'echo_reports', 'entries', 'discharges', 'records']:
                 if k in data and isinstance(data[k], list):
                     return data[k]
             return []
@@ -65,21 +69,30 @@ def generate_synthetic_dataset(num_patients=50):
     bills = load_json('bills.json')
     deposits = load_json('deposits.json')
     dr_visits = load_json('dr_visits_procedures.json')
+    echo_reports = load_json('echo_reports.json')
+    ot_entries = load_json('ot_entries.json')
+    discharges = load_json('discharges.json')
 
     print(f"    Current Genuine Counts -> Patients: {len(patients)}, Admissions: {len(admissions)}, Bills: {len(bills)}")
 
     # Clean prior synthetic data if any
-    patients = [p for p in patients if not str(p.get('id', '')).startswith('TEST-')]
-    admissions = [a for a in admissions if not str(a.get('id', '')).startswith('TEST-')]
-    bills = [b for b in bills if not str(b.get('id', '')).startswith('TEST-')]
-    deposits = [d for d in deposits if not str(d.get('id', '')).startswith('TEST-')]
-    dr_visits = [v for v in dr_visits if not str(v.get('id', '')).startswith('TEST-')]
+    patients = [p for p in patients if not str(p.get('id', '')).startswith('TEST-') and not str(p.get('uhid', '')).startswith('TEST-')]
+    admissions = [a for a in admissions if not str(a.get('id', '')).startswith('TEST-') and not str(a.get('uhid', '')).startswith('TEST-')]
+    bills = [b for b in bills if not str(b.get('id', '')).startswith('TEST-') and not str(b.get('uhid', '')).startswith('TEST-')]
+    deposits = [d for d in deposits if not str(d.get('id', '')).startswith('TEST-') and not str(d.get('uhid', '')).startswith('TEST-')]
+    dr_visits = [v for v in dr_visits if not str(v.get('id', '')).startswith('TEST-') and not str(v.get('uhid', '')).startswith('TEST-')]
+    echo_reports = [e for e in echo_reports if not str(e.get('id', '')).startswith('TEST-') and not str(e.get('uhid', '')).startswith('TEST-')]
+    ot_entries = [o for o in ot_entries if not str(o.get('id', '')).startswith('TEST-') and not str(o.get('uhid', '')).startswith('TEST-')]
+    discharges = [dc for dc in discharges if not str(dc.get('id', '')).startswith('TEST-') and not str(dc.get('uhid', '')).startswith('TEST-')]
 
     new_synthetic_patients = []
     new_synthetic_admissions = []
     new_synthetic_bills = []
     new_synthetic_deposits = []
     new_synthetic_dvps = []
+    new_synthetic_echoes = []
+    new_synthetic_ot = []
+    new_synthetic_discharges = []
 
     for i in range(1, num_patients + 1):
         idx_str = f"{i:04d}"
@@ -197,6 +210,35 @@ def generate_synthetic_dataset(num_patients=50):
             }
             new_synthetic_dvps.append(dvp)
 
+            # OT Entry for some surgical admissions
+            if i % 4 == 0:
+                ot_id = f"TEST-OT-{idx_str}"
+                ot = {
+                    "id": ot_id,
+                    "ot_no": f"OT-SYN-{idx_str}",
+                    "admission_id": adm_id,
+                    "ipd_no": ipd_no,
+                    "patient_id": uhid,
+                    "uhid": uhid,
+                    "patient_name": f"{fname} {lname}",
+                    "surgery_date": adm_date,
+                    "start_time": "10:00",
+                    "end_time": "11:45",
+                    "operation_group": "General Surgery",
+                    "procedure_name": "Laparoscopic Cholecystectomy",
+                    "lead_surgeon": random.choice(SURGEONS),
+                    "assistant_surgeon": random.choice(DOCTORS),
+                    "anesthetist": random.choice(ANESTHETISTS),
+                    "anesthesia_type": "General Anesthesia",
+                    "pre_op_diagnosis": "Symptomatic Cholelithiasis",
+                    "post_op_diagnosis": "Chronic Cholecystitis",
+                    "charges": 28000,
+                    "is_active": True,
+                    "is_synthetic_test": True,
+                    "created_at": f"{adm_date}T14:00:00.000Z"
+                }
+                new_synthetic_ot.append(ot)
+
             # Inpatient Bill if discharged
             if is_discharged:
                 bill_id = f"TEST-BILL-{idx_str}"
@@ -221,10 +263,12 @@ def generate_synthetic_dataset(num_patients=50):
                     ],
                     "subtotal": total_amt,
                     "totalAmount": total_amt,
+                    "discountAmount": 0.0,
                     "netAmount": total_amt,
                     "amountReceived": total_amt,
                     "totalReceived": total_amt,
-                    "balanceDue": 0,
+                    "balanceDue": 0.0,
+                    "balanceAmount": 0.0,
                     "paymentMode": bill_mode,
                     "paymentType": bill_mode,
                     "status": "Paid",
@@ -234,19 +278,92 @@ def generate_synthetic_dataset(num_patients=50):
                 }
                 new_synthetic_bills.append(bill)
 
+                # Discharge Record
+                dis_id = f"TEST-DIS-{idx_str}"
+                dis = {
+                    "id": dis_id,
+                    "discharge_no": f"DIS-SYN-{idx_str}",
+                    "admission_id": adm_id,
+                    "ipd_no": ipd_no,
+                    "patient_id": uhid,
+                    "uhid": uhid,
+                    "patient_name": f"{fname} {lname}",
+                    "age": str(age),
+                    "gender": gender,
+                    "bed_number": f"{ward_info[1]}-{idx_str}",
+                    "admission_date": adm_date,
+                    "discharge_date": bill_date,
+                    "discharge_time": "11:30 AM",
+                    "final_diagnosis": "Acute Gastroenteritis - Resolved",
+                    "condition_on_discharge": "Recovered",
+                    "treatment_summary": "IV fluids, supportive medications, regular vitals monitoring. Ambulatory without distress.",
+                    "investigation_summary": "CBC, LFT, KFT normal.",
+                    "discharge_medications": "Tab Pantocid 40mg (OD x 5 days), Tab Paracetamol 650mg SOS.",
+                    "follow_up_instructions": "Review in OPD in 5 days.",
+                    "follow_up_date": (datetime.strptime(bill_date, '%Y-%m-%d') + timedelta(days=5)).strftime('%Y-%m-%d'),
+                    "discharging_doctor_name": doc,
+                    "is_active": True,
+                    "is_synthetic_test": True,
+                    "created_at": f"{bill_date}T16:15:00.000Z"
+                }
+                new_synthetic_discharges.append(dis)
+
+        # 20% of test patients get 2D Echo Reports
+        if i % 5 == 0:
+            echo_id = f"TEST-ECHO-{idx_str}"
+            lvef = random.randint(52, 65)
+            echo = {
+                "id": echo_id,
+                "uhid": uhid,
+                "patientName": f"{fname} {lname}",
+                "age": str(age),
+                "sex": gender,
+                "reportDate": reg_date,
+                "referredBy": doc,
+                "c_o": "Exertional dyspnea, atypical chest pain evaluation",
+                "mitralValve": "Normal leaflet thickness and mobility. No MR/MS.",
+                "aorticValve": "Trileaflet, normal opening excursion. No AS/AR.",
+                "tricuspidValve": "Normal morphology. Trivial TR.",
+                "pulmonaryValve": "Normal valve anatomy. No PR/PS.",
+                "pericardium": "Pericardium intact. No effusion.",
+                "ivs": "Intact",
+                "ias": "Intact",
+                "septum": 10,
+                "pWall": 10,
+                "lvidd": 46,
+                "lvids": 30,
+                "lvef": lvef,
+                "rwma": "Absent",
+                "rvsp": 26,
+                "dopplerStudy": "Normal diastolic filling pattern for age.",
+                "conclusion": f"LV Systolic Function: LVEF {lvef}%\nNo Regional Wall Motion Abnormality\nNo Valvular Stenosis or Significant Regurgitation\nEstimated PASP 26 mmHg (Normal)",
+                "consultantDr": "Dr. Devang Desai",
+                "drRegNo": "G-29841",
+                "is_synthetic_test": True,
+                "createdAt": f"{reg_date}T15:00:00.000Z",
+                "updatedAt": f"{reg_date}T15:30:00.000Z"
+            }
+            new_synthetic_echoes.append(echo)
+
     # Merge and persist
     save_json('patients.json', 'patients', patients + new_synthetic_patients)
     save_json('admissions.json', 'admissions', admissions + new_synthetic_admissions)
     save_json('bills.json', 'bills', bills + new_synthetic_bills)
     save_json('deposits.json', 'deposits', deposits + new_synthetic_deposits)
     save_json('dr_visits_procedures.json', 'dr_visits_procedures', dr_visits + new_synthetic_dvps)
+    save_json('echo_reports.json', 'echo_reports', echo_reports + new_synthetic_echoes)
+    save_json('ot_entries.json', 'entries', ot_entries + new_synthetic_ot)
+    save_json('discharges.json', 'discharges', discharges + new_synthetic_discharges)
 
-    print(f"[✓] Synthetic Generation Complete:")
+    print(f"[✓] Complete Synthetic Generation Finished:")
     print(f"    + {len(new_synthetic_patients)} Patients (TEST-PAT-*)")
     print(f"    + {len(new_synthetic_admissions)} Admissions (TEST-ADM-*)")
     print(f"    + {len(new_synthetic_deposits)} Deposits (TEST-REC-*)")
     print(f"    + {len(new_synthetic_dvps)} Visits/Procedures (TEST-DVP-*)")
-    print(f"    + {len(new_synthetic_bills)} Bills (TEST-BILL-*)")
+    print(f"    + {len(new_synthetic_ot)} OT Operations (TEST-OT-*)")
+    print(f"    + {len(new_synthetic_bills)} Settled Bills (TEST-BILL-*)")
+    print(f"    + {len(new_synthetic_discharges)} Discharges (TEST-DIS-*)")
+    print(f"    + {len(new_synthetic_echoes)} 2D Echo Studies (TEST-ECHO-*)")
 
 if __name__ == '__main__':
-    generate_synthetic_dataset(60)
+    generate_synthetic_dataset(50)

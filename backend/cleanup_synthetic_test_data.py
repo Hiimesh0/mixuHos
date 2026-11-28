@@ -22,7 +22,7 @@ def purge_file(filename, key_name):
         if isinstance(data, list):
             records = data
         elif isinstance(data, dict):
-            for k in [key_name, 'patients', 'admissions', 'bills', 'deposits', 'dr_visits_procedures', 'records']:
+            for k in [key_name, 'patients', 'admissions', 'bills', 'deposits', 'dr_visits_procedures', 'echo_reports', 'entries', 'discharges', 'records']:
                 if k in data and isinstance(data[k], list):
                     records = data[k]
                     break
@@ -55,16 +55,20 @@ def purge_all_synthetic_test_data():
         ('admissions.json', 'admissions'),
         ('bills.json', 'bills'),
         ('deposits.json', 'deposits'),
-        ('dr_visits_procedures.json', 'dr_visits_procedures')
+        ('dr_visits_procedures.json', 'dr_visits_procedures'),
+        ('echo_reports.json', 'echo_reports'),
+        ('ot_entries.json', 'entries'),
+        ('discharges.json', 'discharges')
     ]
 
     total_purged = 0
     for fn, kn in targets:
         purged, remaining = purge_file(fn, kn)
         total_purged += purged
-        print(f"    - {fn}: Purged {purged} synthetic test items | Preserved {remaining} genuine items")
+        print(f"    - {fn:<25}: Purged {purged:>3} synthetic test items | Preserved {remaining:>3} genuine items")
 
     print(f"[✓] Purge Complete: {total_purged} synthetic test records safely removed.")
+    return total_purged
 
 if __name__ == '__main__':
     purge_all_synthetic_test_data()
