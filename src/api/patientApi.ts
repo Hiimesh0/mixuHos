@@ -14,8 +14,13 @@ export interface PatientRecord {
   ageMonths?: string;
   ageDays?: string;
   sex: string;
+  gender?: string;
   hospitalDoctor: string;
+  consultantDoctor?: string;
+  consultant_dr?: string;
+  doctor?: string;
   referenceBy: string;
+  ref_by?: string;
   religion: string;
   maritalStatus: string;
   weight: string;
@@ -23,6 +28,7 @@ export interface PatientRecord {
   mobile: string;
   email: string;
   streetAddress: string;
+  address?: string;
   city: string;
   state: string;
   pinCode: string;
@@ -35,6 +41,10 @@ export interface PatientRecord {
   employeeId: string;
   companyName: string;
   remark: string;
+  bloodGroup?: string;
+  blood_group?: string;
+  ipdNo?: string;
+  ipd_no?: string;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -63,10 +73,17 @@ export interface PatientDeleteResponse {
 }
 
 export interface BillItem {
-  srNo: number;
-  details: string;
-  rate: number;
-  amount: number;
+  srNo?: number;
+  details?: string;
+  rate?: number;
+  amount?: number;
+  id?: string;
+  name?: string;
+  chargeMasterId?: string;
+  unitPrice?: number;
+  quantity?: number;
+  totalAmount?: number;
+  code?: string;
 }
 
 export interface PatientBillRecord {
@@ -80,14 +97,16 @@ export interface PatientBillRecord {
   invoiceNo: string;
   billDate: string;
   patientName: string;
-  age: string;
-  ageUnit: string;
+  age?: string;
+  ageUnit?: string;
   ageMonths?: string;
   ageDays?: string;
-  sex: string;
-  mobile: string;
+  sex?: string;
+  gender?: string;
+  mobile?: string;
   treatingDoctor: string;
-  referenceDoctor: string;
+  doctorName?: string;
+  referenceDoctor?: string;
   items: BillItem[];
   subtotal?: number;
   discountType?: 'percentage' | 'fixed';
@@ -100,12 +119,13 @@ export interface PatientBillRecord {
   totalAmount: number;
   totalReceived?: number;
   amountReceived: number;
+  paidAmount?: number;
   balanceDue?: number;
   balanceAmount?: number;
   paymentMode?: string;
-  paymentType: string;
-  receiptNo: string;
-  dueAmount: number;
+  paymentType?: string;
+  receiptNo?: string;
+  dueAmount?: number;
   status?: string;
   remarks?: string;
   entryBy?: string;
@@ -690,7 +710,7 @@ export const patientApi = {
               amount: Math.round(rate * 100) / 100,
             };
           });
-          const subtotal = Math.round(items.reduce((acc, it) => acc + it.amount, 0) * 100) / 100;
+          const subtotal = Math.round(items.reduce((acc, it) => acc + (it.amount || 0), 0) * 100) / 100;
           const discType = payload.discountType || existing.discountType || 'percentage';
           const discVal = Number(payload.discountValue !== undefined ? payload.discountValue : existing.discountValue || 0);
           let discAmt = 0;
@@ -774,7 +794,7 @@ export const patientApi = {
       };
     });
 
-    const subtotal = Math.round(items.reduce((acc, it) => acc + it.amount, 0) * 100) / 100;
+    const subtotal = Math.round(items.reduce((acc, it) => acc + (it.amount || 0), 0) * 100) / 100;
     const discType = payload?.discountType || 'percentage';
     const discVal = Number(payload?.discountValue || 0);
     let discAmt = 0;

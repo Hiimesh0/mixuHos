@@ -64,7 +64,7 @@ const InpatientReceipt: React.FC = () => {
   }, [loadData]);
 
   const selectBill = (b: PatientBillRecord) => {
-    setSelectedBillId(b.id || b.billNo);
+    setSelectedBillId(b.id || b.billNo || '');
     setSelectedBill(b);
     setReceiptNo(`REC-IPD-${Math.floor(1000 + Math.random() * 9000)}`);
     const balance = Number(b.balanceDue || b.netAmount || 0);
@@ -93,11 +93,12 @@ const InpatientReceipt: React.FC = () => {
         receipt_no: receiptNo,
         uhid: selectedBill.uhid,
         patient_name: selectedBill.patientName,
+        deposit_date: receiptDate,
         payment_date: receiptDate,
         amount: Number(paymentAmount),
         payment_mode: paymentMode,
         remarks: paymentRemark,
-        collected_by: takenBy,
+        authorized_by: takenBy,
       };
 
       const created = await depositApi.createDeposit(newDeposit);
@@ -172,7 +173,7 @@ const InpatientReceipt: React.FC = () => {
           <div className={`${styles.fieldGroup} ${styles.col12}`}>
             <label className={styles.label}>Patient & UHID:</label>
             <div className={styles.patientNameBadge}>
-              {selectedBill?.patientName || 'Patient'} ({selectedBill?.uhid || 'UHID-XXXX'}) • Consultant: {selectedBill?.doctorName || 'Dr. Nilesh Mahale'}
+              {selectedBill?.patientName || 'Patient'} ({selectedBill?.uhid || 'UHID-XXXX'}) • Consultant: {selectedBill?.doctorName || selectedBill?.treatingDoctor || 'Dr. Nilesh Mahale'}
             </div>
           </div>
         </div>
@@ -292,7 +293,7 @@ const InpatientReceipt: React.FC = () => {
                   patientDeposits.map(dep => (
                     <tr key={dep.id || dep.receipt_no}>
                       <td style={{ fontWeight: 600, color: '#2563eb' }}>{dep.receipt_no}</td>
-                      <td>{dep.payment_date}</td>
+                      <td>{dep.deposit_date || dep.payment_date}</td>
                       <td>{dep.payment_mode}</td>
                       <td style={{ textAlign: 'right', fontWeight: 600, color: '#166534' }}>
                         ₹{Number(dep.amount || 0).toLocaleString()}

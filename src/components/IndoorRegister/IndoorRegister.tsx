@@ -177,18 +177,20 @@ const IndoorRegister: React.FC = () => {
 
   const handleSelectPatient = (pat: PatientRecord) => {
     const parts = (pat.name || '').split(' ');
+    const g = (pat.gender || pat.sex || 'Male').toLowerCase();
+    const cleanGender: 'Male' | 'Female' | 'Other' = g.startsWith('f') ? 'Female' : g.startsWith('o') ? 'Other' : 'Male';
     setFormData(prev => ({
       ...prev,
       uhid: pat.uhid || pat.id,
-      patient_name: pat.name,
+      patient_name: pat.name || '',
       first_name: parts[0] || '',
       middle_name: parts.length > 2 ? parts[1] : '',
       last_name: parts.length > 2 ? parts.slice(2).join(' ') : parts[1] || '',
       age: pat.age ? String(pat.age) : '35',
-      gender: pat.gender || 'Male',
+      gender: cleanGender,
       mobile: pat.mobile || '',
-      address: pat.address || '',
-      reference_doctor: pat.ref_by || prev.reference_doctor,
+      address: pat.address || pat.streetAddress || '',
+      reference_doctor: pat.ref_by || pat.referenceBy || prev.reference_doctor,
     }));
     setShowPatientDropdown(false);
   };
@@ -289,15 +291,20 @@ const IndoorRegister: React.FC = () => {
 
   const handlePrintSticker = () => {
     const name = [formData.first_name, formData.middle_name, formData.last_name].filter(Boolean).join(' ') || formData.patient_name || 'Patient';
-    openPatientStickerPdf({
+    const patRecord: any = {
       uhid: formData.uhid || 'UHID-1001',
       name: name,
-      age: Number(formData.age) || 35,
-      gender: (formData.gender as 'Male' | 'Female' | 'Other') || 'Male',
-      dr_incharge: formData.admitting_doctor,
-      mobile: formData.mobile,
-      reg_date: formData.admission_date,
-    });
+      firstName: formData.first_name || name,
+      lastName: formData.last_name || '',
+      age: String(formData.age || '35'),
+      ageUnit: 'Years',
+      sex: formData.gender || 'Male',
+      hospitalDoctor: formData.admitting_doctor || 'Dr. Nilesh Mahale',
+      mobile: formData.mobile || '',
+      birthDate: '',
+      category: 'General',
+    };
+    openPatientStickerPdf(patRecord);
   };
 
   return (

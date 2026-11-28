@@ -38,7 +38,7 @@ const OPDChargesMaster: React.FC = () => {
     try {
       setLoading(true);
       const res = await opdChargeApi.getAll();
-      const list = res.charges || (Array.isArray(res) ? res : []);
+      const list = (res as any)?.charges || (Array.isArray(res) ? res : []);
       if (list && list.length > 0) {
         setCharges(list);
       }

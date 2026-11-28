@@ -803,7 +803,7 @@ const PatientPastInfo: React.FC = () => {
                       {deposits.map(dep => (
                         <tr key={dep.id}>
                           <td style={{ fontWeight: 700, color: '#2563eb' }}>{dep.receipt_no}</td>
-                          <td>{dep.payment_date}</td>
+                          <td>{dep.deposit_date || dep.payment_date}</td>
                           <td style={{ fontWeight: 700, color: '#166534' }}>₹{Number(dep.amount || 0).toLocaleString()}</td>
                           <td>
                             <span style={{ background: '#f1f5f9', padding: '2px 6px', borderRadius: '3px', fontSize: '11px', fontWeight: 600 }}>

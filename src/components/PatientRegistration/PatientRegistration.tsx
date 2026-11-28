@@ -182,7 +182,7 @@ const getPatientEncounters = (
   patientBills.forEach((b, idx) => {
     const bDateStr = b.billDate || b.createdAt || '';
     const bDateObj = bDateStr ? new Date(bDateStr) : new Date();
-    const itemDesc = b.items && b.items.length > 0 ? b.items[0].details : 'OPD Consultation / Billing';
+    const itemDesc = (b.items && b.items.length > 0) ? (b.items[0].details || b.items[0].name || 'OPD Consultation / Billing') : 'OPD Consultation / Billing';
     encounters.push({
       id: b.id || `ENC-BILL-${idx}-${cleanUhid}`,
       date: bDateStr,
@@ -674,8 +674,8 @@ const PatientRegistration: React.FC = () => {
         setBillRows(
           existing.items.map((it, idx) => ({
             id: `row-${idx}-${Date.now()}`,
-            chargeName: it.details,
-            amount: it.rate || it.amount
+            chargeName: it.details || it.name || 'General Charge',
+            amount: it.rate ?? it.amount ?? 0
           }))
         );
         setBillPaymentType(existing.paymentType || 'Cash');
@@ -735,8 +735,8 @@ const PatientRegistration: React.FC = () => {
         setBillRows(
           existing.items.map((it, idx) => ({
             id: `row-${idx}-${Date.now()}`,
-            chargeName: it.details,
-            amount: it.rate || it.amount
+            chargeName: it.details || it.name || 'General Charge',
+            amount: it.rate ?? it.amount ?? 0
           }))
         );
         setBillPaymentType(existing.paymentType || 'Cash');

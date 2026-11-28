@@ -95,12 +95,14 @@ const DeathCertificate: React.FC = () => {
 
   const populateFromPatient = (pat: PatientRecord) => {
     setSelectedPatientId(pat.id);
+    const g = (pat.gender || pat.sex || 'Male').toLowerCase();
+    const cleanGender: 'Male' | 'Female' | 'Other' = g.startsWith('f') ? 'Female' : g.startsWith('o') ? 'Other' : 'Male';
     setFormData(prev => ({
       ...prev,
       uhid: pat.uhid || pat.id,
-      patient_name: pat.name,
+      patient_name: pat.name || '',
       age: pat.age ? String(pat.age) : '68',
-      gender: pat.gender || 'Male',
+      gender: cleanGender,
     }));
   };
 

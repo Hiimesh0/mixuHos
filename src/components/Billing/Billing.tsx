@@ -90,7 +90,7 @@ const Billing: React.FC = () => {
       try {
         const [pts, docRes] = await Promise.allSettled([
           patientApi.getPatients(),
-          doctorApi.getDoctors({ is_active: true, page_size: 100 })
+          doctorApi.getDoctors({ active_only: true })
         ]);
 
         if (isMounted && pts.status === 'fulfilled') {
@@ -143,11 +143,11 @@ const Billing: React.FC = () => {
         setSavedBill(existing);
         if (existing.items && existing.items.length > 0) {
           setItems(existing.items.map((it, idx) => ({
-            id: `item-${idx}-${Date.now()}`,
-            details: it.details,
-            rate: it.rate,
+            id: it.id || `item-${idx}-${Date.now()}`,
+            details: it.details || it.name || `Service #${idx + 1}`,
+            rate: it.rate ?? it.unitPrice ?? 0,
             drFees: 0,
-            amount: it.amount || it.rate
+            amount: it.amount ?? it.totalAmount ?? it.rate ?? 0
           })));
         }
         if (existing.discountAmount) {
@@ -963,7 +963,7 @@ const Billing: React.FC = () => {
 
       {/* Global Bottom Action Bar */}
       <GlobalBottomActionBar
-        onSave={handleSave}
+        onSave={() => { handleSave(); }}
         saveLabel={isSaving ? 'Saving...' : 'Save Bill'}
         isSaving={isSaving}
         saveDisabled={!selectedPatient || items.length === 0}

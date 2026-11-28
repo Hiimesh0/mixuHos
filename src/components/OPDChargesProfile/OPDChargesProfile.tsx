@@ -128,7 +128,7 @@ const OPDChargesProfile: React.FC = () => {
     try {
       setLoading(true);
       const res = await opdProfileApi.getAll();
-      const list = res.profiles || (Array.isArray(res) ? res : []);
+      const list = (res as any)?.profiles || (Array.isArray(res) ? res : []);
       if (list && list.length > 0) {
         setProfiles(list);
       }

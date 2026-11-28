@@ -167,6 +167,7 @@ const InpatientBill: React.FC = () => {
     return {
       id: billNo || `IPD-BILL-${Date.now()}`,
       billNo: billNo || `BILL-${Date.now()}`,
+      invoiceNo: billNo || `BILL-${Date.now()}`,
       uhid: activeAdmission?.uhid || 'UHID-GEN',
       patientId: activeAdmission?.uhid || 'UHID-GEN',
       admission_id: activeAdmission?.id,
@@ -208,8 +209,9 @@ const InpatientBill: React.FC = () => {
       const saved = await patientApi.createBill(currentBillRecord);
       const generatedBillNo = saved.invoiceNo || saved.billNo || billNo;
       setSavedSuccess(`Inpatient Bill '${generatedBillNo}' saved successfully to permanent hospital records!`);
-      if (saved.invoiceNo || saved.billNo) {
-        setBillNo(saved.invoiceNo || saved.billNo);
+      const newNo = saved.invoiceNo || saved.billNo;
+      if (newNo) {
+        setBillNo(newNo);
       }
       setTimeout(() => setSavedSuccess(''), 5000);
     } catch (err: any) {

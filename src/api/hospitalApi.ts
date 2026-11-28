@@ -39,7 +39,7 @@ export interface AdmissionRecord {
   gender?: string;
   mobile?: string;
   admission_date: string;
-  admission_time: string;
+  admission_time?: string;
   bed_number: string;
   ward_name: string;
   room_type: string;
@@ -48,6 +48,8 @@ export interface AdmissionRecord {
   reference_doctor?: string;
   insurance_company?: string;
   provisional_diagnosis?: string;
+  final_diagnosis?: string;
+  department?: string;
   initial_deposit?: number;
   status: 'Admitted' | 'Discharged' | 'Transferred';
   discharge_id?: string;
@@ -87,7 +89,7 @@ export interface BedRecord {
   id: string;
   bed_number: string;
   ward_name: string;
-  room_type_id: string;
+  room_type_id?: string;
   room_type?: string;
   floor?: string;
   wing?: string;
@@ -117,10 +119,12 @@ export interface DepositRecord {
   patient_name: string;
   ipd_no?: string;
   deposit_date: string;
+  payment_date?: string;
   amount: number;
   payment_mode: string;
   transaction_ref?: string;
   authorized_by?: string;
+  collected_by?: string;
   remarks?: string;
   is_active: boolean;
   created_at?: string;
@@ -216,12 +220,13 @@ function saveLocal<T>(key: string, items: T[]): void {
 // --- Admission API ---
 
 export const admissionApi = {
-  async getAdmissions(params?: { search?: string; status?: string }): Promise<AdmissionRecord[]> {
+  async getAdmissions(params?: { search?: string; status?: string; uhid?: string }): Promise<AdmissionRecord[]> {
     if (API_BASE_URL) {
       try {
         const q = new URLSearchParams();
         if (params?.search) q.set('search', params.search);
         if (params?.status) q.set('status', params.status);
+        if (params?.uhid) q.set('uhid', params.uhid);
         const res = await fetch(`${API_BASE_URL}/admissions/?${q.toString()}`, { headers: { 'Accept': 'application/json' } });
         if (res.ok) {
           const d = await res.json();
@@ -238,6 +243,10 @@ export const admissionApi = {
     }
     if (params?.status) {
       filtered = filtered.filter(a => a.status === params.status);
+    }
+    if (params?.uhid) {
+      const u = params.uhid.toLowerCase();
+      filtered = filtered.filter(a => (a.uhid || '').toLowerCase() === u);
     }
     return filtered;
   },
@@ -686,7 +695,7 @@ const normalizeDrVisitProcedure = (e: any): DrVisitProcedureRecord => {
   const headDesc = String(e.head_description || e.procedure_title || e.head || 'Consultant Round');
   const rate = Number(e.rate ?? e.charges ?? e.amount ?? 0);
   const qty = Number(e.quantity ?? 1);
-  const amount = Number(e.amount ?? (rate * qty) ?? e.charges ?? 0);
+  const amount = Number(e.amount ?? e.charges ?? (rate * qty));
   const remark = String(e.remark || e.notes || '');
   const bedNumber = String(e.bed_number || e.bed_no || '');
 
@@ -749,7 +758,7 @@ export const drVisitProcedureApi = {
   async createEntry(payload: Partial<DrVisitProcedureRecord>): Promise<DrVisitProcedureRecord> {
     const rate = Number(payload.rate ?? payload.charges ?? payload.amount ?? 0);
     const qty = Number(payload.quantity ?? 1);
-    const amount = Number(payload.amount ?? (rate * qty) ?? payload.charges ?? 0);
+    const amount = Number(payload.amount ?? payload.charges ?? (rate * qty));
     const entryDate = payload.entry_date || payload.date || payload.visit_date || new Date().toISOString().split('T')[0];
     const headDesc = payload.head_description || payload.procedure_title || payload.head || 'Consultant Round';
     const remark = payload.remark || payload.notes || '';

@@ -293,14 +293,15 @@ export const echoReportApi = {
     from_date?: string;
     to_date?: string;
     doctor?: string;
-  }): Promise<EchoReportListResponse> {
+  } | string): Promise<EchoReportListResponse> {
+    const filterObj = typeof params === 'string' ? { uhid: params } : params;
     const queryParams = new URLSearchParams();
-    if (params?.search) queryParams.append('search', params.search);
-    if (params?.uhid) queryParams.append('uhid', params.uhid);
-    if (params?.status) queryParams.append('status', params.status);
-    if (params?.from_date) queryParams.append('from_date', params.from_date);
-    if (params?.to_date) queryParams.append('to_date', params.to_date);
-    if (params?.doctor) queryParams.append('doctor', params.doctor);
+    if (filterObj?.search) queryParams.append('search', filterObj.search);
+    if (filterObj?.uhid) queryParams.append('uhid', filterObj.uhid);
+    if (filterObj?.status) queryParams.append('status', filterObj.status);
+    if (filterObj?.from_date) queryParams.append('from_date', filterObj.from_date);
+    if (filterObj?.to_date) queryParams.append('to_date', filterObj.to_date);
+    if (filterObj?.doctor) queryParams.append('doctor', filterObj.doctor);
 
     const url = `${API_BASE_URL}/echo-reports/${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
 
@@ -322,29 +323,29 @@ export const echoReportApi = {
     }
 
     let reports = getFallbackReports();
-    if (params?.uhid) {
-      const uNorm = params.uhid.trim().toUpperCase();
+    if (filterObj?.uhid) {
+      const uNorm = filterObj.uhid.trim().toUpperCase();
       reports = reports.filter(r => r.uhid?.trim().toUpperCase() === uNorm);
     }
-    if (params?.status && params.status !== 'All') {
-      const sNorm = params.status.trim().toLowerCase();
+    if (filterObj?.status && filterObj.status !== 'All') {
+      const sNorm = filterObj.status.trim().toLowerCase();
       reports = reports.filter(r => r.status?.trim().toLowerCase() === sNorm);
     }
-    if (params?.doctor && params.doctor !== 'All') {
-      const dNorm = params.doctor.trim().toLowerCase();
+    if (filterObj?.doctor && filterObj.doctor !== 'All') {
+      const dNorm = filterObj.doctor.trim().toLowerCase();
       reports = reports.filter(r =>
         r.consultantDr?.toLowerCase().includes(dNorm) ||
         r.referredBy?.toLowerCase().includes(dNorm)
       );
     }
-    if (params?.from_date) {
-      reports = reports.filter(r => r.reportDate >= params.from_date!);
+    if (filterObj?.from_date) {
+      reports = reports.filter(r => r.reportDate >= filterObj.from_date!);
     }
-    if (params?.to_date) {
-      reports = reports.filter(r => r.reportDate <= params.to_date!);
+    if (filterObj?.to_date) {
+      reports = reports.filter(r => r.reportDate <= filterObj.to_date!);
     }
-    if (params?.search) {
-      const q = params.search.trim().toLowerCase();
+    if (filterObj?.search) {
+      const q = filterObj.search.trim().toLowerCase();
       reports = reports.filter(r =>
         r.patientName?.toLowerCase().includes(q) ||
         r.uhid?.toLowerCase().includes(q) ||

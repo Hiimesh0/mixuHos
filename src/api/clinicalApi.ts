@@ -13,7 +13,9 @@ export interface TestResultItem {
   value: string;
   unit: string;
   ref_range: string;
+  reference?: string;
   flag?: 'Normal' | 'High' | 'Low' | 'Critical';
+  status?: string;
 }
 
 export interface InvestigationRecord {
