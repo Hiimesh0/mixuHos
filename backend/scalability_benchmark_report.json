@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-11-27 15:21:04",
+  "timestamp": "2026-11-28 14:18:01",
   "scales_tested": [
     1000,
     10000,
@@ -19,101 +19,148 @@
     "10k_to_50k_records": "Requires LRU In-Memory Cache layer. JSON file disk I/O should be throttled to background batch writes.",
     "50k_to_200k_records": "PostgreSQL enterprise database migration mandatory. Requires B-Tree indexing on UHID, IPD, and Composite (Patient, Date) keys to maintain <20ms SLA across 50 concurrent hospital counters."
   },
-  "benchmark_data": [
+  "scale_benchmarks": [
     {
       "record_count": 1000,
       "json_payload_size_mb": 0.27,
       "ram_consumption_mb": 0.75,
-      "json_serialize_write_ms": 36.58,
-      "json_parse_read_ms": 15.94,
+      "json_serialize_write_ms": 38.81,
+      "json_parse_read_ms": 25.65,
       "linear_scan_lookup": {
-        "mean_ms": 0.04,
-        "p95_ms": 0.282,
-        "p99_ms": 0.295
+        "mean_ms": 0.051,
+        "p95_ms": 0.24,
+        "p99_ms": 0.248
       },
       "hash_indexed_lookup": {
-        "mean_ms": 0.00018,
-        "p95_ms": 0.0002,
-        "p99_ms": 0.0013
+        "mean_ms": 0.00051,
+        "p95_ms": 0.0006,
+        "p99_ms": 0.0047
       },
-      "multi_column_filter_ms": 0.18,
+      "multi_column_filter_ms": 0.63,
       "json_flat_file_concurrency_verdict": "EXCELLENT"
     },
     {
       "record_count": 10000,
       "json_payload_size_mb": 2.69,
       "ram_consumption_mb": 7.5,
-      "json_serialize_write_ms": 551.76,
-      "json_parse_read_ms": 211.28,
+      "json_serialize_write_ms": 493.37,
+      "json_parse_read_ms": 232.34,
       "linear_scan_lookup": {
-        "mean_ms": 0.278,
-        "p95_ms": 0.371,
-        "p99_ms": 0.374
+        "mean_ms": 0.902,
+        "p95_ms": 1.98,
+        "p99_ms": 1.981
       },
       "hash_indexed_lookup": {
-        "mean_ms": 0.00025,
-        "p95_ms": 0.0003,
-        "p99_ms": 0.0021
+        "mean_ms": 0.00047,
+        "p95_ms": 0.0005,
+        "p99_ms": 0.0036
       },
-      "multi_column_filter_ms": 23.09,
+      "multi_column_filter_ms": 6.41,
       "json_flat_file_concurrency_verdict": "EXCELLENT"
     },
     {
       "record_count": 50000,
       "json_payload_size_mb": 13.52,
       "ram_consumption_mb": 37.64,
-      "json_serialize_write_ms": 5188.78,
-      "json_parse_read_ms": 2435.94,
+      "json_serialize_write_ms": 6084.65,
+      "json_parse_read_ms": 2881.05,
       "linear_scan_lookup": {
-        "mean_ms": 6.749,
-        "p95_ms": 8.584,
-        "p99_ms": 8.626
+        "mean_ms": 6.694,
+        "p95_ms": 8.592,
+        "p99_ms": 8.592
       },
       "hash_indexed_lookup": {
-        "mean_ms": 0.00274,
-        "p95_ms": 0.0027,
-        "p99_ms": 0.0187
+        "mean_ms": 0.00387,
+        "p95_ms": 0.0053,
+        "p99_ms": 0.0253
       },
-      "multi_column_filter_ms": 192.47,
+      "multi_column_filter_ms": 223.26,
       "json_flat_file_concurrency_verdict": "ACCEPTABLE (With In-Memory Caching)"
     },
     {
       "record_count": 100000,
       "json_payload_size_mb": 27.06,
       "ram_consumption_mb": 75.22,
-      "json_serialize_write_ms": 11372.86,
-      "json_parse_read_ms": 5002.66,
+      "json_serialize_write_ms": 12423.63,
+      "json_parse_read_ms": 5113.28,
       "linear_scan_lookup": {
-        "mean_ms": 12.859,
-        "p95_ms": 22.296,
-        "p99_ms": 22.427
+        "mean_ms": 14.913,
+        "p95_ms": 19.088,
+        "p99_ms": 19.088
       },
       "hash_indexed_lookup": {
-        "mean_ms": 0.0018,
-        "p95_ms": 0.0019,
-        "p99_ms": 0.0224
+        "mean_ms": 0.00291,
+        "p95_ms": 0.0043,
+        "p99_ms": 0.0637
       },
-      "multi_column_filter_ms": 264.72,
+      "multi_column_filter_ms": 430.22,
       "json_flat_file_concurrency_verdict": "BOTTLENECK DETECTED - Relational DB (PostgreSQL) Migration Recommended"
     },
     {
       "record_count": 200000,
       "json_payload_size_mb": 54.34,
       "ram_consumption_mb": 150.68,
-      "json_serialize_write_ms": 13341.48,
-      "json_parse_read_ms": 9870.8,
+      "json_serialize_write_ms": 24406.75,
+      "json_parse_read_ms": 12166.38,
       "linear_scan_lookup": {
-        "mean_ms": 31.949,
-        "p95_ms": 47.357,
-        "p99_ms": 47.676
+        "mean_ms": 29.444,
+        "p95_ms": 34.53,
+        "p99_ms": 34.53
       },
       "hash_indexed_lookup": {
-        "mean_ms": 0.00483,
-        "p95_ms": 0.00529,
-        "p99_ms": 0.0214
+        "mean_ms": 0.0029,
+        "p95_ms": 0.003,
+        "p99_ms": 0.0141
       },
-      "multi_column_filter_ms": 1133.83,
+      "multi_column_filter_ms": 872.42,
       "json_flat_file_concurrency_verdict": "BOTTLENECK DETECTED - Relational DB (PostgreSQL) Migration Recommended"
+    }
+  ],
+  "concurrency_benchmarks": [
+    {
+      "concurrent_counters": 1,
+      "total_transactions": 10,
+      "total_time_sec": 0.04,
+      "throughput_tx_per_sec": 250.7,
+      "mean_latency_ms": 2.48,
+      "p95_latency_ms": 3.42,
+      "mean_lock_wait_ms": 0.0
+    },
+    {
+      "concurrent_counters": 5,
+      "total_transactions": 50,
+      "total_time_sec": 0.143,
+      "throughput_tx_per_sec": 348.7,
+      "mean_latency_ms": 12.82,
+      "p95_latency_ms": 14.48,
+      "mean_lock_wait_ms": 10.33
+    },
+    {
+      "concurrent_counters": 10,
+      "total_transactions": 100,
+      "total_time_sec": 0.269,
+      "throughput_tx_per_sec": 372.3,
+      "mean_latency_ms": 24.68,
+      "p95_latency_ms": 27.24,
+      "mean_lock_wait_ms": 22.26
+    },
+    {
+      "concurrent_counters": 25,
+      "total_transactions": 250,
+      "total_time_sec": 0.684,
+      "throughput_tx_per_sec": 365.7,
+      "mean_latency_ms": 63.29,
+      "p95_latency_ms": 68.78,
+      "mean_lock_wait_ms": 60.85
+    },
+    {
+      "concurrent_counters": 50,
+      "total_transactions": 500,
+      "total_time_sec": 1.386,
+      "throughput_tx_per_sec": 360.6,
+      "mean_latency_ms": 128.55,
+      "p95_latency_ms": 142.85,
+      "mean_lock_wait_ms": 126.1
     }
   ]
 }
