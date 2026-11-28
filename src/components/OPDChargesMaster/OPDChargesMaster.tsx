@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import styles from './OPDChargesMaster.module.css';
 import { opdChargeApi, type OPDChargeRecord } from '../../api/masterApi';
+import GlobalBottomActionBar from '../common/GlobalBottomActionBar';
 
 type ChargeItem = OPDChargeRecord;
 
@@ -145,7 +146,7 @@ const OPDChargesMaster: React.FC = () => {
   };
 
   return (
-    <div className={styles.pageContainer}>
+    <div className={`${styles.pageContainer} hasBottomActionBar`}>
       {/* Header */}
       <div className={styles.header}>
         <div className={styles.headerLeft}>
@@ -372,44 +373,48 @@ const OPDChargesMaster: React.FC = () => {
           </div>
         </div>
 
-        {/* Bottom Action Bar */}
-        <div className={styles.actionBar}>
-          <div className={styles.navControls}>
-            <button className={styles.navBtn} onClick={() => handleNav(0)} title="First Record"><ChevronsLeft size={18} /></button>
-            <button className={styles.navBtn} onClick={() => handleNav(currentIndex - 1)} title="Previous Record"><ChevronLeft size={18} /></button>
-            <button className={styles.navBtn} onClick={() => handleNav(currentIndex + 1)} title="Next Record"><ChevronRight size={18} /></button>
-            <button className={styles.navBtn} onClick={() => handleNav(filteredCharges.length - 1)} title="Last Record"><ChevronsRight size={18} /></button>
-          </div>
-
-          <div className={styles.middleActions}>
-            <div className={styles.radioGroup}>
-              <label className={styles.radioLabel}>
-                <input type="radio" name="filter" checked={listType === 'all'} onChange={() => { setListType('all'); setCurrentIndex(0); }} /> All
-              </label>
-              <label className={styles.radioLabel}>
-                <input type="radio" name="filter" checked={listType === 'active'} onChange={() => { setListType('active'); setCurrentIndex(0); }} /> Active
-              </label>
-              <label className={styles.radioLabel}>
-                <input type="radio" name="filter" checked={listType === 'inactive'} onChange={() => { setListType('inactive'); setCurrentIndex(0); }} /> InActive
-              </label>
+        {/* Global Bottom Action Bar */}
+        <GlobalBottomActionBar
+          onSave={handleSave}
+          saveLabel={loading ? 'Saving...' : 'Save Charges'}
+          isSaving={loading}
+          isDirty={Boolean(current?.name)}
+          dirtyMessage="OPD Charge Modified"
+          onCancel={handleAddNew}
+          cancelLabel="Add New Charge"
+          onDelete={handleDelete}
+          deleteLabel="Delete Charge"
+          statusMessage={`${current?.name || 'Charge'} (${current?.id || '--'}) • Rate: ₹${current?.rate?.toLocaleString() || 0} • ${current?.active ? 'Active' : 'Inactive'}`}
+          extraActions={
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+              <div className={styles.navControls} style={{ display: 'inline-flex', gap: '4px' }}>
+                <button type="button" className={styles.navBtn} onClick={() => handleNav(0)} title="First Record"><ChevronsLeft size={16} /></button>
+                <button type="button" className={styles.navBtn} onClick={() => handleNav(currentIndex - 1)} title="Previous Record"><ChevronLeft size={16} /></button>
+                <button type="button" className={styles.navBtn} onClick={() => handleNav(currentIndex + 1)} title="Next Record"><ChevronRight size={16} /></button>
+                <button type="button" className={styles.navBtn} onClick={() => handleNav(filteredCharges.length - 1)} title="Last Record"><ChevronsRight size={16} /></button>
+              </div>
+              <div className={styles.radioGroup} style={{ display: 'inline-flex', gap: '8px', fontSize: '12px' }}>
+                <label className={styles.radioLabel} style={{ cursor: 'pointer' }}>
+                  <input type="radio" name="filter" checked={listType === 'all'} onChange={() => { setListType('all'); setCurrentIndex(0); }} /> All
+                </label>
+                <label className={styles.radioLabel} style={{ cursor: 'pointer' }}>
+                  <input type="radio" name="filter" checked={listType === 'active'} onChange={() => { setListType('active'); setCurrentIndex(0); }} /> Active
+                </label>
+                <label className={styles.radioLabel} style={{ cursor: 'pointer' }}>
+                  <input type="radio" name="filter" checked={listType === 'inactive'} onChange={() => { setListType('inactive'); setCurrentIndex(0); }} /> InActive
+                </label>
+              </div>
+              <button
+                type="button"
+                className={styles.secondaryBtn}
+                onClick={() => navigate('/billing')}
+                style={{ padding: '6px 12px', fontSize: '12px' }}
+              >
+                <LogOut size={14} /> Exit
+              </button>
             </div>
-          </div>
-
-          <div className={styles.rightActions}>
-            <button className={styles.primaryBtn} onClick={handleAddNew}>
-              <Save size={16} /> Add New
-            </button>
-            <button className={styles.secondaryBtn} onClick={handleSave}>
-              <Edit2 size={16} /> Save Changes
-            </button>
-            <button className={styles.dangerBtn} onClick={handleDelete}>
-              <Trash2 size={16} /> Delete
-            </button>
-            <button className={styles.secondaryBtn} onClick={() => navigate('/billing')}>
-              <LogOut size={16} /> Exit to Billing
-            </button>
-          </div>
-        </div>
+          }
+        />
       </div>
     </div>
   );

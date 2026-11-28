@@ -6,6 +6,7 @@ import {
 import styles from './BedMaster.module.css';
 import { bedApi, type BedRecord } from '../../api/hospitalApi';
 import { useAutoDismissNotification } from '../../hooks/useAutoDismissNotification';
+import GlobalBottomActionBar from '../common/GlobalBottomActionBar';
 
 const defaultBed: BedRecord = {
   id: '',
@@ -113,7 +114,7 @@ const BedMaster: React.FC = () => {
   };
 
   return (
-    <div className={styles.pageContainer}>
+    <div className={`${styles.pageContainer} hasBottomActionBar`}>
       {/* Toast Notification */}
       {notification && (
         <div
@@ -262,32 +263,27 @@ const BedMaster: React.FC = () => {
         </div>
       </div>
 
-      {/* Bottom Action Bar */}
-      <div className={styles.actionBar}>
-        <div className={styles.navControls}>
-          <button className={styles.navBtn} onClick={() => handleNav(0)} title="First Bed"><ChevronsLeft size={20} /></button>
-          <button className={styles.navBtn} onClick={() => handleNav(currentIndex - 1)} title="Previous Bed"><ChevronLeft size={20} /></button>
-          <button className={styles.navBtn} onClick={() => handleNav(currentIndex + 1)} title="Next Bed"><ChevronRight size={20} /></button>
-          <button className={styles.navBtn} onClick={() => handleNav(beds.length - 1)} title="Last Bed"><ChevronsRight size={20} /></button>
-        </div>
-
-        <div className={styles.middleActions}>
-          <button className={styles.secondaryBtn} onClick={handleNew}>
-            <Plus size={16} /> New Bed
-          </button>
-          {formData.id && (
-            <button className={styles.secondaryBtn} onClick={handleDelete} style={{ color: '#dc2626' }}>
-              <Trash2 size={16} /> Deactivate
-            </button>
-          )}
-        </div>
-
-        <div className={styles.rightActions}>
-          <button className={styles.primaryBtn} onClick={handleSave} disabled={loading} style={{ backgroundColor: '#2563eb', color: '#fff' }}>
-            <Save size={18} /> {loading ? 'Saving...' : formData.id ? 'Update Bed' : 'Create Bed'}
-          </button>
-        </div>
-      </div>
+      {/* Global Bottom Action Bar */}
+      <GlobalBottomActionBar
+        onSave={handleSave}
+        saveLabel={loading ? 'Saving...' : formData.id ? 'Update Bed' : 'Create Bed'}
+        isSaving={loading}
+        isDirty={Boolean(formData.bed_number && (!formData.id || (currentIndex >= 0 && beds[currentIndex] && beds[currentIndex].bed_number !== formData.bed_number)))}
+        dirtyMessage="Unsaved Bed Modifications"
+        onCancel={handleNew}
+        cancelLabel="New Bed"
+        onDelete={formData.id ? handleDelete : undefined}
+        deleteLabel="Deactivate Bed"
+        statusMessage={`Bed ${formData.bed_number || 'New'} • ${formData.ward_name || 'Ward'} (${formData.status}) • Rate: Rs. ${formData.daily_rate}/day`}
+        extraActions={
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+            <button type="button" className={styles.navBtn} onClick={() => handleNav(0)} title="First Bed"><ChevronsLeft size={16} /></button>
+            <button type="button" className={styles.navBtn} onClick={() => handleNav(currentIndex - 1)} title="Previous Bed"><ChevronLeft size={16} /></button>
+            <button type="button" className={styles.navBtn} onClick={() => handleNav(currentIndex + 1)} title="Next Bed"><ChevronRight size={16} /></button>
+            <button type="button" className={styles.navBtn} onClick={() => handleNav(beds.length - 1)} title="Last Bed"><ChevronsRight size={16} /></button>
+          </div>
+        }
+      />
     </div>
   );
 };

@@ -6,6 +6,7 @@ import {
 import styles from './VisitingTypeMaster.module.css';
 import { visitingTypeApi, type VisitingTypeRecord } from '../../api/masterApi';
 import { useAutoDismissNotification } from '../../hooks/useAutoDismissNotification';
+import GlobalBottomActionBar from '../common/GlobalBottomActionBar';
 
 const defaultVisitingType: VisitingTypeRecord = {
   id: '',
@@ -102,7 +103,7 @@ const VisitingTypeMaster: React.FC = () => {
   };
 
   return (
-    <div className={styles.pageContainer}>
+    <div className={`${styles.pageContainer} hasBottomActionBar`}>
       {/* Toast Notification */}
       {notification && (
         <div
@@ -212,32 +213,27 @@ const VisitingTypeMaster: React.FC = () => {
         </div>
       </div>
 
-      {/* Bottom Action Bar */}
-      <div className={styles.actionBar}>
-        <div className={styles.navControls}>
-          <button className={styles.navBtn} onClick={() => handleNav(0)} title="First Record"><ChevronsLeft size={20} /></button>
-          <button className={styles.navBtn} onClick={() => handleNav(currentIndex - 1)} title="Previous Record"><ChevronLeft size={20} /></button>
-          <button className={styles.navBtn} onClick={() => handleNav(currentIndex + 1)} title="Next Record"><ChevronRight size={20} /></button>
-          <button className={styles.navBtn} onClick={() => handleNav(visitingTypes.length - 1)} title="Last Record"><ChevronsRight size={20} /></button>
-        </div>
-
-        <div className={styles.middleActions}>
-          <button className={styles.secondaryBtn} onClick={handleNew}>
-            <Plus size={16} /> New Visiting Type
-          </button>
-          {formData.id && (
-            <button className={styles.secondaryBtn} onClick={handleDelete} style={{ color: '#dc2626' }}>
-              <Trash2 size={16} /> Deactivate
-            </button>
-          )}
-        </div>
-
-        <div className={styles.rightActions}>
-          <button className={styles.primaryBtn} onClick={handleSave} disabled={loading} style={{ backgroundColor: '#2563eb', color: '#fff' }}>
-            <Save size={18} /> {loading ? 'Saving...' : formData.id ? 'Update Type' : 'Create Type'}
-          </button>
-        </div>
-      </div>
+      {/* Global Bottom Action Bar */}
+      <GlobalBottomActionBar
+        onSave={handleSave}
+        saveLabel={loading ? 'Saving...' : formData.id ? 'Update Type' : 'Create Type'}
+        isSaving={loading}
+        isDirty={Boolean(formData.name && (!formData.id || (currentIndex >= 0 && visitingTypes[currentIndex] && visitingTypes[currentIndex].name !== formData.name)))}
+        dirtyMessage="Unsaved Visiting Type Changes"
+        onCancel={handleNew}
+        cancelLabel="New Visiting Type"
+        onDelete={formData.id ? handleDelete : undefined}
+        deleteLabel="Deactivate Type"
+        statusMessage={`${formData.name || 'New Visiting Type'} • Default Rate: Rs. ${formData.default_rate}`}
+        extraActions={
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+            <button type="button" className={styles.navBtn} onClick={() => handleNav(0)} title="First Record"><ChevronsLeft size={16} /></button>
+            <button type="button" className={styles.navBtn} onClick={() => handleNav(currentIndex - 1)} title="Previous Record"><ChevronLeft size={16} /></button>
+            <button type="button" className={styles.navBtn} onClick={() => handleNav(currentIndex + 1)} title="Next Record"><ChevronRight size={16} /></button>
+            <button type="button" className={styles.navBtn} onClick={() => handleNav(visitingTypes.length - 1)} title="Last Record"><ChevronsRight size={16} /></button>
+          </div>
+        }
+      />
     </div>
   );
 };

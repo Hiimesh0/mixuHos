@@ -6,6 +6,7 @@ import {
 import styles from './DepartmentMaster.module.css';
 import { departmentApi, type DepartmentRecord } from '../../api/masterApi';
 import { useAutoDismissNotification } from '../../hooks/useAutoDismissNotification';
+import GlobalBottomActionBar from '../common/GlobalBottomActionBar';
 
 const defaultDepartment: DepartmentRecord = {
   id: '',
@@ -102,7 +103,7 @@ const DepartmentMaster: React.FC = () => {
   };
 
   return (
-    <div className={styles.pageContainer}>
+    <div className={`${styles.pageContainer} hasBottomActionBar`}>
       {/* Toast Notification */}
       {notification && (
         <div
@@ -229,32 +230,27 @@ const DepartmentMaster: React.FC = () => {
         </div>
       </div>
 
-      {/* Bottom Action Bar */}
-      <div className={styles.actionBar}>
-        <div className={styles.navControls}>
-          <button className={styles.navBtn} onClick={() => handleNav(0)} title="First Record"><ChevronsLeft size={20} /></button>
-          <button className={styles.navBtn} onClick={() => handleNav(currentIndex - 1)} title="Previous Record"><ChevronLeft size={20} /></button>
-          <button className={styles.navBtn} onClick={() => handleNav(currentIndex + 1)} title="Next Record"><ChevronRight size={20} /></button>
-          <button className={styles.navBtn} onClick={() => handleNav(departments.length - 1)} title="Last Record"><ChevronsRight size={20} /></button>
-        </div>
-
-        <div className={styles.middleActions}>
-          <button className={styles.secondaryBtn} onClick={handleNew}>
-            <Plus size={16} /> New Department
-          </button>
-          {formData.id && (
-            <button className={styles.secondaryBtn} onClick={handleDelete} style={{ color: '#dc2626' }}>
-              <Trash2 size={16} /> Deactivate
-            </button>
-          )}
-        </div>
-
-        <div className={styles.rightActions}>
-          <button className={styles.primaryBtn} onClick={handleSave} disabled={loading} style={{ backgroundColor: '#2563eb', color: '#fff' }}>
-            <Save size={18} /> {loading ? 'Saving...' : formData.id ? 'Update Department' : 'Create Department'}
-          </button>
-        </div>
-      </div>
+      {/* Global Bottom Action Bar */}
+      <GlobalBottomActionBar
+        onSave={handleSave}
+        saveLabel={loading ? 'Saving...' : formData.id ? 'Update Department' : 'Create Department'}
+        isSaving={loading}
+        isDirty={Boolean(formData.name && (!formData.id || (currentIndex >= 0 && departments[currentIndex] && departments[currentIndex].name !== formData.name)))}
+        dirtyMessage="Unsaved Department Changes"
+        onCancel={handleNew}
+        cancelLabel="New Department"
+        onDelete={formData.id ? handleDelete : undefined}
+        deleteLabel="Deactivate Department"
+        statusMessage={`${formData.name || 'New Department'} (${formData.code || 'Code'}) • Status: ${formData.is_active ? 'Active' : 'Inactive'}`}
+        extraActions={
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+            <button type="button" className={styles.navBtn} onClick={() => handleNav(0)} title="First Record"><ChevronsLeft size={16} /></button>
+            <button type="button" className={styles.navBtn} onClick={() => handleNav(currentIndex - 1)} title="Previous Record"><ChevronLeft size={16} /></button>
+            <button type="button" className={styles.navBtn} onClick={() => handleNav(currentIndex + 1)} title="Next Record"><ChevronRight size={16} /></button>
+            <button type="button" className={styles.navBtn} onClick={() => handleNav(departments.length - 1)} title="Last Record"><ChevronsRight size={16} /></button>
+          </div>
+        }
+      />
     </div>
   );
 };
